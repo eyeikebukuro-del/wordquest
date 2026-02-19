@@ -1,0 +1,198 @@
+/* マップ画面スタイル */
+
+.map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    padding-top: calc(12px + var(--safe-area-top));
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+    z-index: 5;
+}
+
+.player-status {
+    display: flex;
+    gap: 16px;
+    font-weight: 700;
+    font-size: var(--font-md);
+}
+
+.status-hp {
+    color: var(--accent-red);
+}
+
+.status-gold {
+    color: var(--accent-yellow);
+}
+
+.floor-title {
+    font-size: var(--font-lg);
+    font-weight: 900;
+    text-align: center;
+}
+
+.player-items {
+    display: flex;
+    gap: 8px;
+}
+
+.relics-display,
+.potions-display {
+    display: flex;
+    gap: 2px;
+    font-size: 1.2rem;
+}
+
+/* マップコンテナ */
+.map-container {
+    flex: 1;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px;
+}
+
+#map-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+#map-nodes {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 24px;
+    padding: 30px 0;
+    min-height: 100%;
+}
+
+.map-layer {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+}
+
+.map-node {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--bg-tertiary);
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.map-node.available {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 15px hsla(270, 80%, 60%, 0.4);
+    animation: nodeGlow 2s ease-in-out infinite;
+}
+
+.map-node.available:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 25px hsla(270, 80%, 60%, 0.6);
+}
+
+.map-node.available:active {
+    transform: scale(0.95);
+}
+
+.map-node.visited {
+    opacity: 0.4;
+    border-color: rgba(255, 255, 255, 0.05);
+    cursor: default;
+}
+
+.map-node.current {
+    border-color: var(--accent-yellow);
+    box-shadow: 0 0 15px hsla(45, 95%, 55%, 0.4);
+}
+
+.map-node.locked {
+    opacity: 0.25;
+    cursor: default;
+}
+
+.map-node.boss {
+    width: 72px;
+    height: 72px;
+    font-size: 2rem;
+    border-color: var(--accent-red);
+}
+
+.map-node.boss.available {
+    box-shadow: 0 0 20px hsla(0, 80%, 58%, 0.5);
+    animation: bossGlow 1.5s ease-in-out infinite;
+}
+
+.map-node-label {
+    position: absolute;
+    bottom: -18px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* マップ接続線（SVG） */
+.map-connection {
+    stroke: rgba(255, 255, 255, 0.12);
+    stroke-width: 2;
+    fill: none;
+}
+
+.map-connection.active {
+    stroke: var(--accent-purple);
+    stroke-width: 2.5;
+    filter: drop-shadow(0 0 4px hsla(270, 80%, 60%, 0.5));
+}
+
+.map-connection.visited {
+    stroke: rgba(255, 255, 255, 0.06);
+}
+
+/* マップフッター */
+.map-footer {
+    padding: 8px 20px 12px;
+    padding-bottom: calc(12px + var(--safe-area-bottom));
+    display: flex;
+    justify-content: center;
+}
+
+/* レスポンシブ */
+@media (max-height: 600px) {
+    .map-node {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+
+    .map-node.boss {
+        width: 62px;
+        height: 62px;
+        font-size: 1.7rem;
+    }
+
+    #map-nodes {
+        gap: 18px;
+    }
+
+    .map-layer {
+        gap: 30px;
+    }
+}

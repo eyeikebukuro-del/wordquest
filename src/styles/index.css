@@ -1,0 +1,504 @@
+/* WordQuest - グローバルスタイル・デザインシステム */
+
+/* === デザイントークン === */
+:root {
+  /* カラーパレット */
+  --bg-primary: hsl(240, 25%, 8%);
+  --bg-secondary: hsl(240, 20%, 12%);
+  --bg-tertiary: hsl(240, 18%, 16%);
+  --bg-card: hsl(240, 15%, 18%);
+  --bg-glass: rgba(255, 255, 255, 0.06);
+  --bg-glass-hover: rgba(255, 255, 255, 0.12);
+
+  --text-primary: hsl(0, 0%, 95%);
+  --text-secondary: hsl(240, 10%, 70%);
+  --text-muted: hsl(240, 10%, 50%);
+
+  /* アクセントカラー */
+  --accent-purple: hsl(270, 80%, 60%);
+  --accent-blue: hsl(210, 90%, 60%);
+  --accent-green: hsl(150, 70%, 50%);
+  --accent-orange: hsl(30, 90%, 55%);
+  --accent-red: hsl(0, 80%, 58%);
+  --accent-yellow: hsl(45, 95%, 55%);
+  --accent-pink: hsl(330, 80%, 60%);
+  --accent-cyan: hsl(180, 70%, 50%);
+
+  /* カードタイプカラー */
+  --card-attack: hsl(0, 70%, 50%);
+  --card-attack-bg: hsla(0, 70%, 50%, 0.15);
+  --card-defense: hsl(210, 70%, 50%);
+  --card-defense-bg: hsla(210, 70%, 50%, 0.15);
+  --card-skill: hsl(150, 60%, 45%);
+  --card-skill-bg: hsla(150, 60%, 45%, 0.15);
+
+  /* HPバー */
+  --hp-high: hsl(120, 60%, 50%);
+  --hp-mid: hsl(45, 80%, 50%);
+  --hp-low: hsl(0, 70%, 50%);
+
+  /* サイズ */
+  --font-xs: 0.7rem;
+  --font-sm: 0.85rem;
+  --font-md: 1rem;
+  --font-lg: 1.25rem;
+  --font-xl: 1.5rem;
+  --font-2xl: 2rem;
+  --font-3xl: 2.5rem;
+  --font-4xl: 3.5rem;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow-purple: 0 0 20px hsla(270, 80%, 60%, 0.4);
+  --shadow-glow-blue: 0 0 20px hsla(210, 90%, 60%, 0.4);
+  --shadow-glow-green: 0 0 20px hsla(150, 70%, 50%, 0.4);
+
+  /* トランジション */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  /* レイアウト */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* === リセット・ベース === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'M PLUS Rounded 1c', 'Outfit', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/* === アプリコンテナ === */
+#app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* === 画面管理 === */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.screen.entering {
+  opacity: 0;
+  animation: screenFadeIn 0.4s ease forwards;
+}
+
+/* === ボタン === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-family: inherit;
+  font-size: var(--font-lg);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  min-height: 50px;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+  color: white;
+  box-shadow: var(--shadow-md), var(--shadow-glow-purple);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-lg), 0 0 30px hsla(270, 80%, 60%, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-glass-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-small {
+  padding: 8px 16px;
+  font-size: var(--font-sm);
+  min-height: 36px;
+}
+
+.btn-glow {
+  animation: buttonGlow 2s ease-in-out infinite;
+}
+
+.btn-end-turn {
+  background: linear-gradient(135deg, hsl(30, 80%, 45%), hsl(15, 85%, 50%));
+  color: white;
+  font-size: var(--font-lg);
+  font-weight: 700;
+  padding: 12px 32px;
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-end-turn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), 0 0 20px hsla(30, 80%, 45%, 0.5);
+}
+
+.btn-end-turn:active {
+  transform: scale(0.95);
+}
+
+.btn-icon {
+  font-size: 1.2em;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* === HPバー === */
+.hp-bar-container {
+  position: relative;
+  width: 180px;
+  height: 24px;
+  background: hsla(0, 0%, 100%, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hp-bar {
+  height: 100%;
+  border-radius: 12px;
+  transition: width var(--transition-normal);
+  background: linear-gradient(90deg, var(--hp-high), hsl(90, 50%, 50%));
+}
+
+.hp-bar.mid {
+  background: linear-gradient(90deg, var(--hp-mid), hsl(30, 70%, 55%));
+}
+
+.hp-bar.low {
+  background: linear-gradient(90deg, var(--hp-low), hsl(15, 80%, 50%));
+  animation: hpPulse 1s ease-in-out infinite;
+}
+
+.hp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  font-family: 'Outfit', sans-serif;
+}
+
+.hp-text.small {
+  font-size: 0.65rem;
+}
+
+/* === モーダル === */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.modal-overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-panel {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 24px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-title {
+  text-align: center;
+  font-size: var(--font-xl);
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal-content {
+  margin-bottom: 20px;
+}
+
+/* === オーバーレイ === */
+.reward-overlay,
+.shop-overlay,
+.rest-overlay,
+.event-overlay,
+.gameover-overlay,
+.victory-overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* === パネル共通 === */
+.reward-panel,
+.shop-panel,
+.rest-panel,
+.event-panel,
+.gameover-panel,
+.victory-panel {
+  background: linear-gradient(145deg, var(--bg-secondary), var(--bg-tertiary));
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 28px 32px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: panelSlideIn 0.4s ease;
+}
+
+/* === スクロールバー === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+/* === カードデザイン === */
+.card {
+  position: relative;
+  width: 100px;
+  min-height: 130px;
+  border-radius: var(--radius-md);
+  padding: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+
+.card.attack {
+  background: var(--card-attack-bg);
+  border-color: var(--card-attack);
+  box-shadow: 0 2px 10px hsla(0, 70%, 50%, 0.2);
+}
+
+.card.defense {
+  background: var(--card-defense-bg);
+  border-color: var(--card-defense);
+  box-shadow: 0 2px 10px hsla(210, 70%, 50%, 0.2);
+}
+
+.card.skill {
+  background: var(--card-skill-bg);
+  border-color: var(--card-skill);
+  box-shadow: 0 2px 10px hsla(150, 60%, 45%, 0.2);
+}
+
+.card:hover {
+  transform: translateY(-12px) scale(1.05);
+  z-index: 10;
+}
+
+.card:active {
+  transform: translateY(-6px) scale(0.98);
+}
+
+.card.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.card.disabled:hover {
+  transform: none;
+}
+
+.card-cost {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 26px;
+  height: 26px;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-yellow);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-xs);
+  font-weight: 900;
+  color: var(--accent-yellow);
+  font-family: 'Outfit', sans-serif;
+}
+
+.card-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.card-name {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.card-desc {
+  font-size: 0.5rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.card-level {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: 0.55rem;
+  background: var(--accent-purple);
+  color: white;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* === 大きいカード（報酬・ショップ用） === */
+.card-large {
+  width: 140px;
+  min-height: 180px;
+  padding: 12px;
+  gap: 6px;
+}
+
+.card-large .card-emoji {
+  font-size: 2.5rem;
+  margin-top: 8px;
+}
+
+.card-large .card-name {
+  font-size: var(--font-sm);
+}
+
+.card-large .card-desc {
+  font-size: var(--font-xs);
+}
+
+/* === ユーティリティ === */
+.text-center { text-align: center; }
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === iPad最適化: 横向き1024×768基準 === */
+@media (max-height: 500px) {
+  .btn {
+    padding: 10px 20px;
+    font-size: var(--font-md);
+    min-height: 40px;
+  }
+  .card {
+    width: 85px;
+    min-height: 110px;
+  }
+  .card-emoji {
+    font-size: 1.5rem;
+  }
+}

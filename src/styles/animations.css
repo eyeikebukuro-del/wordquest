@@ -1,0 +1,393 @@
+/* アニメーション定義 */
+
+/* 画面遷移 */
+@keyframes screenFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(1.02);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ボタンの光り */
+@keyframes buttonGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 20px hsla(270, 80%, 60%, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 35px hsla(270, 80%, 60%, 0.5);
+    }
+}
+
+/* ロゴの浮遊 */
+@keyframes logoFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* グラデーションシフト */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* メニュー背景 */
+@keyframes menuBgShift {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+
+    100% {
+        filter: hue-rotate(30deg);
+    }
+}
+
+/* 敵のアイドルアニメ */
+@keyframes enemyIdle {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    25% {
+        transform: translateY(-3px) scale(1.02);
+    }
+
+    75% {
+        transform: translateY(2px) scale(0.98);
+    }
+}
+
+/* マップノードの光り */
+@keyframes nodeGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px hsla(270, 80%, 60%, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 20px hsla(270, 80%, 60%, 0.5);
+    }
+}
+
+/* ボスノードの光り */
+@keyframes bossGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 12px hsla(0, 80%, 58%, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 25px hsla(0, 80%, 58%, 0.7);
+    }
+}
+
+/* パネルスライドイン */
+@keyframes panelSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* クイズスライドイン */
+@keyframes quizSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 正解フラッシュ */
+@keyframes correctFlash {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.05);
+        background-color: hsla(150, 70%, 50%, 0.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 不正解シェイク */
+@keyframes incorrectShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-8px);
+    }
+
+    40% {
+        transform: translateX(8px);
+    }
+
+    60% {
+        transform: translateX(-6px);
+    }
+
+    80% {
+        transform: translateX(6px);
+    }
+}
+
+/* ダメージ数字浮遊 */
+@keyframes damageFloat {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-30px) scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(0.8);
+    }
+}
+
+/* HPバーの低HP点滅 */
+@keyframes hpPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ゲームオーバーシェイク */
+@keyframes gameoverShake {
+
+    0%,
+    100% {
+        transform: rotate(0);
+    }
+
+    20% {
+        transform: rotate(-5deg);
+    }
+
+    40% {
+        transform: rotate(5deg);
+    }
+
+    60% {
+        transform: rotate(-3deg);
+    }
+
+    80% {
+        transform: rotate(3deg);
+    }
+}
+
+/* 勝利バウンス */
+@keyframes victoryBounce {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+
+    40% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 敵ヒット */
+@keyframes enemyHit {
+    0% {
+        filter: brightness(1);
+        transform: translateY(0);
+    }
+
+    20% {
+        filter: brightness(2) hue-rotate(30deg);
+        transform: translateX(5px);
+    }
+
+    40% {
+        filter: brightness(1.5);
+        transform: translateX(-5px);
+    }
+
+    100% {
+        filter: brightness(1);
+        transform: translateY(0);
+    }
+}
+
+/* 敵死亡 */
+@keyframes enemyDeath {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.1) rotate(5deg);
+        filter: brightness(2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-15deg);
+    }
+}
+
+/* コンボ表示 */
+@keyframes comboPop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* カードドロー */
+@keyframes cardDraw {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* レベルアップ */
+@keyframes levelUp {
+    0% {
+        box-shadow: 0 0 0 0 hsla(270, 80%, 60%, 0.7);
+    }
+
+    50% {
+        box-shadow: 0 0 30px 15px hsla(270, 80%, 60%, 0.3);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 hsla(270, 80%, 60%, 0);
+    }
+}
+
+/* プレイヤーダメージ */
+@keyframes playerDamage {
+
+    0%,
+    100% {
+        background-color: transparent;
+    }
+
+    30% {
+        background-color: hsla(0, 80%, 50%, 0.15);
+    }
+}
+
+/* シールドエフェクト */
+@keyframes shieldEffect {
+    0% {
+        box-shadow: 0 0 0 0 hsla(210, 70%, 50%, 0.5);
+    }
+
+    100% {
+        box-shadow: 0 0 20px 10px hsla(210, 70%, 50%, 0);
+    }
+}
+
+/* ユーティリティクラス */
+.anim-hit {
+    animation: enemyHit 0.4s ease;
+}
+
+.anim-death {
+    animation: enemyDeath 0.6s ease forwards;
+}
+
+.anim-combo {
+    animation: comboPop 0.3s ease;
+}
+
+.anim-card-draw {
+    animation: cardDraw 0.3s ease;
+}
+
+.anim-level-up {
+    animation: levelUp 0.8s ease;
+}
+
+.anim-player-damage {
+    animation: playerDamage 0.3s ease;
+}
+
+.anim-shield {
+    animation: shieldEffect 0.5s ease;
+}

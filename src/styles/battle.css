@@ -1,0 +1,372 @@
+/* バトル画面スタイル */
+
+.battle-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    padding-top: calc(12px + var(--safe-area-top));
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+}
+
+.player-battle-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.battle-stats {
+    display: flex;
+    gap: 12px;
+    font-size: var(--font-md);
+    font-weight: 700;
+}
+
+.stat-energy {
+    color: var(--accent-yellow);
+}
+
+.stat-block {
+    color: var(--accent-blue);
+}
+
+.combo-display {
+    font-size: var(--font-lg);
+    font-weight: 900;
+    color: var(--accent-orange);
+    text-shadow: 0 0 10px hsla(30, 90%, 55%, 0.5);
+    min-height: 28px;
+}
+
+/* バトルフィールド */
+.battle-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 20px;
+    gap: 16px;
+}
+
+/* 敵エリア */
+.enemy-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.enemy-intent {
+    font-size: var(--font-md);
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.enemy-intent.attack {
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+}
+
+.enemy-intent.defend {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.enemy-intent.buff {
+    border-color: var(--accent-yellow);
+    color: var(--accent-yellow);
+}
+
+.enemy-character {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.enemy-emoji {
+    font-size: 4rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    animation: enemyIdle 3s ease-in-out infinite;
+}
+
+.enemy-name {
+    font-size: var(--font-sm);
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.enemy-hp-container {
+    position: relative;
+    width: 140px;
+    height: 18px;
+    background: hsla(0, 0%, 100%, 0.1);
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+.enemy-hp-bar {
+    width: 100%;
+}
+
+.enemy-status {
+    display: flex;
+    gap: 6px;
+    font-size: var(--font-xs);
+}
+
+.status-badge {
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-glass);
+    font-weight: 600;
+}
+
+/* クイズエリア */
+.quiz-area {
+    width: 100%;
+    max-width: 550px;
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    backdrop-filter: blur(12px);
+    animation: quizSlideIn 0.3s ease;
+}
+
+.quiz-card-info {
+    font-size: var(--font-sm);
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.quiz-question {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.quiz-question .question-emoji {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.quiz-question .question-text {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    font-family: 'Outfit', 'M PLUS Rounded 1c', sans-serif;
+    color: var(--accent-yellow);
+    text-shadow: 0 0 20px hsla(45, 95%, 55%, 0.3);
+}
+
+.quiz-question .question-label {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.quiz-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.quiz-choice {
+    padding: 12px 16px;
+    background: var(--bg-tertiary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--font-lg);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-height: 48px;
+}
+
+.quiz-choice:hover {
+    border-color: var(--accent-purple);
+    background: hsla(270, 80%, 60%, 0.15);
+}
+
+.quiz-choice:active {
+    transform: scale(0.97);
+}
+
+.quiz-choice.correct {
+    border-color: var(--accent-green);
+    background: hsla(150, 70%, 50%, 0.25);
+    animation: correctFlash 0.5s ease;
+}
+
+.quiz-choice.incorrect {
+    border-color: var(--accent-red);
+    background: hsla(0, 80%, 58%, 0.25);
+    animation: incorrectShake 0.4s ease;
+}
+
+.quiz-choice.eliminated {
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.quiz-choice.disabled {
+    pointer-events: none;
+}
+
+/* タイピング入力 */
+.typing-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg-tertiary);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif;
+    font-size: var(--font-xl);
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: border-color var(--transition-fast);
+    margin-bottom: 8px;
+}
+
+.typing-input:focus {
+    border-color: var(--accent-purple);
+}
+
+.typing-input::placeholder {
+    color: var(--text-muted);
+}
+
+.quiz-typing {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quiz-result {
+    text-align: center;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-size: var(--font-lg);
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.quiz-result.correct {
+    background: hsla(150, 70%, 50%, 0.15);
+    color: var(--accent-green);
+}
+
+.quiz-result.incorrect {
+    background: hsla(0, 80%, 58%, 0.15);
+    color: var(--accent-red);
+}
+
+/* 手札エリア */
+.hand-area {
+    padding: 8px 16px;
+    padding-bottom: calc(8px + var(--safe-area-bottom));
+}
+
+.hand-cards {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 8px 4px 4px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* バトルアクション */
+.battle-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 4px 20px 12px;
+}
+
+.potion-slots {
+    display: flex;
+    gap: 6px;
+}
+
+.potion-slot {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--bg-glass);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.potion-slot:hover {
+    border-color: var(--accent-green);
+    transform: scale(1.1);
+}
+
+/* ダメージ数字 */
+.damage-number {
+    position: absolute;
+    font-family: 'Outfit', sans-serif;
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: var(--accent-red);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 20;
+    animation: damageFloat 1s ease forwards;
+}
+
+.damage-number.heal {
+    color: var(--accent-green);
+}
+
+.damage-number.block {
+    color: var(--accent-blue);
+}
+
+/* レスポンシブ（短い画面） */
+@media (max-height: 600px) {
+    .enemy-emoji {
+        font-size: 3rem;
+    }
+
+    .quiz-area {
+        padding: 10px 14px;
+    }
+
+    .quiz-question .question-text {
+        font-size: var(--font-xl);
+    }
+
+    .quiz-choice {
+        padding: 8px 12px;
+        font-size: var(--font-md);
+        min-height: 38px;
+    }
+
+    .hand-area {
+        padding: 4px 12px;
+    }
+}

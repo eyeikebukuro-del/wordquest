@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="WordQuest - 英単語を覚えながら冒険するローグライクカードゲーム！小学生向け英語学習アプリ" />
+  <title>WordQuest ⚔️ 英語の塔</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/index.css" />
+  <link rel="stylesheet" href="/src/styles/battle.css" />
+  <link rel="stylesheet" href="/src/styles/map.css" />
+  <link rel="stylesheet" href="/src/styles/menu.css" />
+  <link rel="stylesheet" href="/src/styles/animations.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- メインメニュー -->
+    <div id="screen-menu" class="screen active">
+      <div class="menu-bg"></div>
+      <div class="menu-content">
+        <div class="menu-logo">
+          <div class="logo-emoji">⚔️📖</div>
+          <h1 class="logo-title">WordQuest</h1>
+          <p class="logo-subtitle">〜 英語の塔 〜</p>
+        </div>
+        <div class="menu-buttons">
+          <button id="btn-new-game" class="btn btn-primary btn-glow">
+            <span class="btn-icon">🗡️</span>
+            <span>ぼうけんに出る</span>
+          </button>
+          <button id="btn-stats" class="btn btn-secondary">
+            <span class="btn-icon">📊</span>
+            <span>がくしゅう記録</span>
+          </button>
+        </div>
+        <div class="menu-footer">
+          <p>小学生向け英単語ローグライク</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- マップ画面 -->
+    <div id="screen-map" class="screen">
+      <div class="map-header">
+        <div class="player-status">
+          <span class="status-hp">❤️ <span id="map-hp">60</span>/<span id="map-max-hp">60</span></span>
+          <span class="status-gold">💰 <span id="map-gold">50</span></span>
+        </div>
+        <div class="floor-title" id="floor-title">🌲 まよいの森</div>
+        <div class="player-items">
+          <span id="map-relics" class="relics-display"></span>
+          <span id="map-potions" class="potions-display"></span>
+        </div>
+      </div>
+      <div class="map-container" id="map-container">
+        <canvas id="map-canvas"></canvas>
+        <div id="map-nodes"></div>
+      </div>
+      <div class="map-footer">
+        <button id="btn-view-deck" class="btn btn-small">🃏 デッキ (<span id="deck-count">10</span>枚)</button>
+      </div>
+    </div>
+
+    <!-- バトル画面 -->
+    <div id="screen-battle" class="screen">
+      <div class="battle-top-bar">
+        <div class="player-battle-status">
+          <div class="hp-bar-container">
+            <div class="hp-bar" id="player-hp-bar"></div>
+            <span class="hp-text" id="player-hp-text">60/60</span>
+          </div>
+          <div class="battle-stats">
+            <span class="stat-energy" id="energy-display">⚡ 3/3</span>
+            <span class="stat-block" id="block-display">🛡️ 0</span>
+          </div>
+        </div>
+        <div class="combo-display" id="combo-display"></div>
+      </div>
+
+      <div class="battle-field">
+        <div class="enemy-area">
+          <div class="enemy-intent" id="enemy-intent"></div>
+          <div class="enemy-character" id="enemy-character">
+            <span class="enemy-emoji" id="enemy-emoji">🟢</span>
+            <span class="enemy-name" id="enemy-name">スライム</span>
+          </div>
+          <div class="enemy-hp-container">
+            <div class="hp-bar enemy-hp-bar" id="enemy-hp-bar"></div>
+            <span class="hp-text small" id="enemy-hp-text">20/20</span>
+          </div>
+          <div class="enemy-status" id="enemy-status"></div>
+        </div>
+
+        <!-- クイズエリア -->
+        <div class="quiz-area" id="quiz-area" style="display:none;">
+          <div class="quiz-card-info" id="quiz-card-info"></div>
+          <div class="quiz-question" id="quiz-question"></div>
+          <div class="quiz-choices" id="quiz-choices"></div>
+          <div class="quiz-typing" id="quiz-typing" style="display:none;">
+            <input type="text" id="typing-input" class="typing-input" placeholder="英語で入力..." autocomplete="off" autocapitalize="off" />
+            <button id="typing-submit" class="btn btn-primary btn-small">こたえる</button>
+          </div>
+          <div class="quiz-result" id="quiz-result" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- 手札 -->
+      <div class="hand-area" id="hand-area">
+        <div class="hand-cards" id="hand-cards"></div>
+      </div>
+
+      <div class="battle-actions">
+        <button id="btn-end-turn" class="btn btn-end-turn">ターン終了</button>
+        <div class="potion-slots" id="potion-slots"></div>
+      </div>
+    </div>
+
+    <!-- 報酬画面 -->
+    <div id="screen-reward" class="screen">
+      <div class="reward-overlay">
+        <div class="reward-panel">
+          <h2 class="reward-title">🎉 勝利！</h2>
+          <div class="reward-list" id="reward-list"></div>
+          <button id="btn-close-reward" class="btn btn-primary">つぎへ進む</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ショップ画面 -->
+    <div id="screen-shop" class="screen">
+      <div class="shop-overlay">
+        <div class="shop-panel">
+          <h2 class="shop-title">🛒 ショップ</h2>
+          <div class="shop-gold">💰 <span id="shop-gold">0</span></div>
+          <div class="shop-items" id="shop-items"></div>
+          <button id="btn-close-shop" class="btn btn-secondary">もどる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 休憩画面 -->
+    <div id="screen-rest" class="screen">
+      <div class="rest-overlay">
+        <div class="rest-panel">
+          <h2 class="rest-title">🏕️ キャンプ</h2>
+          <p class="rest-desc">休憩をとろう</p>
+          <div class="rest-choices">
+            <button id="btn-rest-heal" class="btn btn-primary rest-btn">
+              <span class="btn-icon">💚</span>
+              <span>休む（HP30%回復）</span>
+            </button>
+            <button id="btn-rest-upgrade" class="btn btn-secondary rest-btn">
+              <span class="btn-icon">⬆️</span>
+              <span>鍛える（カード強化）</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- イベント画面 -->
+    <div id="screen-event" class="screen">
+      <div class="event-overlay">
+        <div class="event-panel">
+          <h2 class="event-title" id="event-title">❓ イベント</h2>
+          <p class="event-desc" id="event-desc"></p>
+          <div class="event-choices" id="event-choices"></div>
+          <div class="event-result" id="event-result" style="display:none;"></div>
+          <button id="btn-close-event" class="btn btn-secondary" style="display:none;">つづける</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ゲームオーバー画面 -->
+    <div id="screen-game_over" class="screen">
+      <div class="gameover-overlay">
+        <div class="gameover-panel">
+          <div class="gameover-emoji">💀</div>
+          <h2 class="gameover-title">ゲームオーバー</h2>
+          <div class="gameover-stats" id="gameover-stats"></div>
+          <div class="gameover-weak-words" id="gameover-weak-words"></div>
+          <button id="btn-retry" class="btn btn-primary btn-glow">🗡️ もう一度挑戦</button>
+          <button id="btn-to-menu" class="btn btn-secondary">メニューへ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- クリア画面 -->
+    <div id="screen-victory" class="screen">
+      <div class="victory-overlay">
+        <div class="victory-panel">
+          <div class="victory-emoji">👑🎉</div>
+          <h2 class="victory-title">クリアおめでとう！</h2>
+          <p class="victory-sub">英語の塔を制覇した！</p>
+          <div class="victory-stats" id="victory-stats"></div>
+          <button id="btn-victory-retry" class="btn btn-primary btn-glow">🗡️ もういちど</button>
+          <button id="btn-victory-menu" class="btn btn-secondary">メニューへ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- デッキ表示モーダル -->
+    <div id="modal-deck" class="modal" style="display:none;">
+      <div class="modal-overlay">
+        <div class="modal-panel">
+          <h2 class="modal-title">🃏 デッキ</h2>
+          <div class="modal-content" id="deck-list"></div>
+          <button id="btn-close-deck" class="btn btn-secondary">とじる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 学習記録モーダル -->
+    <div id="modal-stats" class="modal" style="display:none;">
+      <div class="modal-overlay">
+        <div class="modal-panel">
+          <h2 class="modal-title">📊 がくしゅう記録</h2>
+          <div class="modal-content" id="stats-content"></div>
+          <button id="btn-close-stats" class="btn btn-secondary">とじる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- カード選択モーダル -->
+    <div id="modal-card-select" class="modal" style="display:none;">
+      <div class="modal-overlay">
+        <div class="modal-panel">
+          <h2 class="modal-title" id="card-select-title">カードを選んでください</h2>
+          <div class="modal-content" id="card-select-list"></div>
+          <button id="btn-skip-card" class="btn btn-secondary">スキップ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

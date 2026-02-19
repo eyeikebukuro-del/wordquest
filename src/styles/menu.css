@@ -1,0 +1,396 @@
+/* メニュー画面スタイル */
+
+.menu-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse at 30% 20%, hsla(270, 60%, 30%, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, hsla(210, 60%, 25%, 0.4) 0%, transparent 50%),
+        var(--bg-primary);
+    animation: menuBgShift 10s ease-in-out infinite alternate;
+}
+
+.menu-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px 20px;
+    gap: 36px;
+}
+
+.menu-logo {
+    text-align: center;
+    animation: logoFloat 4s ease-in-out infinite;
+}
+
+.logo-emoji {
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5));
+}
+
+.logo-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: var(--font-4xl);
+    font-weight: 800;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #c084fc, #818cf8, #38bdf8, #34d399);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease infinite;
+    text-shadow: none;
+}
+
+.logo-subtitle {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    letter-spacing: 8px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.menu-footer {
+    position: absolute;
+    bottom: 24px;
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+}
+
+/* === 報酬画面 === */
+.reward-title {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--accent-yellow), var(--accent-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.reward-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.reward-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.reward-item:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--accent-purple);
+}
+
+.reward-item.claimed {
+    opacity: 0.5;
+    cursor: default;
+    border-color: var(--accent-green);
+}
+
+.reward-emoji {
+    font-size: 1.5rem;
+}
+
+.reward-desc {
+    font-size: var(--font-md);
+    font-weight: 600;
+}
+
+/* カード選択フロー */
+.card-select-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 0;
+}
+
+/* === ショップ === */
+.shop-title {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent-yellow), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shop-gold {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--accent-yellow);
+    margin-bottom: 16px;
+}
+
+.shop-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.shop-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px;
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-width: 100px;
+}
+
+.shop-item:hover {
+    border-color: var(--accent-yellow);
+    background: var(--bg-glass-hover);
+}
+
+.shop-item.sold {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.shop-item-emoji {
+    font-size: 1.5rem;
+}
+
+.shop-item-name {
+    font-size: var(--font-sm);
+    font-weight: 600;
+}
+
+.shop-item-price {
+    font-size: var(--font-sm);
+    color: var(--accent-yellow);
+    font-weight: 700;
+}
+
+/* === 休憩画面 === */
+.rest-title {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.rest-desc {
+    font-size: var(--font-md);
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.rest-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.rest-btn {
+    width: 100%;
+}
+
+/* === イベント画面 === */
+.event-title {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.event-desc {
+    font-size: var(--font-md);
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.event-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.event-choice-btn {
+    padding: 12px 20px;
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--font-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.event-choice-btn:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--accent-purple);
+}
+
+.event-result {
+    padding: 12px;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    font-size: var(--font-lg);
+    font-weight: 700;
+}
+
+/* === ゲームオーバー === */
+.gameover-emoji {
+    font-size: 4rem;
+    margin-bottom: 8px;
+    animation: gameoverShake 0.5s ease;
+}
+
+.gameover-title {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    color: var(--accent-red);
+    margin-bottom: 16px;
+}
+
+.gameover-stats,
+.victory-stats {
+    text-align: left;
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--bg-glass);
+    border-radius: var(--radius-md);
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: var(--font-md);
+}
+
+.stat-row .stat-label {
+    color: var(--text-secondary);
+}
+
+.stat-row .stat-value {
+    font-weight: 700;
+}
+
+.gameover-weak-words {
+    margin-bottom: 16px;
+}
+
+.weak-word-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+.weak-word-tag {
+    padding: 4px 10px;
+    background: hsla(0, 80%, 58%, 0.15);
+    border: 1px solid hsla(0, 80%, 58%, 0.3);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: var(--accent-red);
+}
+
+/* === クリア画面 === */
+.victory-emoji {
+    font-size: 4rem;
+    margin-bottom: 8px;
+    animation: victoryBounce 0.8s ease;
+}
+
+.victory-title {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent-yellow), var(--accent-orange), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+}
+
+.victory-sub {
+    color: var(--text-secondary);
+    font-size: var(--font-md);
+    margin-bottom: 16px;
+}
+
+/* === 学習記録 === */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.stats-card {
+    background: var(--bg-glass);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    text-align: center;
+}
+
+.stats-card-value {
+    font-size: var(--font-2xl);
+    font-weight: 900;
+    font-family: 'Outfit', sans-serif;
+}
+
+.stats-card-label {
+    font-size: var(--font-xs);
+    color: var(--text-secondary);
+}
+
+/* === デッキリスト === */
+.deck-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+@media (max-height: 600px) {
+    .logo-title {
+        font-size: var(--font-3xl);
+    }
+
+    .logo-emoji {
+        font-size: 3rem;
+    }
+}
