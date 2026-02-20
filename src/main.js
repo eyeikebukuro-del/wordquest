@@ -7,6 +7,11 @@ import { BATTLE_STATES } from './game/BattleSystem.js';
 import { NODE_TYPES, NODE_ICONS, FLOOR_THEMES } from './game/MapGenerator.js';
 import { RELIC_DEFINITIONS, POTION_DEFINITIONS } from './game/ScalingSystem.js';
 
+// マップ背景画像のアセットインポート (Viteで正しくパス解決させるため)
+import bgForestMap from './assets/bg_forest_map.png';
+import bgCaveMap from './assets/bg_cave_map.png';
+import bgTowerMap from './assets/bg_tower_map.png';
+
 // ゲームエンジンのインスタンス
 const game = new GameEngine();
 
@@ -48,9 +53,9 @@ function renderMap() {
   const container = document.getElementById('map-container');
   // 背景画像とグラデーションの合成
   let bgImage = '';
-  if (game.currentFloor === 0) bgImage = 'src/assets/bg_forest_map.png';
-  else if (game.currentFloor === 1) bgImage = 'src/assets/bg_cave_map.png';
-  else if (game.currentFloor === 2) bgImage = 'src/assets/bg_tower_map.png';
+  if (game.currentFloor === 0) bgImage = bgForestMap;
+  else if (game.currentFloor === 1) bgImage = bgCaveMap;
+  else if (game.currentFloor === 2) bgImage = bgTowerMap;
 
   if (bgImage) {
     container.style.background = `url(${bgImage}) center center / cover no-repeat, ${theme.bgGradient}`;
