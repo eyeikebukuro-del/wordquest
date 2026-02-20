@@ -3,7 +3,7 @@
 
 import { WordDatabase } from '../vocabulary/WordDatabase.js';
 import { SpacedRepetition } from '../vocabulary/SpacedRepetition.js';
-import { createStarterDeck, createCard } from './CardSystem.js';
+import { createStarterDeck, createCard, getRandomCards } from './CardSystem.js';
 import { BattleSystem } from './BattleSystem.js';
 import { createEnemy, getRandomEnemy, getFloorBoss, ELITE_ENEMIES } from './EnemySystem.js';
 import { generateMap, visitNode, NODE_TYPES } from './MapGenerator.js';
