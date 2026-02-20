@@ -116,7 +116,7 @@ export class GameEngine {
     selectNode(nodeId) {
         const map = this.maps[this.currentFloor];
         const node = map.nodes.find(n => n.id === nodeId);
-        if (!node || !node.available) return;
+        if (!node || (!node.available && !window.DEBUG_MODE)) return;
 
         visitNode(map, nodeId);
         this.currentNodeId = nodeId;

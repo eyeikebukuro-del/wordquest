@@ -99,10 +99,13 @@ function renderMap() {
       label.textContent = labelMap[node.type] || '';
       nodeDiv.appendChild(label);
 
-      if (node.available) {
+      if (node.available || window.DEBUG_MODE) {
         nodeDiv.addEventListener('click', () => {
           game.selectNode(node.id);
         });
+        if (window.DEBUG_MODE && !node.available) {
+          nodeDiv.style.cursor = 'pointer';
+        }
       }
 
       layerDiv.appendChild(nodeDiv);
@@ -658,6 +661,7 @@ function renderEvent() {
   document.getElementById('btn-close-event').style.display = 'none';
 
   const choicesEl = document.getElementById('event-choices');
+  choicesEl.style.display = 'flex';
   choicesEl.innerHTML = '';
 
   for (const choice of event.choices) {
@@ -672,7 +676,20 @@ function renderEvent() {
       resultEl.style.display = 'block';
       resultEl.style.background = 'var(--bg-glass)';
       choicesEl.style.display = 'none';
-      document.getElementById('btn-close-event').style.display = 'block';
+
+      if (result.needCardSelect) {
+        document.getElementById('btn-close-event').style.display = 'none';
+        setTimeout(() => {
+          showCardSelect([...game.playerDeck], (card) => {
+            addCardXP(card);
+            addCardXP(card);
+            addCardXP(card);
+            game.changeScreen(SCREENS.MAP);
+          });
+        }, 1000);
+      } else {
+        document.getElementById('btn-close-event').style.display = 'block';
+      }
     });
 
     choicesEl.appendChild(btn);
