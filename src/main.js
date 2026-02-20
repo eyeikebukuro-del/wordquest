@@ -123,10 +123,21 @@ function renderBattle() {
   const enemy = b.enemy;
   const player = b.player;
 
-  // 背景色を敵のフロアに応じて変更
-  const battleScreen = document.getElementById('screen-battle');
-  const theme = FLOOR_THEMES[game.currentFloor];
-  battleScreen.style.background = theme.bgGradient;
+  // 背景色を敵のフロアに応じて変更（画像ベース）
+  const bgMap = {
+    1: 'url(./assets/bg_forest.png)',
+    2: 'url(./assets/bg_cave.png)',
+    3: 'url(./assets/bg_tower.png)'
+  };
+  const battleField = document.querySelector('.battle-field');
+  if (battleField) {
+    battleField.style.backgroundImage = bgMap[game.currentFloor] || bgMap[1];
+  }
+
+  // 敵の効果をリスニング
+  currentBattle.on('enemy_turn', (result) => {
+    showEnemyTurnEffects(result);
+  });
 
   // 敵表示
   document.getElementById('enemy-emoji').textContent = enemy.emoji;
@@ -155,11 +166,12 @@ function updateBattleUI() {
   document.getElementById('player-hp-text').textContent = `${player.hp}/${player.maxHp}`;
 
   // エナジー
-  document.getElementById('energy-display').textContent = `⚡ ${b.energy}/${b.maxEnergy}`;
+  document.getElementById('energy-display').textContent = `${b.energy}/${b.maxEnergy}`;
 
   // ブロック
-  document.getElementById('block-display').textContent = `🛡️ ${b.playerBlock}`;
-  document.getElementById('block-display').style.color = b.playerBlock > 0 ? 'var(--accent-blue)' : 'var(--text-muted)';
+  const blockDisplay = document.getElementById('block-display');
+  blockDisplay.textContent = `🛡️ ${b.playerBlock}`;
+  blockDisplay.style.opacity = b.playerBlock > 0 ? '1' : '0';
 
   // 敵HP
   const enemyHpPercent = (enemy.hp / enemy.maxHp) * 100;
@@ -406,16 +418,54 @@ function onQuizAnswer(answer, quiz) {
   }, 1500);
 }
 
-function showDamageNumber(value, type) {
-  const enemyArea = document.querySelector('.enemy-area');
+function showDamageNumber(value, type, isPlayer = false) {
+  const container = isPlayer ? document.querySelector('.player-area') : document.querySelector('.enemy-area');
+  if (!container) return;
+
   const el = document.createElement('div');
   el.className = `damage-number ${type}`;
-  const prefix = type === 'heal' ? '+' : type === 'block' ? '+' : '-';
+
+  let prefix = '';
+  if (typeof value === 'number') {
+    prefix = type === 'heal' || type === 'block' ? '+' : type === 'damage' ? '-' : '';
+  }
+
   el.textContent = `${prefix}${value}`;
   el.style.left = `${40 + Math.random() * 40}%`;
   el.style.top = '30%';
-  enemyArea.appendChild(el);
+  container.appendChild(el);
   setTimeout(() => el.remove(), 1000);
+}
+
+function showEnemyTurnEffects(result) {
+  let totalDamage = 0;
+  let blockedAll = false;
+
+  if (!result || !result.effects) return;
+
+  for (const eff of result.effects) {
+    if (eff.type === 'damage' || eff.type === 'multi_damage') {
+      const actual = eff.actual !== undefined ? eff.actual : eff.total;
+      const expected = eff.type === 'damage' ? eff.value : (eff.perHit * eff.hits);
+
+      if (actual > 0) {
+        showDamageNumber(actual, 'damage', true);
+        totalDamage += actual;
+      } else if (expected > 0 && actual === 0) {
+        blockedAll = true;
+      }
+    }
+  }
+
+  if (blockedAll && totalDamage === 0) {
+    showDamageNumber('Block!', 'block', true);
+  }
+
+  if (totalDamage > 0) {
+    const battleScreen = document.getElementById('screen-battle');
+    battleScreen.classList.add('anim-player-damage');
+    setTimeout(() => battleScreen.classList.remove('anim-player-damage'), 600);
+  }
 }
 
 // === ターン終了 ===

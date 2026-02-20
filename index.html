@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description" content="WordQuest - 英単語を覚えながら冒険するローグライクカードゲーム！小学生向け英語学習アプリ" />
   <title>WordQuest ⚔️ 英語の塔</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="/src/styles/index.css" />
   <link rel="stylesheet" href="/src/styles/battle.css" />
   <link rel="stylesheet" href="/src/styles/map.css" />
   <link rel="stylesheet" href="/src/styles/menu.css" />
   <link rel="stylesheet" href="/src/styles/animations.css" />
 </head>
+
 <body>
   <div id="app">
     <!-- メインメニュー -->
@@ -66,21 +71,29 @@
 
     <!-- バトル画面 -->
     <div id="screen-battle" class="screen">
+      <!-- 上部バー（コンボ等） -->
       <div class="battle-top-bar">
-        <div class="player-battle-status">
-          <div class="hp-bar-container">
-            <div class="hp-bar" id="player-hp-bar"></div>
-            <span class="hp-text" id="player-hp-text">60/60</span>
-          </div>
-          <div class="battle-stats">
-            <span class="stat-energy" id="energy-display">⚡ 3/3</span>
-            <span class="stat-block" id="block-display">🛡️ 0</span>
-          </div>
-        </div>
         <div class="combo-display" id="combo-display"></div>
       </div>
 
       <div class="battle-field">
+        <!-- プレイヤーエリア（左） -->
+        <div class="player-area">
+          <div class="player-status" id="player-status"></div>
+          <div class="player-character">
+            <span class="player-emoji">🧙‍♂️</span>
+            <span class="player-name">プレイヤー</span>
+          </div>
+          <div class="player-hp-container">
+            <div class="hp-bar" id="player-hp-bar"></div>
+            <span class="hp-text small" id="player-hp-text">60/60</span>
+          </div>
+          <div class="player-block-container">
+            <span class="stat-block badge" id="block-display" style="opacity:0;">🛡️ 0</span>
+          </div>
+        </div>
+
+        <!-- 敵エリア（右） -->
         <div class="enemy-area">
           <div class="enemy-intent" id="enemy-intent"></div>
           <div class="enemy-character" id="enemy-character">
@@ -94,27 +107,37 @@
           <div class="enemy-status" id="enemy-status"></div>
         </div>
 
-        <!-- クイズエリア -->
+        <!-- クイズエリア（オーバーレイ） -->
         <div class="quiz-area" id="quiz-area" style="display:none;">
           <div class="quiz-card-info" id="quiz-card-info"></div>
           <div class="quiz-question" id="quiz-question"></div>
           <div class="quiz-choices" id="quiz-choices"></div>
           <div class="quiz-typing" id="quiz-typing" style="display:none;">
-            <input type="text" id="typing-input" class="typing-input" placeholder="英語で入力..." autocomplete="off" autocapitalize="off" />
+            <input type="text" id="typing-input" class="typing-input" placeholder="英語で入力..." autocomplete="off"
+              autocapitalize="off" />
             <button id="typing-submit" class="btn btn-primary btn-small">こたえる</button>
           </div>
           <div class="quiz-result" id="quiz-result" style="display:none;"></div>
         </div>
       </div>
 
-      <!-- 手札 -->
-      <div class="hand-area" id="hand-area">
-        <div class="hand-cards" id="hand-cards"></div>
-      </div>
+      <!-- 下部UI領域（エナジー・手札・アクション） -->
+      <div class="battle-bottom-area">
+        <div class="energy-container">
+          <div class="energy-orb">
+            <span class="stat-energy" id="energy-display">3/3</span>
+          </div>
+        </div>
 
-      <div class="battle-actions">
-        <button id="btn-end-turn" class="btn btn-end-turn">ターン終了</button>
-        <div class="potion-slots" id="potion-slots"></div>
+        <!-- 手札 -->
+        <div class="hand-area" id="hand-area">
+          <div class="hand-cards" id="hand-cards"></div>
+        </div>
+
+        <div class="battle-actions">
+          <button id="btn-end-turn" class="btn btn-end-turn">ターン終了</button>
+          <div class="potion-slots" id="potion-slots"></div>
+        </div>
       </div>
     </div>
 
@@ -238,4 +261,5 @@
 
   <script type="module" src="/src/main.js"></script>
 </body>
+
 </html>
