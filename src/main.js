@@ -143,8 +143,10 @@ function renderBattle() {
   });
 
   // 敵表示
-  document.getElementById('enemy-emoji').textContent = enemy.emoji;
-  document.getElementById('enemy-emoji').style.fontSize = enemy.isBoss ? '5rem' : '4rem';
+  const enemyEmojiEl = document.getElementById('enemy-emoji');
+  enemyEmojiEl.classList.remove('anim-death', 'anim-hit'); // 前のバトルのアニメーションをリセット
+  enemyEmojiEl.textContent = enemy.emoji;
+  enemyEmojiEl.style.fontSize = enemy.isBoss ? '5rem' : '4rem';
   document.getElementById('enemy-name').textContent = enemy.name + (enemy.isElite ? ' ⭐' : '');
 
   updateBattleUI();
@@ -380,9 +382,14 @@ function onQuizAnswer(answer, quiz) {
     // ダメージ数字表示
     if (result.cardEffect && result.cardEffect.effects) {
       for (const eff of result.cardEffect.effects) {
-        if (eff.type === 'damage') showDamageNumber(eff.value, 'damage');
-        if (eff.type === 'block') showDamageNumber(eff.value, 'block');
-        if (eff.type === 'heal') showDamageNumber(eff.value, 'heal');
+        if (eff.type === 'damage') {
+          playSlashEffect(false); // 敵への攻撃
+          setTimeout(() => showDamageNumber(eff.actual !== undefined ? eff.actual : eff.value, 'damage', false), 200);
+        } else if (eff.type === 'block') {
+          showDamageNumber(eff.value, 'block', true); // ブロックは自キャラへ
+        } else if (eff.type === 'heal') {
+          showDamageNumber(eff.value, 'heal', true); // ヒールも自キャラへ
+        }
       }
     }
 
@@ -421,6 +428,19 @@ function onQuizAnswer(answer, quiz) {
   }, 1500);
 }
 
+function playSlashEffect(isPlayer = false) {
+  const container = isPlayer ? document.querySelector('.player-area') : document.querySelector('.enemy-area');
+  if (!container) return;
+
+  const slash = document.createElement('div');
+  slash.className = 'slash-effect';
+  slash.style.top = '20%';
+  slash.style.left = '20%';
+  container.appendChild(slash);
+
+  setTimeout(() => slash.remove(), 400);
+}
+
 function showDamageNumber(value, type, isPlayer = false) {
   const container = isPlayer ? document.querySelector('.player-area') : document.querySelector('.enemy-area');
   if (!container) return;
@@ -434,7 +454,7 @@ function showDamageNumber(value, type, isPlayer = false) {
   }
 
   el.textContent = `${prefix}${value}`;
-  el.style.left = `${40 + Math.random() * 40}%`;
+  el.style.left = `${40 + Math.random() * 20}%`;
   el.style.top = '30%';
   container.appendChild(el);
   setTimeout(() => el.remove(), 1000);
@@ -452,7 +472,8 @@ function showEnemyTurnEffects(result) {
       const expected = eff.type === 'damage' ? eff.value : (eff.perHit * eff.hits);
 
       if (actual > 0) {
-        showDamageNumber(actual, 'damage', true);
+        playSlashEffect(true); // プレイヤーへの攻撃
+        setTimeout(() => showDamageNumber(actual, 'damage', true), 200);
         totalDamage += actual;
       } else if (expected > 0 && actual === 0) {
         blockedAll = true;
@@ -486,6 +507,16 @@ function onEndTurn() {
       battleScreen.classList.remove('anim-player-damage');
       game.onBattleEnd('defeat');
     }, 600);
+    return;
+  }
+
+  // 毒などで敵が倒れた場合（勝利チェック）
+  if (currentBattle.state === BATTLE_STATES.VICTORY) {
+    const enemyEmoji = document.getElementById('enemy-emoji');
+    enemyEmoji.classList.add('anim-death');
+    setTimeout(() => {
+      game.onBattleEnd('victory');
+    }, 700);
     return;
   }
 
@@ -686,6 +717,24 @@ function renderEvent() {
             addCardXP(card);
             game.changeScreen(SCREENS.MAP);
           });
+        }, 1000);
+      } else if (choice.effect && choice.effect.type === 'random_card' && result.card) {
+        // カードをもらうイベントの場合、モーダルを開いてカードを表示（選ばなくても獲得済み）
+        document.getElementById('btn-close-event').style.display = 'none';
+        setTimeout(() => {
+          showCardSelect([result.card], (card) => {
+            game.changeScreen(SCREENS.MAP);
+          });
+          // スキップボタンを「つぎへ」という名前に変えて動作させる（視覚的配慮）
+          const skipBtn = document.getElementById('btn-skip-card');
+          const originalText = skipBtn.textContent;
+          skipBtn.textContent = 'つぎへ';
+
+          skipBtn.onclick = () => {
+            document.getElementById('modal-card-select').style.display = 'none';
+            skipBtn.textContent = originalText;
+            game.changeScreen(SCREENS.MAP);
+          };
         }, 1000);
       } else {
         document.getElementById('btn-close-event').style.display = 'block';
