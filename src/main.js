@@ -1019,6 +1019,13 @@ document.addEventListener('DOMContentLoaded', () => {
     game.startNewRun();
   });
 
+  // キャラクター（解放済）を直接クリックしてもスタートするように
+  document.querySelectorAll('.char-card:not(.locked)').forEach(card => {
+    card.addEventListener('click', () => {
+      game.startNewRun();
+    });
+  });
+
   document.getElementById('btn-back-menu').addEventListener('click', () => {
     showScreen('menu');
   });
