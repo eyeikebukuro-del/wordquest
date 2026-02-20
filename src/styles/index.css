@@ -361,7 +361,8 @@ body {
 .card {
   position: relative;
   width: 100px;
-  min-height: 130px;
+  height: 145px;
+  /* min-height から固定の height に変更 */
   border-radius: var(--radius-md);
   padding: 8px;
   cursor: pointer;
@@ -372,6 +373,8 @@ body {
   gap: 3px;
   border: 2px solid transparent;
   flex-shrink: 0;
+  overflow: hidden;
+  /* 高さを超えた場合の溢れを防止 */
 }
 
 .card.attack {
@@ -446,9 +449,14 @@ body {
   font-size: 0.95rem;
   /* 0.8remから変更して文字を大きく */
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.3;
   margin-bottom: 8px;
   flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  /* 高さ固定に伴い、最大3行で省略表示にする */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-level {
@@ -466,6 +474,7 @@ body {
 /* === 大きいカード（報酬・ショップ用） === */
 .card-large {
   width: 140px;
+  height: auto;
   min-height: 180px;
   padding: 12px;
   gap: 6px;

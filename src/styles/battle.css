@@ -435,8 +435,8 @@
 .battle-actions {
     position: absolute;
     right: 30px;
-    bottom: 140px;
-    /* 手札より少し上の位置に配置 */
+    bottom: 200px;
+    /* 手札に被らないよう上へ配置 */
     display: flex;
     flex-direction: column;
     align-items: flex-end;
