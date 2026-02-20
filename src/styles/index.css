@@ -415,10 +415,12 @@ body {
 
 .card-cost {
   position: absolute;
-  top: -6px;
-  left: -6px;
-  width: 26px;
-  height: 26px;
+  top: 4px;
+  /* 見切れないよう内側へ移動 (元-6px) */
+  left: 4px;
+  /* 見切れないよう内側へ移動 (元-6px) */
+  width: 24px;
+  height: 24px;
   background: var(--bg-primary);
   border: 2px solid var(--accent-yellow);
   border-radius: 50%;
@@ -438,22 +440,24 @@ body {
 }
 
 .card-name {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
+  /* ちょっとだけ小さくして詰めを開ける */
   font-weight: 700;
   text-align: center;
-  line-height: 1.2;
+  line-height: 1.1;
   color: var(--text-primary);
 }
 
 .card-desc {
-  font-size: 0.95rem;
-  /* 0.8remから変更して文字を大きく */
+  font-size: 0.85rem;
+  /* 0.95 -> 0.85へ下げる */
   color: var(--text-secondary);
-  line-height: 1.3;
-  margin-bottom: 8px;
+  line-height: 1.25;
+  margin-bottom: 6px;
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   /* 高さ固定に伴い、最大3行で省略表示にする */
   -webkit-box-orient: vertical;
   overflow: hidden;
