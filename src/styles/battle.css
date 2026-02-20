@@ -373,8 +373,9 @@
 /* エナジー表示 */
 .energy-container {
     position: absolute;
-    left: 20px;
-    top: -30px;
+    left: 10px;
+    top: -70px;
+    /* カードの上になるようにさらに上へ移動 */
     z-index: 30;
 }
 
@@ -405,9 +406,11 @@
 
 /* 手札エリア */
 .hand-area {
-    padding: 8px 16px 0;
-    margin-left: 70px;
-    /* エナジーオーブとの被りを防ぐ */
+    padding: 8px 10px 0;
+    margin-left: 0;
+    /* エナジーを上に移動したのでフル幅に変更 */
+    min-height: 160px;
+    /* カードが空でもエリアを維持して背景のチラつきを防ぐ */
     z-index: 20;
 }
 
