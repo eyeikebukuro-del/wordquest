@@ -155,9 +155,20 @@ function drawMapConnections() {
     const x2 = toRect.left - containerRect.left + (toRect.width / 2);
     const y2 = toRect.top - containerRect.top + (toRect.height / 2);
 
+    // 円の半径を考慮して線の長さを短くする (丸の中に線が入り込まないように)
+    // ノードのサイズ（PCなら約60px、モバイルなら50px）を考慮し、半径分を引く
+    const radius = fromRect.width / 2;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const angle = Math.atan2(dy, dx);
+    const startX = x1 + Math.cos(angle) * radius;
+    const startY = y1 + Math.sin(angle) * radius;
+    const endX = x2 - Math.cos(angle) * radius;
+    const endY = y2 - Math.sin(angle) * radius;
+
     ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
 
     // スタイル決定
     ctx.lineWidth = 3;

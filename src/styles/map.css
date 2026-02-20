@@ -124,7 +124,10 @@
 }
 
 .map-node.locked {
-    opacity: 0.25;
+    opacity: 0.8;
+    /* 行けない先も見えやすいように薄すぎない透明度に変更 */
+    filter: grayscale(80%) brightness(0.7);
+    /* 暗く・色あせさせて未到達感を出す */
     cursor: default;
 }
 
@@ -143,10 +146,14 @@
 .map-node-label {
     position: absolute;
     bottom: -18px;
-    font-size: 0.6rem;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    /* 文字色を少し明るく */
+    text-shadow: 0 0 4px #000000, 0 1px 3px rgba(0, 0, 0, 0.8);
+    /* 影をつけて線から浮かせる */
     white-space: nowrap;
+    z-index: 10;
 }
 
 /* マップ接続線（SVG） */

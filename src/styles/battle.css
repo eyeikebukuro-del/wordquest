@@ -105,10 +105,12 @@
 }
 
 .player-block-container {
-    min-height: 28px;
-    /* 敵のenemy-statusと高さを合わせるため追加 */
+    height: 30px;
+    /* HPバーのズレをなくすための固定高さ */
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 
@@ -178,9 +180,11 @@
     display: flex;
     gap: 6px;
     font-size: var(--font-xs);
-    min-height: 28px;
-    /* HPバーの高さをプレイヤー側と合わせるため追加 */
+    height: 30px;
+    /* HPバーのズレをなくすための固定高さ */
+    width: 100%;
     align-items: center;
+    justify-content: center;
 }
 
 .status-badge {
