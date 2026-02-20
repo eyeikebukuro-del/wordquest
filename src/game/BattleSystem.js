@@ -213,7 +213,11 @@ export class BattleSystem {
 
         // カードを使用済みにする
         this.energy -= this.selectedCard.cost;
-        this.deck.playCard(this.selectedCard.instanceId);
+        if (this.selectedCard.type === CARD_TYPES.SKILL) {
+            this.deck.exhaustCard(this.selectedCard.instanceId);
+        } else {
+            this.deck.playCard(this.selectedCard.instanceId);
+        }
         this.selectedCard = null;
         this.currentQuiz = null;
 
@@ -237,7 +241,7 @@ export class BattleSystem {
      * @returns {Object} 効果結果
      */
     applyCardEffect(card) {
-        const result = { type: card.type, effects: [] };
+        const result = { type: card.type, cost: card.cost, effects: [] };
 
         // 攻撃
         if (card.baseDamage) {

@@ -250,13 +250,20 @@ export function createCard(definitionId) {
     const def = CARD_DEFINITIONS[definitionId];
     if (!def) throw new Error(`不明なカード: ${definitionId}`);
 
-    return {
+    const card = {
         ...def,
         instanceId: `${definitionId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         level: 1,
         xp: 0,
         xpToNext: 3 // レベルアップに必要な正答数
     };
+
+    // スキルカードは使用後に廃棄されることを明記
+    if (card.type === CARD_TYPES.SKILL) {
+        card.description += ' 使用後、廃棄する。';
+    }
+
+    return card;
 }
 
 /**
@@ -383,6 +390,19 @@ export class DeckManager {
         if (index === -1) return null;
         const card = this.hand.splice(index, 1)[0];
         this.discardPile.push(card);
+        return card;
+    }
+
+    /**
+     * 手札からカードを除外（廃棄）
+     * @param {string} instanceId - カードインスタンスID
+     * @returns {Object|null} 除外したカード
+     */
+    exhaustCard(instanceId) {
+        const index = this.hand.findIndex(c => c.instanceId === instanceId);
+        if (index === -1) return null;
+        const card = this.hand.splice(index, 1)[0];
+        this.exhaustPile.push(card);
         return card;
     }
 
