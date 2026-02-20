@@ -155,16 +155,18 @@ function drawMapConnections() {
     const x2 = toRect.left - containerRect.left + (toRect.width / 2);
     const y2 = toRect.top - containerRect.top + (toRect.height / 2);
 
-    // 円の半径を考慮して線の長さを短くする (丸の中に線が入り込まないように)
-    // ノードのサイズ（PCなら約60px、モバイルなら50px）を考慮し、半径分+余白を引く
-    const radius = (fromRect.width / 2) + 4;
+    // 要素の中心を基準に、DOM要素のサイズを使って円の半径を正確に計算する
+    // clientWidth / 2 より少し大きい値（例: +2px）を半径として引くことで確実に円形要素の外側から描画する
+    const fromRadius = (fromRect.width / 2) + 2;
+    const toRadius = (toRect.width / 2) + 2;
+
     const dx = x2 - x1;
     const dy = y2 - y1;
     const angle = Math.atan2(dy, dx);
-    const startX = x1 + Math.cos(angle) * radius;
-    const startY = y1 + Math.sin(angle) * radius;
-    const endX = x2 - Math.cos(angle) * radius;
-    const endY = y2 - Math.sin(angle) * radius;
+    const startX = x1 + Math.cos(angle) * fromRadius;
+    const startY = y1 + Math.sin(angle) * fromRadius;
+    const endX = x2 - Math.cos(angle) * toRadius;
+    const endY = y2 - Math.sin(angle) * toRadius;
 
     ctx.beginPath();
     ctx.moveTo(startX, startY);
@@ -183,12 +185,14 @@ function drawMapConnections() {
         ctx.setLineDash([8, 8]); // 点線
         ctx.lineDashOffset = -performance.now() / 50;
       } else {
-        // 現在地以外の、すでに選ばれなかったルートや過去のルートの先への予測線は描画しない
-        continue;
+        // 現在地から繋がっていない遠い未来の線
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.setLineDash([]);
       }
     } else {
-      // 未到達の先の予測ルート（現在地から繋がっていない遠い未来の線）はすっきりさせるため描画しない
-      continue;
+      // 未到達の先の予測ルート
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.setLineDash([]);
     }
 
     ctx.stroke();

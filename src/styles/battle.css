@@ -421,7 +421,8 @@
     gap: 8px;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 10px 10px 4px;
+    padding: 10px 10px 24px;
+    /* 下部余白を増やして黒背景の余白を多めに取る */
     -webkit-overflow-scrolling: touch;
 }
 
