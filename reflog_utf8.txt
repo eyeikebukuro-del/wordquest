@@ -1,0 +1,26 @@
+﻿df4910d HEAD@{0}: commit: fix(cache): 繧ｭ繝｣繝・す繝･繝舌せ繝・ぅ繝ｳ繧ｰ逕ｨ繝代Λ繝｡繝ｼ繧ｿ縺ｮ霑ｽ蜉
+05b298b HEAD@{1}: commit: feat(ui): 繝槭ャ繝苓レ譎ｯ逕ｻ蜒上・霑ｽ蜉縲∫せ邱壹・謠冗判蠎ｧ讓吩ｿｮ豁｣縲√く繝｣繝ｩ蜷阪・謾ｹ陦悟ｴｩ繧御ｿｮ豁｣
+32bbcbf HEAD@{2}: reset: moving to 32bbcbfdab14a81a0bc5106447b9446b073f91bd
+a2b922d HEAD@{3}: commit: fix(ui): 繝槭ャ繝苓｡ｨ遉ｺ譎ゅ・閾ｪ蜍輔せ繧ｯ繝ｭ繝ｼ繝ｫ縺ｨ繧ｿ繝ｼ繝ｳ邨ゆｺ・・繧ｿ繝ｳ縺ｮ繧ｹ繝槭・蜷代￠繝ｬ繧､繧｢繧ｦ繝郁ｪｿ謨ｴ
+a8a266d HEAD@{4}: commit: feat: 譁ｰ繝上う繧ｹ繧ｳ繧｢繝ｭ繧ｸ繝・け隧ｳ邏ｰ陦ｨ遉ｺ縲√ヰ繝・け繧｢繝・・菫晁ｭｷ讖溯・縲∝推UI縺ｮ繝舌げ菫ｮ豁｣
+a60ab7f HEAD@{5}: commit: feat: 隍・焚謨ｵ蟇ｾ蠢懊・螟ｧ隕乗ｨ｡繝ｪ繝輔ぃ繧ｯ繧ｿ繝ｪ繝ｳ繧ｰ縲√ち繝ｼ繧ｲ繝・ぅ繝ｳ繧ｰ讖溯・縲∝・菴捺判謦・き繝ｼ繝峨・譁ｰ隕剰ｿｽ蜉
+26c68c8 HEAD@{6}: commit: fix: 繝槭ャ繝励ヮ繝ｼ繝峨・邵ｦ髢馴囈諡｡蠑ｵ縺ｨ繝繝悶Ν繧ｹ繝医Λ繧､繧ｯ隱ｬ譏取枚縺ｮ菫ｮ豁｣・亥ｮ牙ｮ壽攸・・9be008b HEAD@{7}: commit: fix: 繝槭ャ繝礼ｴ邱壹ａ繧願ｾｼ縺ｿ縺ｮ菫ｮ豁｣縲∝・繧ｫ繝ｼ繝峨・隱ｬ譏取枚逵∵枚蟄怜喧
+32bbcbf HEAD@{8}: commit: fix: 繧ｫ繝ｼ繝蛾∈謚樒峩蠕後・繝√Λ繝・く螳悟・謗帝勁縲√せ繧ｭ繝ｫ繧ｫ繝ｼ繝芽・蜍募ｻ・｣・ユ繧ｭ繧ｹ繝医・遏ｭ邵ｮ
+e4d5ae2 HEAD@{9}: commit: fix: 繧ｫ繝ｼ繝画緒逕ｻ縺ｮ繝√Λ縺､縺埼亟豁｢縲√Ξ繝ｪ繝・け隱ｬ譏取枚縺ｮ譁・ｭ怜・繧御ｿｮ豁｣
+45122e4 HEAD@{10}: commit: fix: 繝繝悶Ν繧ｹ繝医Λ繧､繧ｯ谿句・縲∵焔譛ｭ鬮倥＆蝗ｺ螳壹√う繝吶Φ繝医ヰ繧ｰ縲∵囓霆｢驕・ｰ上・菫ｮ豁｣
+a7ee082 HEAD@{11}: commit: fix: 繝繝悶Ν繧ｹ繝医Λ繧､繧ｯ谿句・縲∵焔譛ｭ鬮倥＆蝗ｺ螳壹√う繝吶Φ繝医ヰ繧ｰ縲∵囓霆｢驕・ｰ上・菫ｮ豁｣
+e7540a9 HEAD@{12}: commit: fix: 蛻晄悄繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ菴咲ｽｮ繝懊ち繝ｳ謾ｹ陦後け繝ｪ繧｢逕ｻ髱｢驕ｷ遘ｻ蜈医・菫ｮ豁｣
+d69ba3e HEAD@{13}: commit: style: 繝昴・繧ｷ繝ｧ繝ｳ驟咲ｽｮ繧偵お繝翫ず繝ｼ縺ｨ蜷瑚｡後↓謠・∴繧九∵枚蟄怜・繧悟ｯｾ遲厄ｼ医ユ繧ｭ繧ｹ繝育洒邵ｮ蛹厄ｼ・01eb4f2 HEAD@{14}: commit: style: 繧ｫ繝ｼ繝画枚蟄励し繧､繧ｺ繧ｨ繝翫ず繝ｼ菴咲ｽｮ繝昴・繧ｷ繝ｧ繝ｳ閭梧勹濶ｲ縺ｮ蠕ｮ隱ｿ謨ｴ
+93f2386 HEAD@{15}: commit: style: 繧ｫ繝ｼ繝蛾ｫ倥＆蝗ｺ螳壹↓繧医ｋ繝ｬ繧､繧｢繧ｦ繝亥ｮ牙ｮ壼喧縺ｨ繝昴・繧ｷ繝ｧ繝ｳ驥阪↑繧贋ｿｮ豁｣
+2db0485 HEAD@{16}: commit: feat: 繝ｬ繝ｪ繝・け驕ｸ謚朸I縺ｮ繝ｬ繧､繧｢繧ｦ繝域隼蝟・→譁ｰ蜊倩ｪ橸ｼ・o.201-232・峨・霑ｽ蜉
+99396f0 HEAD@{17}: commit: style: 繝槭ャ繝玲緒逕ｻ邱壹・繧√ｊ霎ｼ縺ｿ蜀崎ｪｿ謨ｴ繝舌ヨ繝ｫ謇区惆荳矩Κ鮟剃ｽ咏區霑ｽ蜉繝槭ャ繝励・譛ｪ蛻ｰ驕比ｺ域ｸｬ邱壼ｾｩ蜈・f9c66bb HEAD@{18}: commit: fix: 5縺､縺ｮ繝輔ぅ繝ｼ繝峨ヰ繝・け蟇ｾ蠢懶ｼ・I繧ｨ繝翫ず繝ｼ蝣ｱ驟ｬ繝輔か繝ｼ繧ｫ繧ｹ遲会ｼ・79abaf5 HEAD@{19}: commit: fix: 繝偵Φ繝医・繝ｼ繧ｷ繝ｧ繝ｳ菴ｿ逕ｨ譎ゅ・荳榊・蜷医→騾｣邯壼・鬘梧凾縺ｮ繝偵Φ繝郁｡ｨ遉ｺ繧剃ｿｮ豁｣
+b4a7054 HEAD@{20}: commit: style: Reposition energy orb to maximize hand area width and prevent empty hand layout shift
+7eb272e HEAD@{21}: commit: style: Prevent top clipping of active character card by adding container padding
+c037d1b HEAD@{22}: commit: fix: adjust character selection layout to horizontal scrolling for iPhone and fix character card tap event
+e27d00b HEAD@{23}: commit: fix: Resolve mobile layout for character selection and enable direct character clicking
+cadadc1 HEAD@{24}: commit: feat: Add character selection, score calculation, and leaderboard system
+391a3a8 HEAD@{25}: commit: Fix Map UI overlaps and HP bar alignments again
+3f7af84 HEAD@{26}: commit: chore: auto sync map and hp bar fixes
+4d13848 HEAD@{27}: commit: Fix Battle UI HP bar alignment and add Map canvas node connection routing
+e152b89 HEAD@{28}: commit: Improve battle UI: damage float positions, combo text, slash effect, poison logic, actual block values
+a049f55 HEAD@{29}: commit: Update game engine and main for events

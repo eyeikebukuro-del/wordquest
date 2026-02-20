@@ -167,9 +167,12 @@ export class BattleSystem {
         let correct = false;
 
         if (this.currentQuiz.type === 'typing') {
-            correct = answer.toLowerCase().trim() === this.currentQuiz.answer;
+            const normalizedAnswer = answer.toLowerCase().trim();
+            correct = normalizedAnswer === this.currentQuiz.answer ||
+                (this.currentQuiz.aliases && this.currentQuiz.aliases.includes(normalizedAnswer));
         } else {
             correct = answer === this.currentQuiz.correctIndex;
+            // 選択肢問題では、インデックスによる判定のみでOK (表示テキストが重複することは避けたため)
         }
 
         // 学習データ記録

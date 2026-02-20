@@ -102,6 +102,7 @@ export class WordDatabase {
         choices: allChoices.map(c => c.english),
         correctIndex,
         word: correctWord,
+        aliases: correctWord.aliases || [],
         type: questionType
       };
     }
@@ -117,6 +118,7 @@ export class WordDatabase {
       question: correctWord.japanese,
       questionEmoji: correctWord.emoji,
       answer: correctWord.english.toLowerCase(),
+      aliases: (correctWord.aliases || []).map(a => a.toLowerCase()),
       hint: correctWord.english[0] + '_'.repeat(correctWord.english.length - 1),
       word: correctWord,
       type: 'typing'

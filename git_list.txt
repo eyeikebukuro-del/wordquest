@@ -1,0 +1,28 @@
+df4910d fix(cache): キャッシュバスティング用パラメータの追加
+05b298b feat(ui): マップ背景画像の追加、点線の描画座標修正、キャラ名の改行崩れ修正
+32bbcbf fix: カード選択直後のチラツキ完全排除、スキルカード自動廃棄テキストの短縮
+e4d5ae2 fix: カード描画のチラつき防止、レリック説明文の文字切れ修正
+45122e4 fix: ダブルストライク残党、手札高さ固定、イベントバグ、暗転遅小の修正
+a7ee082 fix: ダブルストライク残党、手札高さ固定、イベントバグ、暗転遅小の修正
+e7540a9 fix: 初期スクロール位置ボタン改行クリア画面遷移先の修正
+d69ba3e style: ポーション配置をエナジーと同行に揃える、文字切れ対策（テキスト短縮化）
+01eb4f2 style: カード文字サイズエナジー位置ポーション背景色の微調整
+93f2386 style: カード高さ固定によるレイアウト安定化とポーション重なり修正
+2db0485 feat: レリック選択UIのレイアウト改善と新単語（No.201-232）の追加
+99396f0 style: マップ描画線のめり込み再調整バトル手札下部黒余白追加マップの未到達予測線復元
+f9c66bb fix: 5つのフィードバック対応（UIエナジー報酬フォーカス等）
+79abaf5 fix: ヒントポーション使用時の不具合と連続出題時のヒント表示を修正
+b4a7054 style: Reposition energy orb to maximize hand area width and prevent empty hand layout shift
+7eb272e style: Prevent top clipping of active character card by adding container padding
+c037d1b fix: adjust character selection layout to horizontal scrolling for iPhone and fix character card tap event
+e27d00b fix: Resolve mobile layout for character selection and enable direct character clicking
+cadadc1 feat: Add character selection, score calculation, and leaderboard system
+391a3a8 Fix Map UI overlaps and HP bar alignments again
+3f7af84 chore: auto sync map and hp bar fixes
+4d13848 Fix Battle UI HP bar alignment and add Map canvas node connection routing
+e152b89 Improve battle UI: damage float positions, combo text, slash effect, poison logic, actual block values
+a049f55 Update game engine and main for events
+00c5448 Update battle UI layout, status displays, and background images
+f236750 Trigger deploy
+b467910 Add GitHub Pages deploy workflow
+3235a8a Initial commit: WordQuest English learning roguelike
