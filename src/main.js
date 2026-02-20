@@ -46,7 +46,18 @@ function renderMap() {
 
   const theme = FLOOR_THEMES[game.currentFloor];
   const container = document.getElementById('map-container');
-  container.style.background = theme.bgGradient;
+  // 背景画像とグラデーションの合成
+  let bgImage = '';
+  if (game.currentFloor === 0) bgImage = 'src/assets/bg_forest_map.png';
+  else if (game.currentFloor === 1) bgImage = 'src/assets/bg_cave_map.png';
+  else if (game.currentFloor === 2) bgImage = 'src/assets/bg_tower_map.png';
+
+  if (bgImage) {
+    container.style.background = `url(${bgImage}) center center / cover no-repeat, ${theme.bgGradient}`;
+    container.style.backgroundBlendMode = 'overlay'; // 既存のカラーと自然にブレンドする
+  } else {
+    container.style.background = theme.bgGradient;
+  }
 
   // フロアタイトル
   document.getElementById('floor-title').textContent = `${theme.emoji} ${theme.name}`;
