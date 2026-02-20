@@ -60,13 +60,13 @@ export function generateBattleRewards(enemy, scaling) {
 
     // レリック（ボス/エリートのみ）
     if (enemy.isBoss || enemy.isElite) {
-        const relicIds = scaling.getRandomRelics(1);
+        const relicIds = scaling.getRandomRelics(3);
         if (relicIds.length > 0) {
             rewards.push({
-                type: REWARD_TYPES.RELIC,
-                relicId: relicIds[0],
+                type: 'relic_choice',
+                relicIds: relicIds,
                 emoji: '✨',
-                description: 'レリック'
+                description: 'レリックを1つ選ぶ'
             });
         }
     }

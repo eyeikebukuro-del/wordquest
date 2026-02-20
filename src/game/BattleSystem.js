@@ -40,10 +40,10 @@ export class BattleSystem {
         this.state = BATTLE_STATES.PLAYER_TURN;
         /** ターン番号 */
         this.turn = 1;
-        /** 現在のエナジー */
-        this.energy = player.maxEnergy;
         /** 最大エナジー */
         this.maxEnergy = player.maxEnergy + scaling.getRelicBonus('energy_bonus');
+        /** 現在のエナジー */
+        this.energy = this.maxEnergy;
         /** プレイヤーのブロック */
         this.playerBlock = 0;
         /** 次のクイズで消去する選択肢の数 */
@@ -445,7 +445,15 @@ export class BattleSystem {
      */
     newTurn() {
         this.turn++;
+
+        // 最大エナジーを再計算（レリック等）
+        this.maxEnergy = this.player.maxEnergy + this.scaling.getRelicBonus('energy_bonus');
         this.energy = this.maxEnergy;
+
+        // 次ターンエナジーバフの適用
+        if (this.scaling.buffs.next_turn_energy) {
+            this.energy += this.scaling.buffs.next_turn_energy.value;
+        }
 
         // ブロックをリセット（持続ブロックは残す）
         this.playerBlock = this.persistentBlock;

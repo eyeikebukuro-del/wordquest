@@ -125,9 +125,7 @@
 
 .map-node.locked {
     opacity: 0.8;
-    /* 行けない先も見えやすいように薄すぎない透明度に変更 */
-    filter: grayscale(80%) brightness(0.7);
-    /* 暗く・色あせさせて未到達感を出す */
+    filter: brightness(0.6);
     cursor: default;
 }
 

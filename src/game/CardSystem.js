@@ -223,7 +223,7 @@ export const CARD_DEFINITIONS = {
         emoji: '🔮',
         description: '次のターン、エナジー+1',
         quizMode: QUIZ_MODES.CHOICE,
-        energyBonus: 1,
+        buff: { type: 'next_turn_energy', value: 1, turns: 1 },
         rarity: 'rare',
         color: '#a29bfe'
     },

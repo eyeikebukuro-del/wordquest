@@ -156,8 +156,8 @@ function drawMapConnections() {
     const y2 = toRect.top - containerRect.top + (toRect.height / 2);
 
     // 円の半径を考慮して線の長さを短くする (丸の中に線が入り込まないように)
-    // ノードのサイズ（PCなら約60px、モバイルなら50px）を考慮し、半径分を引く
-    const radius = fromRect.width / 2;
+    // ノードのサイズ（PCなら約60px、モバイルなら50px）を考慮し、半径分+余白を引く
+    const radius = (fromRect.width / 2) + 4;
     const dx = x2 - x1;
     const dy = y2 - y1;
     const angle = Math.atan2(dy, dx);
@@ -173,18 +173,22 @@ function drawMapConnections() {
     // スタイル決定
     ctx.lineWidth = 3;
     if (fromNode.visited && toNode.visited) {
-      // 踏破済みルート
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      // 踏破済みルート（白実線で強調）
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       ctx.setLineDash([]);
-    } else if (fromNode.visited || fromNode.available || fromNode.layer === 0) {
-      // 次に到達可能なルート、またはスタートから繋がるルートを強調
-      ctx.strokeStyle = '#f1c40f'; // yellow
-      ctx.setLineDash([8, 8]); // 点線
-      ctx.lineDashOffset = -performance.now() / 50; // ちょっとしたアニメーション用（一回描画でも良い）
+    } else if (fromNode.visited || fromNode.layer === 0) {
+      // 現在地から次に到達可能なルートを強調
+      if (toNode.available) {
+        ctx.strokeStyle = '#f1c40f'; // yellow
+        ctx.setLineDash([8, 8]); // 点線
+        ctx.lineDashOffset = -performance.now() / 50;
+      } else {
+        // 現在地以外の、すでに選ばれなかったルートや過去のルートの先への予測線は描画しない
+        continue;
+      }
     } else {
-      // 未到達の先のルート
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.setLineDash([]);
+      // 未到達の先の予測ルート（現在地から繋がっていない遠い未来の線）はすっきりさせるため描画しない
+      continue;
     }
 
     ctx.stroke();
@@ -674,6 +678,24 @@ function renderRewards() {
           }
         });
       }
+    } else if (reward.type === 'relic_choice') {
+      item.innerHTML = `<span class="reward-emoji">${reward.emoji}</span><span class="reward-desc">${reward.description}</span>`;
+      item.addEventListener('click', () => {
+        if (!item.classList.contains('claimed')) {
+          showRelicSelect(reward.relicIds, (selectedRelicId) => {
+            const relic = RELIC_DEFINITIONS[selectedRelicId];
+            if (relic) {
+              game.scaling.addRelic(selectedRelicId);
+              if (relic.effect.type === 'max_hp_bonus') {
+                game.player.maxHp += relic.effect.value;
+                game.player.hp += relic.effect.value;
+              }
+              item.classList.add('claimed');
+              item.innerHTML = `<span class="reward-emoji">${relic.emoji}</span><span class="reward-desc">${relic.name}を獲得！ ✅</span>`;
+            }
+          });
+        }
+      });
     } else if (reward.type === 'potion') {
       const potion = POTION_DEFINITIONS[reward.potionId];
       if (potion) {
@@ -713,6 +735,43 @@ function showCardSelect(cards, onSelect) {
 
   document.getElementById('btn-skip-card').onclick = () => {
     modal.style.display = 'none';
+  };
+}
+
+// === レリック選択モーダル ===
+function showRelicSelect(relicIds, onSelect) {
+  const modal = document.getElementById('modal-card-select');
+  modal.style.display = 'block';
+
+  // タイトルの書き換え
+  const titleEl = document.getElementById('card-select-title') || modal.querySelector('h2');
+  if (titleEl) titleEl.textContent = 'レリックを選んでください';
+
+  const list = document.getElementById('card-select-list');
+  list.innerHTML = '<div class="card-select-row" style="gap:20px;">' +
+    relicIds.map(id => {
+      const relic = RELIC_DEFINITIONS[id];
+      return `
+        <div class="card relic-card" data-relic-id="${id}" style="height:auto; min-height:180px; padding:20px; display:flex; flex-direction:column; align-items:center;">
+          <div style="font-size:3rem; margin-bottom:10px;">${relic.emoji}</div>
+          <div style="font-size:1.2rem; font-weight:bold; margin-bottom:10px;">${relic.name}</div>
+          <div style="font-size:0.9rem; text-align:center;">${relic.description}</div>
+        </div>
+        `;
+    }).join('') +
+    '</div>';
+
+  list.querySelectorAll('.relic-card').forEach((cardEl) => {
+    cardEl.addEventListener('click', () => {
+      onSelect(cardEl.dataset.relicId);
+      modal.style.display = 'none';
+      if (titleEl) titleEl.textContent = 'カードを選んでください'; // リセット
+    });
+  });
+
+  document.getElementById('btn-skip-card').onclick = () => {
+    modal.style.display = 'none';
+    if (titleEl) titleEl.textContent = 'カードを選んでください'; // リセット
   };
 }
 

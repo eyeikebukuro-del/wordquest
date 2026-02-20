@@ -102,6 +102,7 @@ export class GameEngine {
         // 統計リセット
         this.stats = {
             battlesWon: 0,
+            enemiesDefeated: 0,
             totalCorrect: 0,
             totalIncorrect: 0,
             floorsCleared: 0,
