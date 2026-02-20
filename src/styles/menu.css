@@ -151,7 +151,9 @@
     display: flex;
     justify-content: flex-start;
     gap: 15px;
-    margin: 20px 0;
+    margin: 10px 0;
+    padding-top: 15px;
+    /* 浮き上がるアニメーションと影が枠に切れないようにする */
     padding-bottom: 15px;
     /* スクロールバーの分余白 */
     overflow-x: auto;
