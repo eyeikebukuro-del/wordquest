@@ -427,14 +427,17 @@
     display: none;
 }
 
-/* バトルアクション */
+/* バトルアクション (絶対配置に変更) */
 .battle-actions {
+    position: absolute;
+    right: 30px;
+    bottom: 140px;
+    /* 手札より少し上の位置に配置 */
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    /* 右寄せ */
-    gap: 12px;
-    padding: 8px 20px 16px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    z-index: 30;
     padding-bottom: calc(16px + var(--safe-area-bottom));
 }
 

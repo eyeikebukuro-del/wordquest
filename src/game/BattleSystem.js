@@ -257,6 +257,10 @@ export class BattleSystem {
             this.enemy.block = Math.max(0, this.enemy.block - damage);
             this.enemy.hp = Math.max(0, this.enemy.hp - actualDamage);
 
+            // 今回のバトルの最大ダメージを記録
+            if (!this.maxDamageThisBattle) this.maxDamageThisBattle = 0;
+            this.maxDamageThisBattle = Math.max(this.maxDamageThisBattle, damage);
+
             result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
         }
 

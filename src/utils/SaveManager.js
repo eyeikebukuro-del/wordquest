@@ -39,6 +39,42 @@ export class SaveManager {
     }
 
     /**
+     * リーダーボードにスコアを保存
+     */
+    saveLeaderboardScore(scoreData) {
+        try {
+            const lbKey = 'wordquest_leaderboard';
+            const data = localStorage.getItem(lbKey);
+            let leaderboard = data ? JSON.parse(data) : [];
+
+            leaderboard.push(scoreData);
+            // スコア降順でソート
+            leaderboard.sort((a, b) => b.score - a.score);
+            // 上位10件まで保持
+            if (leaderboard.length > 10) {
+                leaderboard = leaderboard.slice(0, 10);
+            }
+
+            localStorage.setItem(lbKey, JSON.stringify(leaderboard));
+        } catch (e) {
+            console.error('Failed to save to leaderboard', e);
+        }
+    }
+
+    /**
+     * リーダーボードを取得
+     */
+    getLeaderboard() {
+        try {
+            const lbKey = 'wordquest_leaderboard';
+            const data = localStorage.getItem(lbKey);
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    /**
      * 全データをクリア
      */
     clearAll() {

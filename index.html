@@ -47,6 +47,45 @@
       </div>
     </div>
 
+    <!-- キャラクター選択画面 -->
+    <div id="screen-char-select" class="screen">
+      <div class="menu-bg"></div>
+      <div class="char-select-content">
+        <h2 class="screen-title">キャラクターをえらぼう</h2>
+        <div class="char-grid">
+          <!-- 解放済（ワードマスター） -->
+          <div class="char-card active" data-char="wordmaster">
+            <div class="char-emoji">🧙‍♂️</div>
+            <div class="char-name">ワードマスター</div>
+            <div class="char-desc">えいごの まほうつかい。<br>バランスがよく あつかいやすい。</div>
+          </div>
+          <!-- 未解放 -->
+          <div class="char-card locked">
+            <div class="char-emoji">🧮</div>
+            <div class="char-name">算術マスター</div>
+            <div class="char-desc">（じっそう よてい）</div>
+          </div>
+          <div class="char-card locked">
+            <div class="char-emoji">🥋</div>
+            <div class="char-name">カンフーマスター</div>
+            <div class="char-desc">（じっそう よてい）</div>
+          </div>
+          <div class="char-card locked">
+            <div class="char-emoji">❓</div>
+            <div class="char-name">？？？</div>
+            <div class="char-desc">（？？？）</div>
+          </div>
+        </div>
+        <div class="char-select-actions">
+          <button id="btn-start-adventure" class="btn btn-primary btn-glow">
+            <span class="btn-icon">✨</span>
+            <span>冒険にしゅっぱつ！</span>
+          </button>
+          <button id="btn-back-menu" class="btn btn-secondary">もどる</button>
+        </div>
+      </div>
+    </div>
+
     <!-- マップ画面 -->
     <div id="screen-map" class="screen">
       <div class="map-header">

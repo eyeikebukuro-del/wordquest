@@ -198,7 +198,9 @@ export class GameEngine {
     onBattleEnd(result) {
         if (result === 'victory') {
             this.stats.battlesWon++;
+            this.stats.enemiesDefeated++;
             this.stats.maxCombo = Math.max(this.stats.maxCombo, this.scaling.maxCombo);
+            this.stats.maxDamage = Math.max(this.stats.maxDamage || 0, this.battle.maxDamageThisBattle || 0);
 
             // レリック「いやしの指輪」効果
             if (this.scaling.hasRelic('heal_after_battle')) {

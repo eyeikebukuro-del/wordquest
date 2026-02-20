@@ -124,13 +124,82 @@
     font-weight: 600;
 }
 
-/* カード選択フロー */
+/* カード選択フロー (報酬などの既存) */
 .card-select-row {
     display: flex;
     justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
     padding: 10px 0;
+}
+
+/* === キャラクター選択画面 === */
+.char-select-content {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    box-shadow: var(--shadow-xl);
+    z-index: 10;
+}
+
+.char-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.char-card {
+    background: var(--bg-tertiary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    width: 160px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.char-card.active {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 15px hsla(270, 80%, 60%, 0.4);
+    transform: translateY(-5px);
+}
+
+.char-card.locked {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+}
+
+.char-emoji {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.char-name {
+    font-size: var(--font-md);
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.char-desc {
+    font-size: var(--font-xs);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.char-select-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 /* === ショップ === */

@@ -854,13 +854,36 @@ function renderGameOver() {
 
 function renderVictory() {
   const statsEl = document.getElementById('victory-stats');
+
+  // スコア計算
+  const enemiesScore = (game.stats.enemiesDefeated || 0) * 50;
+  const comboScore = (game.stats.maxCombo || 0) * 100;
+  const damageScore = (game.stats.maxDamage || 0) * 10;
+  const goldScore = (game.player.gold || 0) * 1;
+  const baseScore = 1000;
+  const totalScore = baseScore + enemiesScore + comboScore + damageScore + goldScore;
+
   statsEl.innerHTML = `
-    <div class="stat-row"><span class="stat-label">勝利バトル</span><span class="stat-value">${game.stats.battlesWon}</span></div>
-    <div class="stat-row"><span class="stat-label">最大コンボ</span><span class="stat-value">${game.stats.maxCombo}</span></div>
-    <div class="stat-row"><span class="stat-label">学習した単語</span><span class="stat-value">${game.spacedRep.getStats().totalAttempted}</span></div>
-    <div class="stat-row"><span class="stat-label">正答率</span><span class="stat-value">${game.spacedRep.getStats().accuracy}%</span></div>
+    <div class="stat-row"><span class="stat-label">クリアボーナス</span><span class="stat-value">+${baseScore}点</span></div>
+    <div class="stat-row"><span class="stat-label">倒した敵 (${game.stats.enemiesDefeated || 0}体)</span><span class="stat-value">+${enemiesScore}点</span></div>
+    <div class="stat-row"><span class="stat-label">最大コンボ (${game.stats.maxCombo || 0})</span><span class="stat-value">+${comboScore}点</span></div>
+    <div class="stat-row"><span class="stat-label">最大ダメージ (${game.stats.maxDamage || 0})</span><span class="stat-value">+${damageScore}点</span></div>
+    <div class="stat-row"><span class="stat-label">所持ゴールド (${game.player.gold || 0}G)</span><span class="stat-value">+${goldScore}点</span></div>
+    <div class="stat-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 1.2em; font-weight: bold; color: var(--accent-yellow);">
+      <span class="stat-label">最終スコア</span><span class="stat-value">${totalScore}点</span>
+    </div>
   `;
 
+  // リーダーボードに保存
+  const scoreData = {
+    date: Date.now(),
+    character: 'ワードマスター', // 現状固定
+    emoji: '🧙‍♂️',
+    score: totalScore
+  };
+  if (game.saveManager.saveLeaderboardScore) {
+    game.saveManager.saveLeaderboardScore(scoreData);
+  }
   game.saveManager.saveBestRun(game.stats);
 }
 
@@ -882,6 +905,38 @@ function showStats() {
 
   const stats = game.spacedRep.getStats();
   const best = game.saveManager.loadBestRun();
+  const leaderboard = game.saveManager.getLeaderboard ? game.saveManager.getLeaderboard() : [];
+
+  let topHtml = '';
+  if (leaderboard.length > 0) {
+    const listItems = leaderboard.map((lb, i) => {
+      const dateStr = new Date(lb.date).toLocaleDateString();
+      return `
+        <div style="display:flex; justify-content:space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center;">
+          <div><span style="display:inline-block; width:20px; color: var(--text-muted);">${i + 1}.</span> ${lb.emoji} ${lb.character}</div>
+          <div><span style="font-weight:bold; color:var(--accent-yellow);">${lb.score}</span> <span style="font-size:0.7em; color:var(--text-muted);">${dateStr}</span></div>
+        </div>
+      `;
+    }).join('');
+
+    topHtml = `
+      <div style="margin-top:20px; text-align:left;">
+        <h3 style="text-align:center; color: var(--accent-yellow); margin-bottom: 15px;">🏆 リーダーボード TOP10</h3>
+        <div style="background: var(--bg-tertiary); border-radius: 8px; padding: 10px;">
+          ${listItems}
+        </div>
+      </div>
+    `;
+  } else {
+    topHtml = `
+      <div style="margin-top:20px; text-align:left;">
+        <h3 style="text-align:center; color: var(--accent-yellow); margin-bottom: 15px;">🏆 リーダーボード TOP10</h3>
+        <div style="background: var(--bg-tertiary); border-radius: 8px; padding: 20px; text-align:center; color: var(--text-muted);">
+          まだきろくがありません
+        </div>
+      </div>
+    `;
+  }
 
   document.getElementById('stats-content').innerHTML = `
     <div class="stats-grid">
@@ -902,10 +957,10 @@ function showStats() {
         <div class="stats-card-label">にがてな単語</div>
       </div>
     </div>
-    <div style="text-align:center;color:var(--text-secondary);font-size:var(--font-sm)">
-      <p>総プレイ回数: ${best.totalRuns || 0}</p>
-      <p>クリアしたフロア: ${best.floorsCleared || 0}</p>
+    <div style="text-align:center;color:var(--text-secondary);font-size:var(--font-sm);margin-top:15px;">
+      <p>総プレイ回数: ${best.totalRuns || 0} / クリアしたフロア: ${best.floorsCleared || 0}</p>
     </div>
+    ${topHtml}
   `;
 }
 
@@ -955,7 +1010,17 @@ window.addEventListener('resize', () => {
 document.addEventListener('DOMContentLoaded', () => {
   // メニュー
   document.getElementById('btn-new-game').addEventListener('click', () => {
+    // game.startNewRun(); からキャラクター選択画面への遷移に変更
+    showScreen('char-select');
+  });
+
+  // キャラクター選択画面
+  document.getElementById('btn-start-adventure').addEventListener('click', () => {
     game.startNewRun();
+  });
+
+  document.getElementById('btn-back-menu').addEventListener('click', () => {
+    showScreen('menu');
   });
 
   document.getElementById('btn-stats').addEventListener('click', showStats);
