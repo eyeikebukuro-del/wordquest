@@ -752,14 +752,14 @@ function showRelicSelect(relicIds, onSelect) {
   if (titleEl) titleEl.textContent = 'レリックを選んでください';
 
   const list = document.getElementById('card-select-list');
-  list.innerHTML = '<div class="card-select-row" style="gap:20px;">' +
+  list.innerHTML = '<div class="card-select-row" style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">' +
     relicIds.map(id => {
       const relic = RELIC_DEFINITIONS[id];
       return `
-        <div class="card relic-card" data-relic-id="${id}" style="height:auto; min-height:180px; padding:20px; display:flex; flex-direction:column; align-items:center;">
-          <div style="font-size:3rem; margin-bottom:10px;">${relic.emoji}</div>
-          <div style="font-size:1.2rem; font-weight:bold; margin-bottom:10px;">${relic.name}</div>
-          <div style="font-size:0.9rem; text-align:center;">${relic.description}</div>
+        <div class="card relic-card" data-relic-id="${id}" style="width:140px; height:auto; min-height:160px; padding:15px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;">
+          <div style="font-size:3rem; margin-bottom:8px;">${relic.emoji}</div>
+          <div style="font-size:1.1rem; font-weight:bold; margin-bottom:8px; text-align:center; line-height:1.2;">${relic.name}</div>
+          <div style="font-size:0.85rem; text-align:center; line-height:1.4; color:var(--text-secondary); word-break:keep-all;">${relic.description}</div>
         </div>
         `;
     }).join('') +
