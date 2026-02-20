@@ -142,9 +142,6 @@
     max-width: 800px;
     width: 95%;
     max-height: 90vh;
-    /* スマホで画面からはみ出さないように */
-    overflow-y: auto;
-    /* はみ出した場合はスクロール可能に */
     text-align: center;
     box-shadow: var(--shadow-xl);
     z-index: 10;
@@ -152,19 +149,44 @@
 
 .char-grid {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 15px;
     margin: 20px 0;
-    flex-wrap: wrap;
+    padding-bottom: 15px;
+    /* スクロールバーの分余白 */
+    overflow-x: auto;
+    /* 横スクロールを可能に */
+    scroll-snap-type: x mandatory;
+    /* スクロール時にカードにピタッと止まるように */
+    -webkit-overflow-scrolling: touch;
+    /* iOSでのスクロールを滑らかに */
+}
+
+/* スクロールバーの非表示（好みに応じて） */
+.char-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.char-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.char-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }
 
 .char-card {
     background: var(--bg-tertiary);
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
-    padding: 10px;
-    width: 130px;
-    /* スマホで2つ並べられるサイズに縮小 */
+    padding: 15px 10px;
+    width: 140px;
+    flex-shrink: 0;
+    /* サイズを縮めず横並びに維持 */
+    scroll-snap-align: center;
+    /* スナップの基準点 */
     cursor: pointer;
     transition: all var(--transition-fast);
 }
