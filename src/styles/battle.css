@@ -104,6 +104,13 @@
     color: var(--text-secondary);
 }
 
+.player-block-container {
+    min-height: 28px;
+    /* 敵のenemy-statusと高さを合わせるため追加 */
+    display: flex;
+    align-items: center;
+}
+
 
 .enemy-intent {
     font-size: var(--font-md);
@@ -171,6 +178,9 @@
     display: flex;
     gap: 6px;
     font-size: var(--font-xs);
+    min-height: 28px;
+    /* HPバーの高さをプレイヤー側と合わせるため追加 */
+    align-items: center;
 }
 
 .status-badge {
@@ -238,9 +248,13 @@
 }
 
 .quiz-question .question-label {
-    font-size: var(--font-xs);
-    color: var(--text-muted);
-    margin-top: 2px;
+    font-size: var(--font-sm);
+    color: #ffffff;
+    /* 白にして見やすく */
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    /* 影をつけて背景から浮かせる */
+    margin-top: 6px;
+    font-weight: bold;
 }
 
 .quiz-choices {

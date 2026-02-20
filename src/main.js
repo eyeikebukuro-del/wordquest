@@ -76,6 +76,7 @@ function renderMap() {
     for (const node of layerNodes) {
       const nodeDiv = document.createElement('div');
       nodeDiv.className = 'map-node';
+      nodeDiv.dataset.nodeId = node.id; // ルート描画用にIDを付与
       nodeDiv.innerHTML = NODE_ICONS[node.type] || '❓';
 
       if (node.available) nodeDiv.classList.add('available');
@@ -112,6 +113,70 @@ function renderMap() {
     }
 
     nodesContainer.appendChild(layerDiv);
+  }
+
+  // DOMへの追加完了後、少し待ってから線を引く（要素の位置が確定してから描画するため）
+  setTimeout(drawMapConnections, 50);
+}
+
+// === マップルート（線）描画 ===
+function drawMapConnections() {
+  const map = game.getCurrentMap();
+  if (!map) return;
+
+  const canvas = document.getElementById('map-canvas');
+  const container = document.getElementById('map-nodes');
+  const ctx = canvas.getContext('2d');
+
+  // Canvasのサイズをコンテナに合わせる
+  canvas.width = container.clientWidth;
+  canvas.height = container.clientHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // コンテナのスクロールやOffsetを考慮して線を引くための基準
+  const containerRect = container.getBoundingClientRect();
+
+  // 線の描画
+  for (const conn of map.connections) {
+    const fromNode = map.nodes.find(n => n.id === conn.from);
+    const toNode = map.nodes.find(n => n.id === conn.to);
+    if (!fromNode || !toNode) continue;
+
+    const fromEl = container.querySelector(`[data-node-id="${fromNode.id}"]`);
+    const toEl = container.querySelector(`[data-node-id="${toNode.id}"]`);
+    if (!fromEl || !toEl) continue;
+
+    const fromRect = fromEl.getBoundingClientRect();
+    const toRect = toEl.getBoundingClientRect();
+
+    // コンテナ内での相対座標を計算 (要素の中心)
+    const x1 = fromRect.left - containerRect.left + (fromRect.width / 2);
+    const y1 = fromRect.top - containerRect.top + (fromRect.height / 2);
+    const x2 = toRect.left - containerRect.left + (toRect.width / 2);
+    const y2 = toRect.top - containerRect.top + (toRect.height / 2);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+
+    // スタイル決定
+    ctx.lineWidth = 3;
+    if (fromNode.visited && toNode.visited) {
+      // 踏破済みルート
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.setLineDash([]);
+    } else if (fromNode.visited || fromNode.available || fromNode.layer === 0) {
+      // 次に到達可能なルート、またはスタートから繋がるルートを強調
+      ctx.strokeStyle = '#f1c40f'; // yellow
+      ctx.setLineDash([8, 8]); // 点線
+      ctx.lineDashOffset = -performance.now() / 50; // ちょっとしたアニメーション用（一回描画でも良い）
+    } else {
+      // 未到達の先のルート
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.setLineDash([]);
+    }
+
+    ctx.stroke();
   }
 }
 
@@ -378,25 +443,7 @@ function onQuizAnswer(answer, quiz) {
     if (result.leveledUp) txt += ' ⬆️ カードレベルアップ！';
     resultEl.className = 'quiz-result correct';
     resultEl.textContent = txt;
-
-    // ダメージ数字表示
-    if (result.cardEffect && result.cardEffect.effects) {
-      for (const eff of result.cardEffect.effects) {
-        if (eff.type === 'damage') {
-          playSlashEffect(false); // 敵への攻撃
-          setTimeout(() => showDamageNumber(eff.actual !== undefined ? eff.actual : eff.value, 'damage', false), 200);
-        } else if (eff.type === 'block') {
-          showDamageNumber(eff.value, 'block', true); // ブロックは自キャラへ
-        } else if (eff.type === 'heal') {
-          showDamageNumber(eff.value, 'heal', true); // ヒールも自キャラへ
-        }
-      }
-    }
-
-    // 敵ヒットアニメ
-    const enemyEmoji = document.getElementById('enemy-emoji');
-    enemyEmoji.classList.add('anim-hit');
-    setTimeout(() => enemyEmoji.classList.remove('anim-hit'), 400);
+    // (ここではテキスト更新のみ行い、アニメーションはウィンドウを閉じた後に実行する)
   } else {
     const correctAnswer = quiz.type === 'typing' ? quiz.answer : quiz.choices[quiz.correctIndex];
     resultEl.className = 'quiz-result incorrect';
@@ -417,6 +464,30 @@ function onQuizAnswer(answer, quiz) {
     updateBattleUI();
     renderHand();
 
+    // ↓ ウィンドウが閉じた直後にアニメーションとエフェクトを再生する ↓
+    if (result.correct && result.cardEffect && result.cardEffect.effects) {
+      const isMeteor = result.cardEffect.type === 'attack' && result.cardEffect.cost >= 3;
+
+      for (const eff of result.cardEffect.effects) {
+        if (eff.type === 'damage') {
+          playAttackEffect(false, isMeteor); // 敵への攻撃 (isMeteorでエフェクト分岐)
+          // 少し遅れてダメージ数字を表示する
+          setTimeout(() => {
+            showDamageNumber(eff.actual !== undefined ? eff.actual : eff.value, 'damage', false);
+            // 敵ヒットアニメ
+            const enemyEmoji = document.getElementById('enemy-emoji');
+            enemyEmoji.classList.add('anim-hit');
+            setTimeout(() => enemyEmoji.classList.remove('anim-hit'), 400);
+          }, 300);
+        } else if (eff.type === 'block') {
+          showDamageNumber(eff.value, 'block', true);
+        } else if (eff.type === 'heal') {
+          showDamageNumber(eff.value, 'heal', true);
+        }
+      }
+    }
+    // ↑ アニメーション追加ここまで ↑
+
     // バトル終了チェック
     if (result.battleEnd === 'victory') {
       const enemyEmoji = document.getElementById('enemy-emoji');
@@ -428,17 +499,17 @@ function onQuizAnswer(answer, quiz) {
   }, 1500);
 }
 
-function playSlashEffect(isPlayer = false) {
+function playAttackEffect(isPlayer = false, isMeteor = false) {
   const container = isPlayer ? document.querySelector('.player-area') : document.querySelector('.enemy-area');
   if (!container) return;
 
-  const slash = document.createElement('div');
-  slash.className = 'slash-effect';
-  slash.style.top = '20%';
-  slash.style.left = '20%';
-  container.appendChild(slash);
+  const effectEl = document.createElement('div');
+  effectEl.className = isMeteor ? 'meteor-effect' : 'slash-effect';
+  effectEl.style.top = isMeteor ? '-20px' : '20%';
+  effectEl.style.left = isMeteor ? '20%' : '20%';
+  container.appendChild(effectEl);
 
-  setTimeout(() => slash.remove(), 400);
+  setTimeout(() => effectEl.remove(), isMeteor ? 700 : 500);
 }
 
 function showDamageNumber(value, type, isPlayer = false) {
@@ -472,8 +543,8 @@ function showEnemyTurnEffects(result) {
       const expected = eff.type === 'damage' ? eff.value : (eff.perHit * eff.hits);
 
       if (actual > 0) {
-        playSlashEffect(true); // プレイヤーへの攻撃
-        setTimeout(() => showDamageNumber(actual, 'damage', true), 200);
+        playAttackEffect(true, false); // プレイヤーへの攻撃（敵からメテオは来ない想定）
+        setTimeout(() => showDamageNumber(actual, 'damage', true), 300);
         totalDamage += actual;
       } else if (expected > 0 && actual === 0) {
         blockedAll = true;
@@ -856,7 +927,20 @@ game.onScreenChange = (screen) => {
   }
 };
 
-// === イベントリスナー ===
+// === イベントリスナー等 ===
+window.addEventListener('resize', () => {
+  if (window.innerWidth <= 768) {
+    document.body.classList.add('mobile');
+  } else {
+    document.body.classList.remove('mobile');
+  }
+
+  // マップ画面を開いている時はリサイズに合わせて線を再描画
+  if (game && game.state === GAME_STATES.MAP && document.getElementById('screen-map').classList.contains('active')) {
+    drawMapConnections();
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   // メニュー
   document.getElementById('btn-new-game').addEventListener('click', () => {
