@@ -347,12 +347,16 @@ function renderPotions() {
     slot.textContent = potion.emoji;
     slot.title = `${potion.name}: ${potion.description}`;
     slot.addEventListener('click', () => {
-      if (currentBattle && currentBattle.state === BATTLE_STATES.PLAYER_TURN) {
+      if (currentBattle && (currentBattle.state === BATTLE_STATES.PLAYER_TURN || currentBattle.state === BATTLE_STATES.QUIZ_ACTIVE)) {
         const result = currentBattle.usePotion(potion.instanceId);
         if (result) {
           updateBattleUI();
           renderHand();
           renderPotions();
+
+          if (currentBattle.state === BATTLE_STATES.QUIZ_ACTIVE && result.effects.some(e => e.type === 'eliminate')) {
+            showQuiz(currentBattle.currentQuiz);
+          }
         }
       }
     });
@@ -405,17 +409,32 @@ function showQuiz(quiz) {
     choicesEl.style.display = 'grid';
     choicesEl.innerHTML = '';
 
+    // 消去する不正解のインデックスを決定する（再描画時に状態を維持するため quiz オブジェクトに保存）
+    if (!quiz.eliminatedIndices) {
+      quiz.eliminatedIndices = new Set();
+    }
+
+    if (quiz.hintEliminated && quiz.hintEliminated > quiz.eliminatedIndices.size) {
+      const wrongIndices = quiz.choices
+        .map((_, idx) => idx)
+        .filter(idx => idx !== quiz.correctIndex && !quiz.eliminatedIndices.has(idx));
+
+      // ランダムにシャッフルして必要な数だけ消去
+      wrongIndices.sort(() => Math.random() - 0.5);
+      const eliminateCount = Math.min(quiz.hintEliminated - quiz.eliminatedIndices.size, wrongIndices.length);
+      for (let i = 0; i < eliminateCount; i++) {
+        quiz.eliminatedIndices.add(wrongIndices[i]);
+      }
+    }
+
     quiz.choices.forEach((choice, i) => {
       const btn = document.createElement('button');
       btn.className = 'quiz-choice';
       btn.textContent = choice;
 
       // ヒントで選択肢を消す
-      if (quiz.hintEliminated && i !== quiz.correctIndex) {
-        const eliminatedCount = quiz.choices.filter((_, idx) => idx !== quiz.correctIndex).length;
-        if (Math.random() < quiz.hintEliminated / eliminatedCount) {
-          btn.classList.add('eliminated');
-        }
+      if (quiz.eliminatedIndices.has(i)) {
+        btn.classList.add('eliminated');
       }
 
       btn.addEventListener('click', () => {

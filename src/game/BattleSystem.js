@@ -46,6 +46,8 @@ export class BattleSystem {
         this.maxEnergy = player.maxEnergy + scaling.getRelicBonus('energy_bonus');
         /** プレイヤーのブロック */
         this.playerBlock = 0;
+        /** 次のクイズで消去する選択肢の数 */
+        this.nextQuizHints = 0;
         /** 現在のクイズデータ */
         this.currentQuiz = null;
         /** 選択されたカード */
@@ -135,9 +137,15 @@ export class BattleSystem {
             this.currentQuiz = this.wordDb.generateQuestion(word, type);
         }
 
-        // レリック「ちえの宝石」でヒント表示
+        // レリック「ちえの宝石」やヒントポーションでヒント表示
         if (this.scaling.hasRelic('hint') && this.currentQuiz.choices) {
-            this.currentQuiz.hintEliminated = 1;
+            this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + 1;
+        }
+
+        // ポーションによるヒント適用
+        if (this.nextQuizHints > 0 && this.currentQuiz.choices) {
+            this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + this.nextQuizHints;
+            this.nextQuizHints = 0; // 消費
         }
 
         this.emit('quiz_start', {
@@ -201,6 +209,12 @@ export class BattleSystem {
                 const nextWord = this.wordDb.getWeightedRandomWord(3, weights, [this.currentQuiz.word.id]);
                 const type = Math.random() > 0.5 ? 'en_to_jp' : 'jp_to_en';
                 this.currentQuiz = this.wordDb.generateQuestion(nextWord, type);
+
+                // レリック「ちえの宝石」のヒント適用
+                if (this.scaling.hasRelic('hint') && this.currentQuiz.choices) {
+                    this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + 1;
+                }
+
                 result.nextQuiz = this.currentQuiz;
 
                 this.emit('quiz_result', result);
@@ -490,6 +504,11 @@ export class BattleSystem {
                 result.effects.push({ type: 'buff', value: potion.effect.value });
                 break;
             case 'eliminate_choices':
+                this.nextQuizHints += potion.effect.value;
+                if (this.state === BATTLE_STATES.QUIZ_ACTIVE && this.currentQuiz && this.currentQuiz.choices) {
+                    this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + this.nextQuizHints;
+                    this.nextQuizHints = 0;
+                }
                 result.effects.push({ type: 'eliminate', value: potion.effect.value });
                 break;
         }

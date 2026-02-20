@@ -89,6 +89,8 @@ export class GameEngine {
 
         // スケーリングリセット
         this.scaling = new ScalingSystem();
+        // テスト用：開始時にヒントポーションを付与
+        this.scaling.addPotion('hint_potion');
 
         // フロア1のマップ生成
         this.currentFloor = 1;
