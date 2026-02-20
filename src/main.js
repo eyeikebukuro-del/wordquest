@@ -201,6 +201,7 @@ function drawMapConnections() {
 
 // === バトルレンダリング ===
 let currentBattle = null;
+let drawnCards = new Set(); // 描画済みカードを記憶し、再描画時のアニメーション重複（チラツキ）を防ぐ
 
 function renderBattle() {
   if (!game.battle) return;
@@ -237,6 +238,7 @@ function renderBattle() {
 
   // バトル開始
   b.start();
+  drawnCards.clear(); // バトル開始時に描画履歴をリセット
   renderHand();
 }
 
@@ -332,7 +334,11 @@ function renderHand() {
       cardNode.classList.add('disabled');
     }
 
-    cardNode.classList.add('anim-card-draw');
+    // 新しく手札に加わった（描画履歴にない）カードのみアニメーションを付与し、チラつきを防ぐ
+    if (!drawnCards.has(card.instanceId)) {
+      cardNode.classList.add('anim-card-draw');
+      drawnCards.add(card.instanceId);
+    }
 
     cardNode.addEventListener('click', () => {
       if (b.state !== BATTLE_STATES.PLAYER_TURN || card.cost > b.energy) return;
@@ -756,10 +762,10 @@ function showRelicSelect(relicIds, onSelect) {
     relicIds.map(id => {
       const relic = RELIC_DEFINITIONS[id];
       return `
-        <div class="card relic-card" data-relic-id="${id}" style="width:140px; height:auto; min-height:160px; padding:15px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;">
+        <div class="card relic-card" data-relic-id="${id}" style="width:150px; height:auto; min-height:160px; padding:15px; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;">
           <div style="font-size:3rem; margin-bottom:8px;">${relic.emoji}</div>
           <div style="font-size:1.1rem; font-weight:bold; margin-bottom:8px; text-align:center; line-height:1.2;">${relic.name}</div>
-          <div style="font-size:0.85rem; text-align:center; line-height:1.4; color:var(--text-secondary); word-break:keep-all;">${relic.description}</div>
+          <div style="font-size:0.85rem; text-align:center; line-height:1.4; color:var(--text-secondary);">${relic.description}</div>
         </div>
         `;
     }).join('') +
