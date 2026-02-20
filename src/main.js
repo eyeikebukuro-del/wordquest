@@ -1092,8 +1092,12 @@ window.addEventListener('resize', () => {
 document.addEventListener('DOMContentLoaded', () => {
   // メニュー
   document.getElementById('btn-new-game').addEventListener('click', () => {
-    // game.startNewRun(); からキャラクター選択画面への遷移に変更
+    // キャラクター選択画面への遷移とスクロール初期化
     showScreen('char-select');
+    setTimeout(() => {
+      const charGrid = document.querySelector('.char-grid');
+      if (charGrid) charGrid.scrollLeft = 0;
+    }, 10); // 画面アクティブ化の時間を少し待つことで確実に適用させる
   });
 
   // キャラクター選択画面
@@ -1167,21 +1171,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ゲームオーバー
-  document.getElementById('btn-retry').addEventListener('click', () => {
-    game.startNewRun();
-  });
-
   document.getElementById('btn-to-menu').addEventListener('click', () => {
-    showScreen('menu');
+    location.reload(); // 完全状態リセットのためリロード
   });
 
   // クリア
-  document.getElementById('btn-victory-retry').addEventListener('click', () => {
-    game.startNewRun();
-  });
-
   document.getElementById('btn-victory-menu').addEventListener('click', () => {
-    showScreen('menu');
+    location.reload(); // 完全状態リセットのためリロード
   });
 
   // モーダル閉じる

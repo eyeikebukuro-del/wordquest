@@ -146,6 +146,8 @@ body {
   position: relative;
   overflow: hidden;
   min-height: 50px;
+  white-space: nowrap;
+  /* ボタン内の文字が改行されるのを防ぐ */
 }
 
 .btn:active {
