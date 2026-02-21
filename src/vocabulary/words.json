@@ -1845,6 +1845,604 @@
       "category": "action",
       "difficulty": 1,
       "emoji": "🎿"
+    },
+    {
+      "id": 233,
+      "english": "January",
+      "japanese": "1月",
+      "category": "calendar",
+      "difficulty": 2,
+      "emoji": "⛄"
+    },
+    {
+      "id": 234,
+      "english": "February",
+      "japanese": "2月",
+      "category": "calendar",
+      "difficulty": 2,
+      "emoji": "👹"
+    },
+    {
+      "id": 235,
+      "english": "March",
+      "japanese": "3月",
+      "category": "calendar",
+      "difficulty": 2,
+      "emoji": "🌸"
+    },
+    {
+      "id": 236,
+      "english": "April",
+      "japanese": "4月",
+      "category": "calendar",
+      "difficulty": 2,
+      "emoji": "🏫"
+    },
+    {
+      "id": 237,
+      "english": "May",
+      "japanese": "5月",
+      "category": "calendar",
+      "difficulty": 1,
+      "emoji": "🎏"
+    },
+    {
+      "id": 238,
+      "english": "June",
+      "japanese": "6月",
+      "category": "calendar",
+      "difficulty": 1,
+      "emoji": "☔"
+    },
+    {
+      "id": 239,
+      "english": "July",
+      "japanese": "7月",
+      "category": "calendar",
+      "difficulty": 1,
+      "emoji": "🎋"
+    },
+    {
+      "id": 240,
+      "english": "August",
+      "japanese": "8月",
+      "category": "calendar",
+      "difficulty": 2,
+      "emoji": "🌻"
+    },
+    {
+      "id": 241,
+      "english": "September",
+      "japanese": "9月",
+      "category": "calendar",
+      "difficulty": 3,
+      "emoji": "🎑"
+    },
+    {
+      "id": 242,
+      "english": "October",
+      "japanese": "10月",
+      "category": "calendar",
+      "difficulty": 2,
+      "emoji": "🎃"
+    },
+    {
+      "id": 243,
+      "english": "November",
+      "japanese": "11月",
+      "category": "calendar",
+      "difficulty": 3,
+      "emoji": "🍁"
+    },
+    {
+      "id": 244,
+      "english": "December",
+      "japanese": "12月",
+      "category": "calendar",
+      "difficulty": 3,
+      "emoji": "🎄"
+    },
+    {
+      "id": 245,
+      "english": "fall",
+      "aliases": [
+        "autumn"
+      ],
+      "japanese": "秋",
+      "category": "season",
+      "difficulty": 1,
+      "emoji": "🍂"
+    },
+    {
+      "id": 246,
+      "english": "boy",
+      "japanese": "男の子",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "👦"
+    },
+    {
+      "id": 247,
+      "english": "girl",
+      "japanese": "女の子",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "👧"
+    },
+    {
+      "id": 248,
+      "english": "man",
+      "japanese": "男の人",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "👨"
+    },
+    {
+      "id": 249,
+      "english": "woman",
+      "japanese": "女の人",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "👩"
+    },
+    {
+      "id": 250,
+      "english": "child",
+      "japanese": "子ども",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "🧒"
+    },
+    {
+      "id": 251,
+      "english": "family",
+      "japanese": "家族",
+      "category": "family",
+      "difficulty": 1,
+      "emoji": "👪"
+    },
+    {
+      "id": 252,
+      "english": "it",
+      "japanese": "それ",
+      "category": "pronoun",
+      "difficulty": 1,
+      "emoji": "👇"
+    },
+    {
+      "id": 253,
+      "english": "they",
+      "japanese": "彼らは",
+      "category": "pronoun",
+      "difficulty": 1,
+      "emoji": "👥"
+    },
+    {
+      "id": 254,
+      "english": "what",
+      "japanese": "何",
+      "category": "question",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 255,
+      "english": "who",
+      "japanese": "誰",
+      "category": "question",
+      "difficulty": 1,
+      "emoji": "👤"
+    },
+    {
+      "id": 256,
+      "english": "when",
+      "japanese": "いつ",
+      "category": "question",
+      "difficulty": 1,
+      "emoji": "🕒"
+    },
+    {
+      "id": 257,
+      "english": "where",
+      "japanese": "どこ",
+      "category": "question",
+      "difficulty": 1,
+      "emoji": "📍"
+    },
+    {
+      "id": 258,
+      "english": "how",
+      "japanese": "どのように",
+      "category": "question",
+      "difficulty": 1,
+      "emoji": "🤔"
+    },
+    {
+      "id": 259,
+      "english": "hello",
+      "japanese": "こんにちは",
+      "category": "greeting",
+      "difficulty": 1,
+      "emoji": "👋"
+    },
+    {
+      "id": 260,
+      "english": "goodbye",
+      "aliases": [
+        "bye"
+      ],
+      "japanese": "さようなら",
+      "category": "greeting",
+      "difficulty": 1,
+      "emoji": "👋"
+    },
+    {
+      "id": 261,
+      "english": "yes",
+      "japanese": "はい",
+      "category": "greeting",
+      "difficulty": 1,
+      "emoji": "⭕"
+    },
+    {
+      "id": 262,
+      "english": "no",
+      "japanese": "いいえ",
+      "category": "greeting",
+      "difficulty": 1,
+      "emoji": "❌"
+    },
+    {
+      "id": 263,
+      "english": "thank you",
+      "aliases": [
+        "thanks"
+      ],
+      "japanese": "ありがとう",
+      "category": "greeting",
+      "difficulty": 1,
+      "emoji": "🙏"
+    },
+    {
+      "id": 264,
+      "english": "get up",
+      "aliases": [
+        "wake up"
+      ],
+      "japanese": "起きる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "🥱"
+    },
+    {
+      "id": 265,
+      "english": "go",
+      "japanese": "行く",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🚶‍♂️"
+    },
+    {
+      "id": 266,
+      "english": "come",
+      "japanese": "来る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "👋"
+    },
+    {
+      "id": 267,
+      "english": "see",
+      "aliases": [
+        "look",
+        "watch"
+      ],
+      "japanese": "見る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "👀"
+    },
+    {
+      "id": 268,
+      "english": "make",
+      "japanese": "作る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🛠️"
+    },
+    {
+      "id": 269,
+      "english": "have",
+      "japanese": "持っている、飼う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🤲"
+    },
+    {
+      "id": 270,
+      "english": "like",
+      "japanese": "好き",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "👍"
+    },
+    {
+      "id": 271,
+      "english": "want",
+      "japanese": "欲しい",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🥺"
+    },
+    {
+      "id": 272,
+      "english": "know",
+      "japanese": "知っている",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "💡"
+    },
+    {
+      "id": 273,
+      "english": "wash",
+      "japanese": "洗う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🧽"
+    },
+    {
+      "id": 274,
+      "english": "help",
+      "japanese": "助ける",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🆘"
+    },
+    {
+      "id": 275,
+      "english": "tall",
+      "japanese": "背が高い",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "🦒"
+    },
+    {
+      "id": 276,
+      "english": "cute",
+      "japanese": "かわいい",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "🥺"
+    },
+    {
+      "id": 277,
+      "english": "cool",
+      "japanese": "かっこいい、涼しい",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "😎"
+    },
+    {
+      "id": 278,
+      "english": "fun",
+      "japanese": "楽しい",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "🎉"
+    },
+    {
+      "id": 279,
+      "english": "room",
+      "japanese": "部屋",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "🛋️"
+    },
+    {
+      "id": 280,
+      "english": "shop",
+      "aliases": [
+        "store"
+      ],
+      "japanese": "お店",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "🏪"
+    },
+    {
+      "id": 281,
+      "english": "ship",
+      "aliases": [
+        "boat"
+      ],
+      "japanese": "船",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "🚢"
+    },
+    {
+      "id": 282,
+      "english": "money",
+      "japanese": "お金",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "💴"
+    },
+    {
+      "id": 283,
+      "english": "shoe",
+      "japanese": "靴",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "👟"
+    },
+    {
+      "id": 284,
+      "english": "pants",
+      "japanese": "ズボン",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "👖"
+    },
+    {
+      "id": 285,
+      "english": "pen",
+      "japanese": "ペン",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "🖊️"
+    },
+    {
+      "id": 286,
+      "english": "bed",
+      "japanese": "ベッド",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "🛏️"
+    },
+    {
+      "id": 287,
+      "english": "picture",
+      "japanese": "写真、絵",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "🖼️"
+    },
+    {
+      "id": 288,
+      "english": "meat",
+      "japanese": "肉",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🥩"
+    },
+    {
+      "id": 289,
+      "english": "vegetable",
+      "japanese": "野菜",
+      "category": "food",
+      "difficulty": 3,
+      "emoji": "🥦"
+    },
+    {
+      "id": 290,
+      "english": "fruit",
+      "japanese": "果物",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "🍎"
+    },
+    {
+      "id": 291,
+      "english": "breakfast",
+      "japanese": "朝ごはん",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "🥞"
+    },
+    {
+      "id": 292,
+      "english": "lunch",
+      "japanese": "昼ごはん",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🍱"
+    },
+    {
+      "id": 293,
+      "english": "dinner",
+      "japanese": "夜ごはん",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "🍲"
+    },
+    {
+      "id": 294,
+      "english": "mouse",
+      "japanese": "ねずみ",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐭"
+    },
+    {
+      "id": 295,
+      "english": "cow",
+      "japanese": "牛",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐄"
+    },
+    {
+      "id": 296,
+      "english": "wolf",
+      "japanese": "おおかみ",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐺"
+    },
+    {
+      "id": 297,
+      "english": "duck",
+      "japanese": "あひる",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🦆"
+    },
+    {
+      "id": 298,
+      "english": "time",
+      "japanese": "時間",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "⏱️"
+    },
+    {
+      "id": 299,
+      "english": "name",
+      "japanese": "名前",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "📛"
+    },
+    {
+      "id": 300,
+      "english": "music",
+      "japanese": "音楽",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "🎵"
+    },
+    {
+      "id": 301,
+      "english": "game",
+      "japanese": "ゲーム",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "🎮"
+    },
+    {
+      "id": 302,
+      "english": "computer",
+      "japanese": "コンピューター",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "💻"
+    },
+    {
+      "id": 303,
+      "english": "English",
+      "japanese": "英語",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "🔤"
+    },
+    {
+      "id": 304,
+      "english": "Japanese",
+      "japanese": "国語、日本語",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "🗾"
     }
   ]
 }
