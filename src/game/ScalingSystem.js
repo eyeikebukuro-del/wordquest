@@ -184,6 +184,7 @@ export class ScalingSystem {
         if (!def) return null;
         if (this.relics.find(r => r.id === relicId)) return null; // 重複不可
         this.relics.push({ ...def });
+        if (window.sm) window.sm.playRelic();
         return def;
     }
 

@@ -11,9 +11,27 @@ import { RELIC_DEFINITIONS, POTION_DEFINITIONS } from './game/ScalingSystem.js';
 import bgForestMap from './assets/bg_forest_map.png';
 import bgCaveMap from './assets/bg_cave_map.png';
 import bgTowerMap from './assets/bg_tower_map.png';
+import { SoundManager } from './game/SoundManager.js';
 
 // ゲームエンジンのインスタンス
 const game = new GameEngine();
+
+// オーディオマネージャの設定
+window.sm = new SoundManager();
+
+// グローバルなUI音（ホバー・クリック）のイベントデリゲーション
+document.body.addEventListener('mouseover', (e) => {
+  if (e.target.closest('button') || e.target.closest('.card') || e.target.closest('.char-card')) {
+    // 連続して鳴りすぎないようにするための簡単なチェックなども後で入れられます
+    window.sm.playUIHover();
+  }
+});
+document.body.addEventListener('mousedown', (e) => {
+  window.sm.resume(); // オーディオコンテキストの再開
+  if (e.target.closest('button')) {
+    window.sm.playUIClick();
+  }
+});
 
 // === 画面管理 ===
 function showScreen(screenId) {
@@ -118,6 +136,7 @@ function renderMap() {
 
       if (node.available || window.DEBUG_MODE) {
         nodeDiv.addEventListener('click', () => {
+          if (window.sm) window.sm.playMapNode();
           game.selectNode(node.id);
         });
         if (window.DEBUG_MODE && !node.available) {
@@ -396,6 +415,7 @@ function renderPotions() {
 
 // === クイズ表示 ===
 function onCardSelect(instanceId) {
+  if (window.sm) window.sm.playCardSelect();
   const quiz = currentBattle.selectCard(instanceId);
   if (!quiz) return;
   showQuiz(quiz);
@@ -1124,6 +1144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // キャラクター選択画面
   document.getElementById('btn-start-adventure').addEventListener('click', () => {
+    if (window.sm) window.sm.playGameStart();
     game.startNewRun();
   });
 

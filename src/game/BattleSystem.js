@@ -98,6 +98,7 @@ export class BattleSystem {
             drawCount += this.scaling.getRelicBonus('first_draw_bonus');
         }
         const drawn = this.deck.draw(drawCount);
+        if (window.sm && drawn.length > 0) window.sm.playCardDraw();
         this.emit('battle_start', { drawn, enemy: this.enemy });
         this.emit('state_change', { state: this.state });
     }
@@ -177,10 +178,15 @@ export class BattleSystem {
 
         // 学習データ記録
         if (correct) {
+            if (window.sm) window.sm.playQuizCorrect();
             this.spacedRep.recordCorrect(this.currentQuiz.word.id);
             this.scaling.incrementCombo();
+            if (window.sm && this.scaling.comboCount > 1) {
+                window.sm.playComboUp(this.scaling.comboCount);
+            }
             this.correctCount++;
         } else {
+            if (window.sm) window.sm.playQuizIncorrect();
             this.spacedRep.recordIncorrect(this.currentQuiz.word.id);
             this.scaling.resetCombo();
         }
@@ -231,8 +237,10 @@ export class BattleSystem {
         // カードを使用済みにする
         this.energy -= this.selectedCard.cost;
         if (this.selectedCard.type === CARD_TYPES.SKILL) {
+            if (window.sm) window.sm.playCardExhaust();
             this.deck.exhaustCard(this.selectedCard.instanceId);
         } else {
+            if (window.sm) window.sm.playCardPlay();
             this.deck.playCard(this.selectedCard.instanceId);
         }
         this.selectedCard = null;
@@ -240,6 +248,7 @@ export class BattleSystem {
 
         // 敵のHP確認
         if (this.enemy.hp <= 0) {
+            if (window.sm) window.sm.playDefeat();
             this.state = BATTLE_STATES.VICTORY;
             result.battleEnd = 'victory';
         } else {
@@ -278,6 +287,11 @@ export class BattleSystem {
             if (!this.maxDamageThisBattle) this.maxDamageThisBattle = 0;
             this.maxDamageThisBattle = Math.max(this.maxDamageThisBattle, damage);
 
+            if (window.sm) {
+                if (damage >= 10) window.sm.playHeavyAttack();
+                else window.sm.playAttack();
+            }
+
             result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
         }
 
@@ -285,6 +299,7 @@ export class BattleSystem {
         if (card.baseBlock) {
             const block = this.scaling.calculateBlock(card);
             this.playerBlock += block;
+            if (window.sm) window.sm.playBlock();
             result.effects.push({ type: 'block', value: block });
         }
 
@@ -292,6 +307,7 @@ export class BattleSystem {
         if (card.healAmount) {
             const heal = Math.min(card.healAmount, this.player.maxHp - this.player.hp);
             this.player.hp += heal;
+            if (window.sm) window.sm.playPotion();
             result.effects.push({ type: 'heal', value: heal });
         }
 
@@ -373,11 +389,13 @@ export class BattleSystem {
 
         // 毒ダメージ
         if (this.enemyPoison > 0) {
+            if (window.sm) window.sm.playPoison();
             this.enemy.hp = Math.max(0, this.enemy.hp - this.enemyPoison);
             result.effects.push({ type: 'poison_damage', value: this.enemyPoison });
             this.enemyPoison = Math.max(0, this.enemyPoison - 1);
 
             if (this.enemy.hp <= 0) {
+                if (window.sm) window.sm.playDefeat();
                 this.state = BATTLE_STATES.VICTORY;
                 this.emit('battle_end', { result: 'victory' });
                 this.emit('state_change', { state: this.state });
@@ -395,8 +413,14 @@ export class BattleSystem {
                     damage = Math.max(0, damage - this.enemyDebuffs.weakened.value);
                 }
                 const actualDamage = Math.max(0, damage - this.playerBlock);
+                if (window.sm && this.playerBlock > 0 && damage >= this.playerBlock) window.sm.playBlockBreak();
+
                 this.playerBlock = Math.max(0, this.playerBlock - damage);
                 this.player.hp = Math.max(0, this.player.hp - actualDamage);
+
+                if (window.sm && actualDamage > 0) window.sm.playDamage();
+                else if (window.sm && actualDamage <= 0) window.sm.playBlock();
+
                 result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
                 break;
             }
@@ -409,8 +433,14 @@ export class BattleSystem {
                         damage = Math.max(0, damage - this.enemyDebuffs.weakened.value);
                     }
                     const actualDamage = Math.max(0, damage - this.playerBlock);
+                    if (window.sm && this.playerBlock > 0 && damage >= this.playerBlock) setTimeout(() => window.sm.playBlockBreak(), i * 200);
+
                     this.playerBlock = Math.max(0, this.playerBlock - damage);
                     this.player.hp = Math.max(0, this.player.hp - actualDamage);
+
+                    if (window.sm && actualDamage > 0) setTimeout(() => window.sm.playDamage(), i * 200);
+                    else if (window.sm && actualDamage <= 0) setTimeout(() => window.sm.playBlock(), i * 200);
+
                     totalActual += actualDamage;
                 }
                 result.effects.push({ type: 'multi_damage', hits: intent.hits, perHit: intent.damage, total: totalActual });
@@ -483,6 +513,7 @@ export class BattleSystem {
         // 手札を捨て、新しく5枚引く
         this.deck.discardHand();
         const drawn = this.deck.draw(5);
+        if (window.sm && drawn.length > 0) window.sm.playCardDraw();
 
         this.state = BATTLE_STATES.PLAYER_TURN;
         this.emit('new_turn', { turn: this.turn, drawn, energy: this.energy });
@@ -497,6 +528,7 @@ export class BattleSystem {
     usePotion(instanceId) {
         const potion = this.scaling.usePotion(instanceId);
         if (!potion) return null;
+        if (window.sm) window.sm.playPotion();
 
         const result = { potion, effects: [] };
 

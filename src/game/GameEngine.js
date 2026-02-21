@@ -245,6 +245,7 @@ export class GameEngine {
      * @param {number} amount - ゴールド量
      */
     addGold(amount) {
+        if (window.sm) window.sm.playGold();
         this.player.gold += amount;
     }
 
