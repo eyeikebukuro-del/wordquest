@@ -66,6 +66,8 @@ export class BattleSystem {
         this.correctCount = 0;
         /** クイズ連続正答中の現在カードのヒット数 */
         this.currentHitIndex = 0;
+        /** 進化する古文書専用：覚醒する知性（乗算バフ） */
+        this.awakeningMultiplier = 1.0;
 
         // 次の敵の行動を計算
         this.nextEnemyIntent = getEnemyIntent(enemy);
@@ -99,6 +101,13 @@ export class BattleSystem {
         }
         const drawn = this.deck.draw(drawCount);
         if (window.sm && drawn.length > 0) window.sm.playCardDraw();
+
+        // 特別なボス戦の開始時ログ
+        if (this.enemy.id === 'evolving_archive') {
+            this.log.push('【特殊戦闘】覚醒する知性：正解するたびダメージが1.5倍（乗算）！ミスでリセット。');
+            this.log.push('【警告】敵の攻撃力が毎ターン上昇していく！');
+        }
+
         this.emit('battle_start', { drawn, enemy: this.enemy });
         this.emit('state_change', { state: this.state });
     }
@@ -207,6 +216,13 @@ export class BattleSystem {
 
             // カード効果発動
             this.currentHitIndex++;
+
+            // 進化する古文書：マルチプライヤー上昇
+            if (this.enemy.id === 'evolving_archive') {
+                this.awakeningMultiplier *= 1.5;
+                this.log.push(`覚醒する知性！ ダメージ倍率: ${this.awakeningMultiplier.toFixed(2)}倍`);
+            }
+
             const cardResult = this.applyCardEffect(this.selectedCard);
             result.cardEffect = cardResult;
 
@@ -232,6 +248,12 @@ export class BattleSystem {
         } else {
             // 誤答ペナルティ ― カード不発
             result.cardEffect = { type: 'miss', message: 'カード不発！' };
+
+            // 進化する古文書：マルチプライヤーリセット
+            if (this.enemy.id === 'evolving_archive') {
+                this.awakeningMultiplier = 1.0;
+                this.log.push('覚醒する知性が解除された！');
+            }
         }
 
         // カードを使用済みにする
@@ -272,6 +294,11 @@ export class BattleSystem {
         // 攻撃
         if (card.baseDamage !== undefined) {
             let damage = this.scaling.calculateDamage(card);
+
+            // 覚醒する知性マルチプライヤー適用
+            if (this.awakeningMultiplier > 1.0) {
+                damage = Math.ceil(damage * this.awakeningMultiplier);
+            }
 
             // コンボボーナス（サンダーカード）
             if (card.comboBonus && this.scaling.comboCount >= 2) {
@@ -436,6 +463,13 @@ export class BattleSystem {
         }
 
         this.enemy.block = 0;
+
+        // 進化する古文書：毎ターン攻撃力上昇 (+2)
+        if (this.enemy.id === 'evolving_archive') {
+            if (!this.enemy.buffs.strength) this.enemy.buffs.strength = 0;
+            this.enemy.buffs.strength += 2;
+            this.log.push('古文書の知識が深まり、攻撃力が2上昇した。');
+        }
 
         switch (intent.intent) {
             case ENEMY_INTENTS.ATTACK: {

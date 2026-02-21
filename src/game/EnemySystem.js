@@ -224,6 +224,20 @@ export const ENEMY_DEFINITIONS = {
             { intent: ENEMY_INTENTS.ATTACK, damage: 22, emoji: '⚔️' }
         ],
         floor: 3
+    },
+    evolving_archive: {
+        id: 'evolving_archive',
+        name: '進化する古文書',
+        emoji: '📖',
+        baseHp: 150,
+        isBoss: true,
+        patterns: [
+            { intent: ENEMY_INTENTS.ATTACK, damage: 10, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 12, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.DEFEND, block: 10, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 5, hits: 3, emoji: '⚡' }
+        ],
+        floor: 3
     }
 };
 
@@ -312,8 +326,10 @@ export function getRandomEnemy(floor) {
  * @returns {string} ボス敵定義ID
  */
 export function getFloorBoss(floor) {
-    const boss = Object.entries(ENEMY_DEFINITIONS)
-        .find(([, def]) => def.floor === floor && def.isBoss);
+    const bosses = Object.entries(ENEMY_DEFINITIONS)
+        .filter(([, def]) => def.floor === floor && def.isBoss);
 
-    return boss ? boss[0] : null;
+    if (bosses.length === 0) return null;
+    const [id] = bosses[Math.floor(Math.random() * bosses.length)];
+    return id;
 }
