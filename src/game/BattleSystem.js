@@ -270,12 +270,27 @@ export class BattleSystem {
         const result = { type: card.type, cost: card.cost, effects: [] };
 
         // 攻撃
-        if (card.baseDamage) {
+        if (card.baseDamage !== undefined) {
             let damage = this.scaling.calculateDamage(card);
 
             // コンボボーナス（サンダーカード）
             if (card.comboBonus && this.scaling.comboCount >= 2) {
                 damage += card.comboBonus;
+            }
+
+            // 新シナジー：コンボ・ブレード（コンボ数×5）
+            if (card.comboMultiplierBonus && this.scaling.comboCount > 0) {
+                damage += this.scaling.comboCount * card.comboMultiplierBonus;
+            }
+
+            // 新シナジー：長文バースト（文字数×3）
+            if (card.lengthSynergy && this.currentQuiz && this.currentQuiz.word.english) {
+                damage += this.currentQuiz.word.english.length * card.lengthSynergy;
+                // ブロックも文字数分追加
+                const blockAmount = this.currentQuiz.word.english.length * card.lengthSynergy;
+                this.playerBlock += blockAmount;
+                result.effects.push({ type: 'block', value: blockAmount });
+                if (window.sm) window.sm.playBlock();
             }
 
             // 敵のブロックを計算
@@ -340,6 +355,23 @@ export class BattleSystem {
             this.enemyPoison += card.poison;
             result.effects.push({ type: 'poison', value: card.poison });
         }
+
+        // 新シナジー：毒の触媒（毒を2倍にする）
+        if (card.catalyst) {
+            if (this.enemyPoison > 0) {
+                if (window.sm) window.sm.playPoison(); // SE再生
+                const addedPoison = this.enemyPoison;
+                this.enemyPoison *= 2;
+                result.effects.push({ type: 'poison_catalyst', value: addedPoison });
+            } else {
+                result.effects.push({ type: 'miss', message: '敵が毒状態ではない' });
+            }
+        }
+
+        // 元の触媒の後に毒のpushが残っていた不自然な記述（バグの原因にもなる）があったため修正
+        // ここでの push({type: 'poison'}) は二重に記録されてしまうため不要であれば削除するが、念のため既存に合わせて残す場合でも
+        // 先程の部分ですでに poison 処理は終わっているので削除。
+        // （元は354行目の if(card.poison) で処理済み）
 
         // エナジーボーナス
         if (card.energyBonus) {

@@ -64,6 +64,30 @@ export const ENEMY_DEFINITIONS = {
         ],
         floor: 1
     },
+    metal_slime: {
+        id: 'metal_slime',
+        name: 'メタルスライム',
+        emoji: '🛡️',
+        baseHp: 15,
+        patterns: [
+            { intent: ENEMY_INTENTS.DEFEND, block: 15, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.DEFEND, block: 20, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 2, emoji: '⚔️' }
+        ],
+        floor: 1
+    },
+    poison_toad: {
+        id: 'poison_toad',
+        name: 'ポイズントード',
+        emoji: '🐸',
+        baseHp: 28,
+        patterns: [
+            { intent: ENEMY_INTENTS.ATTACK, damage: 3, emoji: '⚔️' }, // 実際は毒攻撃にしたいが今のシステムで再現するならバフ等が必要
+            { intent: ENEMY_INTENTS.DEFEND, block: 5, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 7, emoji: '⚔️' }
+        ],
+        floor: 1
+    },
 
     // === フロア1 ボス ===
     forest_guardian: {
@@ -207,7 +231,7 @@ export const ENEMY_DEFINITIONS = {
  * エリート敵（通常より強い中ボス）
  */
 export const ELITE_ENEMIES = {
-    1: ['goblin', 'mushroom'],
+    1: ['goblin', 'mushroom', 'metal_slime'],
     2: ['golem', 'dark_mage'],
     3: ['demon', 'dark_knight']
 };

@@ -124,6 +124,32 @@ export const CARD_DEFINITIONS = {
         rarity: 'uncommon',
         color: '#6c5ce7'
     },
+    combo_blade: {
+        id: 'combo_blade',
+        name: 'コンボ・ブレード',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 10,
+        emoji: '🔪',
+        description: '10ダメージ。[シナジー]コンボ数×5の追加ダメージ',
+        quizMode: QUIZ_MODES.TYPING,
+        comboMultiplierBonus: 5, // BattleSystem側で特別処理
+        rarity: 'rare',
+        color: '#ff9f43'
+    },
+    longword_burst: {
+        id: 'longword_burst',
+        name: '長文バースト',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 0,
+        emoji: '📚',
+        description: '[シナジー]出題された英単語の文字数×3のダメージとブロック',
+        quizMode: QUIZ_MODES.TYPING,
+        lengthSynergy: 3, // BattleSystem側で特別処理
+        rarity: 'rare',
+        color: '#5f27cd'
+    },
 
     // === 防御カード ===
     shield: {
@@ -238,6 +264,18 @@ export const CARD_DEFINITIONS = {
         quizMode: QUIZ_MODES.TYPING,
         rarity: 'rare',
         color: '#fd79a8'
+    },
+    poison_catalyst: {
+        id: 'poison_catalyst',
+        name: '猛毒の触媒',
+        type: CARD_TYPES.SKILL,
+        cost: 3,
+        emoji: '🧪',
+        description: '[シナジー]敵の毒を2倍にする',
+        quizMode: QUIZ_MODES.TYPING,
+        catalyst: true, // BattleSystem側で特別処理
+        rarity: 'rare',
+        color: '#8e44ad'
     }
 };
 
