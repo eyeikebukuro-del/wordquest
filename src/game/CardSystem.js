@@ -131,7 +131,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseDamage: 10,
         emoji: '🔪',
-        description: '10ダメージ。[シナジー]コンボ数×5の追加ダメージ',
+        description: '10ダメージ。コンボ数×5の追加ダメージ',
         quizMode: QUIZ_MODES.TYPING,
         comboMultiplierBonus: 5, // BattleSystem側で特別処理
         rarity: 'rare',
@@ -144,7 +144,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseDamage: 0,
         emoji: '📚',
-        description: '[シナジー]英単語の文字数×3のダメージとブロック',
+        description: '英単語の文字数×3のダメージとブロック',
         quizMode: QUIZ_MODES.TYPING,
         lengthSynergy: 3, // BattleSystem側で特別処理
         rarity: 'rare',
@@ -267,11 +267,11 @@ export const CARD_DEFINITIONS = {
     },
     poison_catalyst: {
         id: 'poison_catalyst',
-        name: '猛毒の触媒',
+        name: 'もうどく',
         type: CARD_TYPES.SKILL,
-        cost: 1,
+        cost: 2,
         emoji: '🧪',
-        description: '[シナジー]毒5を与え、その後敵の毒を2倍にする',
+        description: '毒5を与え、その後敵の毒を2倍にする',
         quizMode: QUIZ_MODES.TYPING,
         poison: 5,
         catalyst: true, // BattleSystem側で特別処理
@@ -299,7 +299,7 @@ export function createCard(definitionId) {
 
     // スキルカードは使用後に廃棄されることを明記
     if (card.type === CARD_TYPES.SKILL) {
-        card.description += ' 使用後、廃棄する。';
+        card.description += ' 廃棄する。';
     }
 
     return card;
