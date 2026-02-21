@@ -144,7 +144,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseDamage: 0,
         emoji: '📚',
-        description: '[シナジー]出題された英単語の文字数×3のダメージとブロック',
+        description: '[シナジー]英単語の文字数×3のダメージとブロック',
         quizMode: QUIZ_MODES.TYPING,
         lengthSynergy: 3, // BattleSystem側で特別処理
         rarity: 'rare',
@@ -269,10 +269,11 @@ export const CARD_DEFINITIONS = {
         id: 'poison_catalyst',
         name: '猛毒の触媒',
         type: CARD_TYPES.SKILL,
-        cost: 3,
+        cost: 1,
         emoji: '🧪',
-        description: '[シナジー]敵の毒を2倍にする',
+        description: '[シナジー]毒5を与え、その後敵の毒を2倍にする',
         quizMode: QUIZ_MODES.TYPING,
+        poison: 5,
         catalyst: true, // BattleSystem側で特別処理
         rarity: 'rare',
         color: '#8e44ad'
