@@ -67,7 +67,10 @@ export class GameEngine {
             totalCorrect: 0,
             totalIncorrect: 0,
             floorsCleared: 0,
-            maxCombo: 0
+            maxCombo: 0,
+            totalWisdomScore: 0,
+            lastBossId: null,
+            lastBossName: null
         };
     }
 
@@ -106,7 +109,10 @@ export class GameEngine {
             totalCorrect: 0,
             totalIncorrect: 0,
             floorsCleared: 0,
-            maxCombo: 0
+            maxCombo: 0,
+            totalWisdomScore: 0,
+            lastBossId: null,
+            lastBossName: null
         };
 
         this.changeScreen(SCREENS.MAP);
@@ -204,6 +210,12 @@ export class GameEngine {
             this.stats.enemiesDefeated++;
             this.stats.maxCombo = Math.max(this.stats.maxCombo, this.scaling.maxCombo);
             this.stats.maxDamage = Math.max(this.stats.maxDamage || 0, this.battle.maxDamageThisBattle || 0);
+            this.stats.totalWisdomScore += (this.battle.wisdomScore || 0);
+
+            if (this.battle.enemy.isBoss) {
+                this.stats.lastBossId = this.battle.enemy.id;
+                this.stats.lastBossName = this.battle.enemy.name;
+            }
 
             // レリック「いやしの指輪」効果
             if (this.scaling.hasRelic('heal_after_battle')) {

@@ -68,6 +68,8 @@ export class BattleSystem {
         this.currentHitIndex = 0;
         /** 進化する古文書専用：覚醒する知性（乗算バフ） */
         this.awakeningMultiplier = 1.0;
+        /** 智恵スコア（難易度に応じたボーナス） */
+        this.wisdomScore = 0;
 
         // 次の敵の行動を計算
         this.nextEnemyIntent = getEnemyIntent(enemy);
@@ -219,9 +221,14 @@ export class BattleSystem {
 
             // 進化する古文書：マルチプライヤー上昇
             if (this.enemy.id === 'evolving_archive') {
-                this.awakeningMultiplier *= 1.5;
+                this.awakeningMultiplier *= 1.2;
                 this.log.push(`覚醒する知性！ ダメージ倍率: ${this.awakeningMultiplier.toFixed(2)}倍`);
             }
+
+            // 智恵スコア加算
+            const difficulty = this.currentQuiz.word.difficulty || 1;
+            const wisdomPoints = difficulty === 3 ? 800 : difficulty === 2 ? 300 : 100;
+            this.wisdomScore += wisdomPoints;
 
             const cardResult = this.applyCardEffect(this.selectedCard);
             result.cardEffect = cardResult;
@@ -638,7 +645,10 @@ export class BattleSystem {
             maxCombo: this.scaling.maxCombo,
             comboText: this.scaling.getComboText(),
             enemyName: this.enemy.name,
-            isBoss: this.enemy.isBoss
+            enemyId: this.enemy.id,
+            isBoss: this.enemy.isBoss,
+            wisdomScore: this.wisdomScore,
+            maxDamage: this.maxDamageThisBattle || 0
         };
     }
 }

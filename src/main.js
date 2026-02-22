@@ -982,16 +982,28 @@ function renderVictory() {
   // スコア計算
   const enemiesScore = (game.stats.enemiesDefeated || 0) * 50;
   const comboScore = (game.stats.maxCombo || 0) * 100;
-  const damageScore = (game.stats.maxDamage || 0) * 10;
+  const wisdomBonus = game.stats.totalWisdomScore || 0;
+
+  // ダメージスコア（平方根による減衰）
+  const maxDamage = game.stats.maxDamage || 0;
+  const damageScore = Math.floor(Math.sqrt(maxDamage) * 400);
+
+  // ボス撃破ボーナス
+  let bossBonus = 0;
+  if (game.stats.lastBossId === 'word_king') bossBonus = 3000;
+  else if (game.stats.lastBossId === 'evolving_archive') bossBonus = 1000;
+
   const goldScore = (game.player.gold || 0) * 1;
   const baseScore = 1000;
-  const totalScore = baseScore + enemiesScore + comboScore + damageScore + goldScore;
+  const totalScore = baseScore + enemiesScore + comboScore + damageScore + wisdomBonus + bossBonus + goldScore;
 
   statsEl.innerHTML = `
     <div class="stat-row"><span class="stat-label">クリアボーナス</span><span class="stat-value">+${baseScore}点</span></div>
+    <div class="stat-row"><span class="stat-label">ボス撃破ボーナス (${game.stats.lastBossName || 'ボス'})</span><span class="stat-value">+${bossBonus}点</span></div>
     <div class="stat-row"><span class="stat-label">倒した敵 (${game.stats.enemiesDefeated || 0}体)</span><span class="stat-value">+${enemiesScore}点</span></div>
     <div class="stat-row"><span class="stat-label">最大コンボ (${game.stats.maxCombo || 0})</span><span class="stat-value">+${comboScore}点</span></div>
-    <div class="stat-row"><span class="stat-label">最大ダメージ (${game.stats.maxDamage || 0})</span><span class="stat-value">+${damageScore}点</span></div>
+    <div class="stat-row"><span class="stat-label">最大ダメージ (${maxDamage})</span><span class="stat-value">+${damageScore}点</span></div>
+    <div class="stat-row"><span class="stat-label">智恵ボーナス</span><span class="stat-value">+${wisdomBonus}点</span></div>
     <div class="stat-row"><span class="stat-label">所持ゴールド (${game.player.gold || 0}G)</span><span class="stat-value">+${goldScore}点</span></div>
     <div class="stat-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 1.2em; font-weight: bold; color: var(--accent-yellow);">
       <span class="stat-label">最終スコア</span><span class="stat-value">${totalScore}点</span>
@@ -1003,7 +1015,8 @@ function renderVictory() {
     date: Date.now(),
     character: 'ワードマスター', // 現状固定
     emoji: '🧙‍♂️',
-    score: totalScore
+    score: totalScore,
+    bossName: game.stats.lastBossName || 'なし'
   };
   if (game.saveManager.saveLeaderboardScore) {
     game.saveManager.saveLeaderboardScore(scoreData);
@@ -1037,7 +1050,7 @@ function showStats() {
       const dateStr = new Date(lb.date).toLocaleDateString();
       return `
         <div style="display:flex; justify-content:space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center;">
-          <div><span style="display:inline-block; width:20px; color: var(--text-muted);">${i + 1}.</span> ${lb.emoji} ${lb.character}</div>
+          <div><span style="display:inline-block; width:20px; color: var(--text-muted);">${i + 1}.</span> ${lb.emoji} ${lb.character} <span style="font-size:0.8em; color:var(--text-muted);">(${lb.bossName || '???'}撃破)</span></div>
           <div><span style="font-weight:bold; color:var(--accent-yellow);">${lb.score}</span> <span style="font-size:0.7em; color:var(--text-muted);">${dateStr}</span></div>
         </div>
       `;

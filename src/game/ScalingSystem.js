@@ -136,10 +136,10 @@ export class ScalingSystem {
     getComboMultiplier() {
         const baseComboBonus = this.getRelicBonus('combo_bonus');
         if (this.comboCount < 2) return 1.0;
-        if (this.comboCount < 4) return 1.3 + baseComboBonus;
+        if (this.comboCount < 4) return 1.4 + baseComboBonus; // 1.3 -> 1.4
         if (this.comboCount < 6) return 1.6 + baseComboBonus * 2;
         if (this.comboCount < 8) return 2.0 + baseComboBonus * 3;
-        return 2.5 + baseComboBonus * 4;
+        return 2.4 + baseComboBonus * 4; // 2.5 -> 2.4
     }
 
     /**
