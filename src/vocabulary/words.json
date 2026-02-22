@@ -667,7 +667,7 @@
     {
       "id": 84,
       "english": "library",
-      "japanese": "としょかん",
+      "japanese": "本がいっぱいある「としょかん」",
       "category": "school",
       "difficulty": 2,
       "emoji": "📖"
@@ -753,7 +753,7 @@
     {
       "id": 94,
       "english": "rainy",
-      "japanese": "「雨ふりの」天気",
+      "japanese": "雨がふっている「あめ」のひ",
       "category": "weather",
       "difficulty": 1,
       "emoji": "🌧️"
@@ -929,7 +929,7 @@
     {
       "id": 116,
       "english": "listen",
-      "japanese": "きく",
+      "japanese": "音楽などを「きく」",
       "category": "action",
       "difficulty": 2,
       "emoji": "👂"
@@ -1249,7 +1249,7 @@
     {
       "id": 156,
       "english": "house",
-      "japanese": "いえ",
+      "japanese": "みんなが住んでいる「いえ」",
       "category": "place",
       "difficulty": 1,
       "emoji": "🏠"
@@ -1265,7 +1265,7 @@
     {
       "id": 158,
       "english": "hospital",
-      "japanese": "びょういん",
+      "japanese": "風邪のときに行く「びょういん」",
       "category": "place",
       "difficulty": 2,
       "emoji": "🏥"
@@ -1273,7 +1273,7 @@
     {
       "id": 159,
       "english": "station",
-      "japanese": "えき",
+      "japanese": "電車に乗るところ「えき」",
       "category": "place",
       "difficulty": 1,
       "emoji": "🚉"
@@ -2134,7 +2134,7 @@
         "look",
         "watch"
       ],
-      "japanese": "見る",
+      "japanese": "目に自然と「見える」",
       "category": "action",
       "difficulty": 1,
       "emoji": "👀"
@@ -2150,7 +2150,7 @@
     {
       "id": 269,
       "english": "have",
-      "japanese": "持っている、飼う",
+      "japanese": "ペットなどを「かっている」",
       "category": "action",
       "difficulty": 1,
       "emoji": "🤲"
@@ -2214,7 +2214,7 @@
     {
       "id": 277,
       "english": "cool",
-      "japanese": "かっこいい、涼しい",
+      "japanese": "かっこいい、または「すずしい」",
       "category": "adjective",
       "difficulty": 1,
       "emoji": "😎"
@@ -2230,7 +2230,7 @@
     {
       "id": 279,
       "english": "room",
-      "japanese": "部屋",
+      "japanese": "いえの中にある「へや」",
       "category": "place",
       "difficulty": 1,
       "emoji": "🛋️"
@@ -2265,7 +2265,7 @@
     {
       "id": 283,
       "english": "shoe",
-      "japanese": "片方の「靴」",
+      "japanese": "片方だけの「くつ」",
       "category": "thing",
       "difficulty": 1,
       "emoji": "👟"
@@ -2297,7 +2297,7 @@
     {
       "id": 287,
       "english": "picture",
-      "japanese": "写真、絵",
+      "japanese": "かべにかざる「しゃしん」や「え」",
       "category": "thing",
       "difficulty": 2,
       "emoji": "🖼️"
