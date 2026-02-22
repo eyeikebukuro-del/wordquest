@@ -92,6 +92,15 @@ export class BattleSystem {
     }
 
     /**
+     * バトルログを追加
+     * @param {string} message - ログメッセージ
+     */
+    addLog(message) {
+        this.log.push(message);
+        this.emit('log', { message });
+    }
+
+    /**
      * バトル開始（初期手札ドロー）
      */
     start() {
@@ -104,8 +113,8 @@ export class BattleSystem {
 
         // 特別なボス戦の開始時ログ
         if (this.enemy.id === 'evolving_archive') {
-            this.log.push('【特殊戦闘】覚醒する知性：正解するたびダメージが1.5倍（乗算）！ミスでリセット。');
-            this.log.push('【警告】敵の攻撃力が毎ターン上昇していく！');
+            this.addLog('【特殊戦闘】覚醒する知性：正解するたびダメージが1.5倍（乗算）！ミスでリセット。');
+            this.addLog('【警告】敵の攻撃力が毎ターン上昇していく！');
         }
 
         this.emit('battle_start', { drawn, enemy: this.enemy });
@@ -220,7 +229,7 @@ export class BattleSystem {
             // 進化する古文書：マルチプライヤー上昇
             if (this.enemy.id === 'evolving_archive') {
                 this.awakeningMultiplier *= 1.5;
-                this.log.push(`覚醒する知性！ ダメージ倍率: ${this.awakeningMultiplier.toFixed(2)}倍`);
+                this.addLog(`覚醒する知性！ ダメージ倍率: ${this.awakeningMultiplier.toFixed(2)}倍`);
             }
 
             const cardResult = this.applyCardEffect(this.selectedCard);
@@ -252,7 +261,7 @@ export class BattleSystem {
             // 進化する古文書：マルチプライヤーリセット
             if (this.enemy.id === 'evolving_archive') {
                 this.awakeningMultiplier = 1.0;
-                this.log.push('覚醒する知性が解除された！');
+                this.addLog('覚醒する知性が解除された！');
             }
         }
 
@@ -468,7 +477,7 @@ export class BattleSystem {
         if (this.enemy.id === 'evolving_archive') {
             if (!this.enemy.buffs.strength) this.enemy.buffs.strength = 0;
             this.enemy.buffs.strength += 2;
-            this.log.push('古文書の知識が深まり、攻撃力が2上昇した。');
+            this.addLog('古文書の知識が深まり、攻撃力が2上昇した。');
         }
 
         switch (intent.intent) {

@@ -497,6 +497,52 @@
     color: var(--accent-blue);
 }
 
+/* バトルログ */
+.battle-log {
+    position: absolute;
+    left: 20px;
+    bottom: 220px;
+    width: 280px;
+    max-height: 120px;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4px;
+    pointer-events: none;
+    z-index: 15;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
+    border-left: 2px solid var(--accent-purple);
+    padding-left: 10px;
+}
+
+.log-entry {
+    font-size: var(--font-xs);
+    color: var(--text-secondary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    animation: logFadeIn 0.3s ease-out forwards;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.log-entry.new {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+@keyframes logFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 /* レスポンシブ（短い画面） */
 @media (max-height: 600px) {
     .enemy-emoji {
