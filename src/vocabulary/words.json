@@ -1001,7 +1001,7 @@
     {
       "id": 125,
       "english": "happy",
-      "japanese": "うれしい",
+      "japanese": "（幸せで）うれしい",
       "category": "adjective",
       "difficulty": 1,
       "emoji": "😊"
@@ -1569,7 +1569,7 @@
     {
       "id": 196,
       "english": "hat",
-      "japanese": "ぼうし",
+      "japanese": "ふちのある「ぼうし」",
       "category": "thing",
       "difficulty": 1,
       "emoji": "🎩"
@@ -2437,6 +2437,5422 @@
       "category": "abstract",
       "difficulty": 2,
       "emoji": "🗾"
+    },
+    {
+      "id": 305,
+      "english": "why",
+      "japanese": "なぜ、どうして",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 306,
+      "english": "need",
+      "japanese": "〜を必要とする",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 307,
+      "english": "year",
+      "japanese": "年、学年",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 308,
+      "english": "visit",
+      "japanese": "～を訪問する、を訪れる、を訪ねる",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 309,
+      "english": "go to",
+      "japanese": "～へ行く、学校に通う",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 310,
+      "english": "talk",
+      "japanese": "話す",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 311,
+      "english": "in",
+      "japanese": "〜の中で、〜に、〜で",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 312,
+      "english": "people",
+      "japanese": "人々、世間の人",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 313,
+      "english": "look",
+      "japanese": "見る、〜のように見える",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 314,
+      "english": "show",
+      "japanese": "～を見せる、示す",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 315,
+      "english": "find",
+      "japanese": "～を見つける",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 316,
+      "english": "take",
+      "japanese": "～を取る、持っていく、連れて行く、受ける、乗る、撮る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 317,
+      "english": "get",
+      "japanese": "～を得る、になる、分かる、〜を受け取る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 318,
+      "english": "day",
+      "japanese": "日、一日、昼間",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 319,
+      "english": "of",
+      "japanese": "～の、〜のうち",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 320,
+      "english": "say",
+      "japanese": "～と言う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 321,
+      "english": "thank",
+      "japanese": "～に感謝する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 322,
+      "english": "learn",
+      "japanese": "〜を学ぶ、習う",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 323,
+      "english": "ask",
+      "japanese": "尋ねる、質問する、頼む",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 324,
+      "english": "live",
+      "japanese": "住んでいる、住む、生きる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 325,
+      "english": "at",
+      "japanese": "～で、～に",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 326,
+      "english": "do",
+      "japanese": "〜をする、十分である",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 327,
+      "english": "start",
+      "japanese": "始まる、を始める",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 328,
+      "english": "try",
+      "japanese": "〜をやってみる、〜を試す",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 329,
+      "english": "enjoy",
+      "japanese": "～を楽しむ、満喫する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 330,
+      "english": "for",
+      "japanese": "～のために、～の間、～にとって",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 331,
+      "english": "become",
+      "japanese": "～になる",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 332,
+      "english": "give",
+      "japanese": "～を与える",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 333,
+      "english": "hear",
+      "japanese": "聞く、聞こえる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 334,
+      "english": "tell",
+      "japanese": "伝える",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 335,
+      "english": "work",
+      "japanese": "働く、作業する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 336,
+      "english": "buy",
+      "japanese": "〜を買う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 337,
+      "english": "on",
+      "japanese": "～の上で、曜日・日付に",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 338,
+      "english": "first",
+      "japanese": "最初の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 339,
+      "english": "kindness",
+      "japanese": "親切、優しさ",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 340,
+      "english": "leave",
+      "japanese": "〜を去る、を残す、離れる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 341,
+      "english": "use",
+      "japanese": "〜を利用する、使う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 342,
+      "english": "with",
+      "japanese": "～といっしょに、～で",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 343,
+      "english": "join",
+      "japanese": "～に加わる、に参加する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 344,
+      "english": "begin",
+      "japanese": "～を始める、～し始める、始まる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 345,
+      "english": "finish",
+      "japanese": "～を終える、終わる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 346,
+      "english": "idea",
+      "japanese": "考え、アイデア",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 347,
+      "english": "remember",
+      "japanese": "覚えている、を思い出す、忘れずにする",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 348,
+      "english": "world",
+      "japanese": "世界、世の中、〜界",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 349,
+      "english": "life",
+      "japanese": "生活、人生、命",
+      "category": "nature",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 350,
+      "english": "problem",
+      "japanese": "問題",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 351,
+      "english": "stay",
+      "japanese": "滞在する、とどまる、泊まる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 352,
+      "english": "food",
+      "japanese": "食べ物、食品",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 353,
+      "english": "class",
+      "japanese": "授業、クラス",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 354,
+      "english": "decide",
+      "japanese": "〜を決める、決定する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 355,
+      "english": "wait",
+      "japanese": "待つ",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 356,
+      "english": "city",
+      "japanese": "都市、市",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 357,
+      "english": "send",
+      "japanese": "〜を送る、送信する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 358,
+      "english": "watch",
+      "japanese": "～を見る",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 359,
+      "english": "feel",
+      "japanese": "感じる、感情を抱く",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 360,
+      "english": "teach",
+      "japanese": "～を教える",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 361,
+      "english": "change",
+      "japanese": "〜を変える、〜を変更する、変わる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 362,
+      "english": "stop",
+      "japanese": "～を止める、止まる、やめる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 363,
+      "english": "which",
+      "japanese": "どちら、どれ",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 364,
+      "english": "believe",
+      "japanese": "〜を信じる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 365,
+      "english": "bring",
+      "japanese": "〜を持ってくる、連れてくる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 366,
+      "english": "meet",
+      "japanese": "〜に会う、満たす",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 367,
+      "english": "laugh at",
+      "japanese": "～を笑う",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 368,
+      "english": "very",
+      "japanese": "ひじょうに、とても",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 369,
+      "english": "there",
+      "japanese": "そこに、そこへ",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 370,
+      "english": "answer",
+      "japanese": "～に答える",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 371,
+      "english": "call",
+      "japanese": "～を呼ぶ、～を～と呼ぶ、に電話をかける、呼び出す",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 372,
+      "english": "month",
+      "japanese": "月、1か月",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 373,
+      "english": "week",
+      "japanese": "週",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 374,
+      "english": "Mr.",
+      "japanese": "～さん",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 375,
+      "english": "country",
+      "japanese": "国",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 376,
+      "english": "grow",
+      "japanese": "～を育てる、成長する、増える",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 377,
+      "english": "many",
+      "japanese": "たくさんの、多い",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 378,
+      "english": "question",
+      "japanese": "質問、問題",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 379,
+      "english": "love",
+      "japanese": "大好きだ、を愛する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 380,
+      "english": "place",
+      "japanese": "場所",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 381,
+      "english": "put",
+      "japanese": "～を置く、入れる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 382,
+      "english": "keep",
+      "japanese": "～を保つ、～し続ける、取っておく",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 383,
+      "english": "smile",
+      "japanese": "ほほえむ",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 384,
+      "english": "practice",
+      "japanese": "練習する",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 385,
+      "english": "understand",
+      "japanese": "〜を理解する、がわかる",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 386,
+      "english": "hope",
+      "japanese": "〜を望む",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 387,
+      "english": "second",
+      "japanese": "２番目",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 388,
+      "english": "really",
+      "japanese": "本当に",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 389,
+      "english": "story",
+      "japanese": "物語、話",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 390,
+      "english": "also",
+      "japanese": "～もまた",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 391,
+      "english": "dream",
+      "japanese": "夢",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 392,
+      "english": "right",
+      "japanese": "右の、正しい",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 393,
+      "english": "wear",
+      "japanese": "身に着ける、着る、着用する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 394,
+      "english": "only",
+      "japanese": "唯一の",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 395,
+      "english": "home",
+      "japanese": "家、自宅、家庭",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 396,
+      "english": "stand",
+      "japanese": "立つ、我慢する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 397,
+      "english": "person",
+      "japanese": "人",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 398,
+      "english": "sit",
+      "japanese": "座る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 399,
+      "english": "then",
+      "japanese": "そのとき、それから、それなら",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 400,
+      "english": "sound",
+      "japanese": "～に聞こえる、音がする",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 401,
+      "english": "guy",
+      "japanese": "男、やつ",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 402,
+      "english": "here",
+      "japanese": "ここに、ここで",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 403,
+      "english": "lose",
+      "japanese": "〜を失う、なくす、に負ける、を見失う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 404,
+      "english": "happen",
+      "japanese": "起こる、偶然〜する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 405,
+      "english": "letter",
+      "japanese": "手紙、文字",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 406,
+      "english": "next",
+      "japanese": "次の",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 407,
+      "english": "well",
+      "japanese": "じょうずに、よく",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 408,
+      "english": "hold",
+      "japanese": "～を手に持つ、持つ、開催する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 409,
+      "english": "Ms.",
+      "japanese": "〜さん",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 410,
+      "english": "let",
+      "japanese": "～するのを許す、に(〜)させる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 411,
+      "english": "all",
+      "japanese": "すべての",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 412,
+      "english": "shut",
+      "japanese": "閉める、閉まる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 413,
+      "english": "build",
+      "japanese": "〜を建てる、築く",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 414,
+      "english": "number",
+      "japanese": "数、番号",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 415,
+      "english": "birthday",
+      "japanese": "誕生日、バースデー",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 416,
+      "english": "last",
+      "japanese": "最後の、この前の",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 417,
+      "english": "today",
+      "japanese": "きょう",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 418,
+      "english": "minute",
+      "japanese": "分",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 419,
+      "english": "up",
+      "japanese": "上へ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 420,
+      "english": "hour",
+      "japanese": "時間（60分）、時、〜時間",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 421,
+      "english": "important",
+      "japanese": "重要な、大切な",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 422,
+      "english": "choose",
+      "japanese": "〜を選ぶ、選択する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 423,
+      "english": "sport",
+      "japanese": "スポーツ、運動競技",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 424,
+      "english": "hard",
+      "japanese": "一生懸命に",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 425,
+      "english": "back",
+      "japanese": "後ろに",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 426,
+      "english": "doctor",
+      "japanese": "医師、医者",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 427,
+      "english": "travel",
+      "japanese": "旅行する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 428,
+      "english": "always",
+      "japanese": "いつも、常に",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 429,
+      "english": "group",
+      "japanese": "集団、グループ",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 430,
+      "english": "catch",
+      "japanese": "～をつかまえる、風邪をひく、意味をつかむ、列車に間に合う",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 431,
+      "english": "another",
+      "japanese": "もう１つの、別の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 432,
+      "english": "carry",
+      "japanese": "～を運ぶ、携帯する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 433,
+      "english": "welcome",
+      "japanese": "歓迎される",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 434,
+      "english": "nice",
+      "japanese": "すてきな、感じのいい",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 435,
+      "english": "sell",
+      "japanese": "〜を売る、売れる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 436,
+      "english": "culture",
+      "japanese": "文化",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 437,
+      "english": "after",
+      "japanese": "～のあとに",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 438,
+      "english": "plan",
+      "japanese": "計画、予定",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 439,
+      "english": "history",
+      "japanese": "歴史",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 440,
+      "english": "interesting",
+      "japanese": "おもしろい、興味深い",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 441,
+      "english": "save",
+      "japanese": "～を救う、を節約する、を保存する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 442,
+      "english": "tea",
+      "japanese": "お茶、〜ティー",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 443,
+      "english": "activity",
+      "japanese": "活動",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 444,
+      "english": "break",
+      "japanese": "〜をこわす、壊れる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 445,
+      "english": "scientist",
+      "japanese": "科学者",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 446,
+      "english": "again",
+      "japanese": "再び、もう一度、また",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 447,
+      "english": "little",
+      "japanese": "小さい、ほとんどない",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 448,
+      "english": "light",
+      "japanese": "光、明かり",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 449,
+      "english": "point",
+      "japanese": "点、要点",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 450,
+      "english": "together",
+      "japanese": "いっしょに、共に、同時に",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 451,
+      "english": "before",
+      "japanese": "〜の前に",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 452,
+      "english": "mail",
+      "japanese": "郵便",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 453,
+      "english": "never",
+      "japanese": "決して～ない、(これまで一度も)〜したことがない",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 454,
+      "english": "song",
+      "japanese": "歌",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 455,
+      "english": "arrive",
+      "japanese": "到着する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 456,
+      "english": "often",
+      "japanese": "よく、しばしば",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 457,
+      "english": "by",
+      "japanese": "～によって、～までに、〜のそばに",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 458,
+      "english": "cry",
+      "japanese": "泣く、叫ぶ",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 459,
+      "english": "just",
+      "japanese": "ちょうど、ただ〜だけ、たった今、ほんの少しだけ、ほんの〜にすぎない",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 460,
+      "english": "same",
+      "japanese": "同じ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 461,
+      "english": "different",
+      "japanese": "違う",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 462,
+      "english": "or",
+      "japanese": "または、あるいは、もしくは、それとも",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 463,
+      "english": "out",
+      "japanese": "外へ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 464,
+      "english": "front",
+      "japanese": "前、正面",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 465,
+      "english": "difficult",
+      "japanese": "難しい、困難な",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 466,
+      "english": "great",
+      "japanese": "すばらしい、偉大な",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 467,
+      "english": "left",
+      "japanese": "左に",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 468,
+      "english": "close",
+      "japanese": "近い、親しい",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 469,
+      "english": "forget",
+      "japanese": "～を忘れる、～するのを忘れる、置き忘れる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 470,
+      "english": "interested",
+      "japanese": "興味がある、関心がある",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 471,
+      "english": "best",
+      "japanese": "最もよい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 472,
+      "english": "language",
+      "japanese": "言語",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 473,
+      "english": "party",
+      "japanese": "パーティー、政党",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 474,
+      "english": "color",
+      "japanese": "色、カラー",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 475,
+      "english": "pass",
+      "japanese": "～を手渡す、合格する、を通過する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 476,
+      "english": "street",
+      "japanese": "通り、街路",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 477,
+      "english": "art",
+      "japanese": "芸術、美術",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 478,
+      "english": "plant",
+      "japanese": "植物",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 479,
+      "english": "tomorrow",
+      "japanese": "明日",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 480,
+      "english": "earth",
+      "japanese": "地球",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 481,
+      "english": "into",
+      "japanese": "～の中へ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 482,
+      "english": "famous",
+      "japanese": "有名な、名高い",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 483,
+      "english": "sometimes",
+      "japanese": "ときどき、たまに",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 484,
+      "english": "high",
+      "japanese": "高い",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 485,
+      "english": "few",
+      "japanese": "ほとんど〜ない、少ない、少数の",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 486,
+      "english": "over",
+      "japanese": "～の上に、〜を超えて",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 487,
+      "english": "program",
+      "japanese": "番組、計画",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 488,
+      "english": "spend",
+      "japanese": "〜を費やす、金を使う、を過ごす",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 489,
+      "english": "later",
+      "japanese": "あとで",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 490,
+      "english": "near",
+      "japanese": "～の近くに",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 491,
+      "english": "sorry",
+      "japanese": "申し訳ない",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 492,
+      "english": "during",
+      "japanese": "〜の間",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 493,
+      "english": "weekend",
+      "japanese": "週末",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 494,
+      "english": "ago",
+      "japanese": "～前に",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 495,
+      "english": "mom",
+      "japanese": "お母さん、ママ",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 496,
+      "english": "paper",
+      "japanese": "紙、用紙",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 497,
+      "english": "sour",
+      "japanese": "酸っぱい、不機謙な",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 498,
+      "english": "excuse",
+      "japanese": "～を許す、言い訳をする",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 499,
+      "english": "laugh",
+      "japanese": "笑う",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 500,
+      "english": "ride",
+      "japanese": "〜に乗る、自転車に乗る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 501,
+      "english": "building",
+      "japanese": "建物",
+      "category": "place",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 502,
+      "english": "office",
+      "japanese": "事務所、オフィス",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 503,
+      "english": "around",
+      "japanese": "〜の周りに",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 504,
+      "english": "still",
+      "japanese": "まだ、それでも",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 505,
+      "english": "face",
+      "japanese": "顔",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 506,
+      "english": "down",
+      "japanese": "下へ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 507,
+      "english": "wonderful",
+      "japanese": "すばらしい",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 508,
+      "english": "easy",
+      "japanese": "簡単な、容易な",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 509,
+      "english": "yesterday",
+      "japanese": "昨日",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 510,
+      "english": "everything",
+      "japanese": "あらゆること、すべて、全部、何もかも",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 511,
+      "english": "message",
+      "japanese": "伝言、メッセージ",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 512,
+      "english": "soon",
+      "japanese": "すぐに、近いうちに",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 513,
+      "english": "such",
+      "japanese": "そのような、そんな",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 514,
+      "english": "young",
+      "japanese": "若い、幼い",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 515,
+      "english": "company",
+      "japanese": "会社、仲間",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 516,
+      "english": "newspaper",
+      "japanese": "新聞",
+      "category": "thing",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 517,
+      "english": "late",
+      "japanese": "遅く",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 518,
+      "english": "post",
+      "japanese": "郵便、ポスト",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 519,
+      "english": "large",
+      "japanese": "大きい",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 520,
+      "english": "special",
+      "japanese": "特別な",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 521,
+      "english": "check",
+      "japanese": "～を確認する、確かめる、チェックする",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 522,
+      "english": "free",
+      "japanese": "自由な、無料の、手が空いている",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 523,
+      "english": "imagine",
+      "japanese": "～を想像する、思い浮かべる、思い描く、～だと想像する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 524,
+      "english": "body",
+      "japanese": "体、身体",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 525,
+      "english": "lake",
+      "japanese": "湖",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 526,
+      "english": "map",
+      "japanese": "地図",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 527,
+      "english": "throw",
+      "japanese": "～を投げる",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 528,
+      "english": "age",
+      "japanese": "年齢",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 529,
+      "english": "sick",
+      "japanese": "病気の",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 530,
+      "english": "card",
+      "japanese": "カード、名刺、トランプ",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 531,
+      "english": "enough",
+      "japanese": "十分な",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 532,
+      "english": "since",
+      "japanese": "～以来、〜から",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 533,
+      "english": "glad",
+      "japanese": "（何かが起きて）うれしい",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 534,
+      "english": "however",
+      "japanese": "しかしながら、しかし",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 535,
+      "english": "sample",
+      "japanese": "見本、サンプル、試料",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 536,
+      "english": "early",
+      "japanese": "早く、早めに",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 537,
+      "english": "season",
+      "japanese": "季節、シーズン",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 538,
+      "english": "drive",
+      "japanese": "～を運転する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 539,
+      "english": "warm",
+      "japanese": "暖かい",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 540,
+      "english": "between",
+      "japanese": "～の間に、〜の間で",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 541,
+      "english": "contest",
+      "japanese": "コンテスト、競技会",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 542,
+      "english": "floor",
+      "japanese": "床、階",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 543,
+      "english": "area",
+      "japanese": "地域、面積",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 544,
+      "english": "bottle",
+      "japanese": "びん、ボトル",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 545,
+      "english": "plane",
+      "japanese": "飛行機、平面",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 546,
+      "english": "able",
+      "japanese": "（能力的に）できる",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 547,
+      "english": "already",
+      "japanese": "すでに、もう",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 548,
+      "english": "seat",
+      "japanese": "座席",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 549,
+      "english": "enter",
+      "japanese": "(場所)に入る、入力する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 550,
+      "english": "hall",
+      "japanese": "講堂、ホール",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 551,
+      "english": "tour",
+      "japanese": "旅行、ツアー、見学",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 552,
+      "english": "next week",
+      "japanese": "来週",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 553,
+      "english": "until",
+      "japanese": "～まで",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 554,
+      "english": "half",
+      "japanese": "半分",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 555,
+      "english": "meeting",
+      "japanese": "会合、会議",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 556,
+      "english": "ticket",
+      "japanese": "切符、乗車券、入場券",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 557,
+      "english": "under",
+      "japanese": "～の下に、〜未満で",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 558,
+      "english": "center",
+      "japanese": "中心、センター",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 559,
+      "english": "rich",
+      "japanese": "金持ちの、裕福な、豊かな、豊富な",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 560,
+      "english": "aid",
+      "japanese": "援助、助け",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 561,
+      "english": "dish",
+      "japanese": "皿、料理",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 562,
+      "english": "gift",
+      "japanese": "贈り物、才能",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 563,
+      "english": "almost",
+      "japanese": "ほとんど、もう少しで、危うく",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 564,
+      "english": "easily",
+      "japanese": "簡単に、容易に",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 565,
+      "english": "mistake",
+      "japanese": "誤り、間違い",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 566,
+      "english": "coffee",
+      "japanese": "コーヒー",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 567,
+      "english": "far",
+      "japanese": "遠くに",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 568,
+      "english": "lesson",
+      "japanese": "授業、教訓",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 569,
+      "english": "cap",
+      "japanese": "ふちのない「ぼうし」",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 570,
+      "english": "hotel",
+      "japanese": "ホテル",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 571,
+      "english": "afraid",
+      "japanese": "怖がっている",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 572,
+      "english": "miss",
+      "japanese": "〜を逃す、乗り遅れる、人を恋しく思う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 573,
+      "english": "yet",
+      "japanese": "もう、まだ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 574,
+      "english": "invite",
+      "japanese": "～を招待する、誘う",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 575,
+      "english": "ground",
+      "japanese": "地面、根拠",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 576,
+      "english": "realize",
+      "japanese": "〜に気づく",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 577,
+      "english": "uncle",
+      "japanese": "おじ",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 578,
+      "english": "maybe",
+      "japanese": "もしかしたら、ひょっとすると",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 579,
+      "english": "fine",
+      "japanese": "元気だ、大丈夫だ、良い",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 580,
+      "english": "test",
+      "japanese": "テスト、試験",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 581,
+      "english": "once",
+      "japanese": "一回、かつては",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 582,
+      "english": "delicious",
+      "japanese": "とてもおいしい、おいしい",
+      "category": "adjective",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 583,
+      "english": "reduce",
+      "japanese": "〜を減らす、削減する、縮小する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 584,
+      "english": "aunt",
+      "japanese": "おば",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 585,
+      "english": "son",
+      "japanese": "息子",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 586,
+      "english": "wrong",
+      "japanese": "間違った",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 587,
+      "english": "guide",
+      "japanese": "案内人",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 588,
+      "english": "quickly",
+      "japanese": "すばやく",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 589,
+      "english": "outside",
+      "japanese": "～の外に",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 590,
+      "english": "dark",
+      "japanese": "暗い",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 591,
+      "english": "fifteen",
+      "japanese": "十五",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 592,
+      "english": "million",
+      "japanese": "100万",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 593,
+      "english": "among",
+      "japanese": "〜の間で、〜の中で、〜の一つとして",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 594,
+      "english": "hit",
+      "japanese": "～を打つ、〜に当たる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 595,
+      "english": "Mrs.",
+      "japanese": "〜さん、ミセス",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 596,
+      "english": "by accident",
+      "japanese": "偶然",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 597,
+      "english": "improve",
+      "japanese": "～を改良する、改善する、上達する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 598,
+      "english": "leg",
+      "japanese": "足、脚",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 599,
+      "english": "thousand",
+      "japanese": "1000",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 600,
+      "english": "account",
+      "japanese": "説明、口座",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 601,
+      "english": "actually",
+      "japanese": "実際には、実は",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 602,
+      "english": "seem",
+      "japanese": "〜ようだ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 603,
+      "english": "increase",
+      "japanese": "増える、増やす",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 604,
+      "english": "strange",
+      "japanese": "奇妙な、不思議な、変な",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 605,
+      "english": "farm",
+      "japanese": "農場、農園",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 606,
+      "english": "kid",
+      "japanese": "（話し言葉での）こども",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 607,
+      "english": "order",
+      "japanese": "注文、順番、命令",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 608,
+      "english": "abroad",
+      "japanese": "外国に、海外で",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 609,
+      "english": "stone",
+      "japanese": "石",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 610,
+      "english": "advice",
+      "japanese": "助言、アドバイス",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 611,
+      "english": "human",
+      "japanese": "人間の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 612,
+      "english": "situation",
+      "japanese": "状況、事態",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 613,
+      "english": "low",
+      "japanese": "低い",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 614,
+      "english": "bath",
+      "japanese": "ふろ、入浴",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 615,
+      "english": "dear",
+      "japanese": "親愛なる〜さん、大切な",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 616,
+      "english": "perfect",
+      "japanese": "完璧な",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 617,
+      "english": "garbage",
+      "japanese": "ゴミ",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 618,
+      "english": "ice",
+      "japanese": "氷",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 619,
+      "english": "skill",
+      "japanese": "技能",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 620,
+      "english": "gate",
+      "japanese": "門、ゲート",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 621,
+      "english": "technology",
+      "japanese": "科学技術、技術",
+      "category": "thing",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 622,
+      "english": "gold",
+      "japanese": "金",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 623,
+      "english": "eleven",
+      "japanese": "11",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 624,
+      "english": "holiday",
+      "japanese": "祝日、休日",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 625,
+      "english": "drug",
+      "japanese": "薬、違法薬物",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 626,
+      "english": "slowly",
+      "japanese": "ゆっくりと",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 627,
+      "english": "nurse",
+      "japanese": "看護師",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 628,
+      "english": "ring",
+      "japanese": "鳴る、に電話をかける",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 629,
+      "english": "friendly",
+      "japanese": "親しみやすい、フレンドリーな、友好的な",
+      "category": "adjective",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 630,
+      "english": "temperature",
+      "japanese": "温度、気温、体温",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 631,
+      "english": "bridge",
+      "japanese": "橋",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 632,
+      "english": "careful",
+      "japanese": "注意深い、慎重な",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 633,
+      "english": "heavy",
+      "japanese": "重い",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 634,
+      "english": "touch",
+      "japanese": "～にさわる、触れる",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 635,
+      "english": "inside",
+      "japanese": "～の中に",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 636,
+      "english": "real",
+      "japanese": "本当の、現実の",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 637,
+      "english": "safe",
+      "japanese": "安全な、無事な",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 638,
+      "english": "century",
+      "japanese": "世紀",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 639,
+      "english": "rock",
+      "japanese": "岩",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 640,
+      "english": "writer",
+      "japanese": "作家",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 641,
+      "english": "prove",
+      "japanese": "～を証明する、立証する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 642,
+      "english": "twelve",
+      "japanese": "12",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 643,
+      "english": "oven",
+      "japanese": "オーブン",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 644,
+      "english": "supermarket",
+      "japanese": "スーパーマーケット",
+      "category": "place",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 645,
+      "english": "land",
+      "japanese": "陸地、土地",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 646,
+      "english": "speed",
+      "japanese": "速度、速さ、スピード",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 647,
+      "english": "quiet",
+      "japanese": "静かな、おとなしい",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 648,
+      "english": "railroad",
+      "japanese": "鉄道、鉄道会社",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 649,
+      "english": "lucky",
+      "japanese": "幸運な、運がいい",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 650,
+      "english": "nineteen",
+      "japanese": "19",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 651,
+      "english": "matter",
+      "japanese": "事柄",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 652,
+      "english": "police",
+      "japanese": "警察",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 653,
+      "english": "ceremony",
+      "japanese": "儀式、式(典)",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 654,
+      "english": "pursue",
+      "japanese": "〜を追求する、追跡する",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 655,
+      "english": "fill",
+      "japanese": "〜を満たす、記入する、埋める",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 656,
+      "english": "promise",
+      "japanese": "約束する",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 657,
+      "english": "period",
+      "japanese": "期間、時代",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 658,
+      "english": "rough",
+      "japanese": "おおまかな、ざらざらした、乱暴な",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 659,
+      "english": "full",
+      "japanese": "いっぱいの、完全な",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 660,
+      "english": "system",
+      "japanese": "制度、システム、体系",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 661,
+      "english": "post office",
+      "japanese": "郵便局",
+      "category": "place",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 662,
+      "english": "clear",
+      "japanese": "明白な、明確な、晴れた",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 663,
+      "english": "straight",
+      "japanese": "まっすぐに",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 664,
+      "english": "dad",
+      "japanese": "お父さん",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 665,
+      "english": "relax",
+      "japanese": "くつろぐ、リラックスする、緩める",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 666,
+      "english": "daughter",
+      "japanese": "娘",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 667,
+      "english": "insect",
+      "japanese": "昆虫",
+      "category": "animal",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 668,
+      "english": "noon",
+      "japanese": "正午",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 669,
+      "english": "education",
+      "japanese": "教育",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 670,
+      "english": "across",
+      "japanese": "～を横切って",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 671,
+      "english": "seventeen",
+      "japanese": "17",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 672,
+      "english": "captain",
+      "japanese": "キャプテン、船長",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 673,
+      "english": "level",
+      "japanese": "レベル、水準",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 674,
+      "english": "size",
+      "japanese": "大きさ、サイズ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 675,
+      "english": "fresh",
+      "japanese": "新鮮な、爽やかな",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 676,
+      "english": "less",
+      "japanese": "より少ない",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 677,
+      "english": "sweet",
+      "japanese": "あまい",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 678,
+      "english": "global",
+      "japanese": "世界的な、地球全体の",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 679,
+      "english": "god",
+      "japanese": "神",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 680,
+      "english": "whose",
+      "japanese": "だれの、〜の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 681,
+      "english": "hair",
+      "japanese": "髪の毛、毛",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 682,
+      "english": "moment",
+      "japanese": "ちょっとの間、瞬間",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 683,
+      "english": "pollution",
+      "japanese": "汚染、公害",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 684,
+      "english": "singer",
+      "japanese": "歌手",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 685,
+      "english": "fashion",
+      "japanese": "流行、ファッション",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 686,
+      "english": "recommend",
+      "japanese": "～を推薦する、〜を勧める",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 687,
+      "english": "drop",
+      "japanese": "～を落とす、下がる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 688,
+      "english": "cheap",
+      "japanese": "安い、安価な、安っぽい",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 689,
+      "english": "smell",
+      "japanese": "〜のにおいがする、嗅ぐ",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 690,
+      "english": "tooth",
+      "japanese": "歯",
+      "category": "body",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 691,
+      "english": "date",
+      "japanese": "日付、日にち",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 692,
+      "english": "note",
+      "japanese": "メモ",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 693,
+      "english": "king",
+      "japanese": "王",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 694,
+      "english": "telephone",
+      "japanese": "電話",
+      "category": "thing",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 695,
+      "english": "above",
+      "japanese": "～の上に",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 696,
+      "english": "arm",
+      "japanese": "腕",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 697,
+      "english": "salt",
+      "japanese": "塩",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 698,
+      "english": "radio",
+      "japanese": "ラジオ",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 699,
+      "english": "camp",
+      "japanese": "キャンプ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 700,
+      "english": "gas",
+      "japanese": "ガス、気体",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 701,
+      "english": "boat",
+      "japanese": "ボート",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 702,
+      "english": "bowl",
+      "japanese": "ボウル",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 703,
+      "english": "kill",
+      "japanese": "〜を殺す",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 704,
+      "english": "leaf",
+      "japanese": "葉",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 705,
+      "english": "flight",
+      "japanese": "便、飛行",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 706,
+      "english": "dislike",
+      "japanese": "～を嫌う",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 707,
+      "english": "bank",
+      "japanese": "銀行、土手",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 708,
+      "english": "tonight",
+      "japanese": "今夜",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 709,
+      "english": "be late for",
+      "japanese": "～に遅れる、～に遅刻する",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 710,
+      "english": "be ready for",
+      "japanese": "準備ができている",
+      "category": "adjective",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 711,
+      "english": "kitchen",
+      "japanese": "台所、キッチン",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 712,
+      "english": "proper",
+      "japanese": "適切な",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 713,
+      "english": "dry",
+      "japanese": "乾いた",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 714,
+      "english": "oil",
+      "japanese": "油、食用油、石油",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 715,
+      "english": "giant",
+      "japanese": "巨大な",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 716,
+      "english": "peace",
+      "japanese": "平和",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 717,
+      "english": "last week",
+      "japanese": "先週",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 718,
+      "english": "discover",
+      "japanese": "～を発見する、見つけ出す",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 719,
+      "english": "glass",
+      "japanese": "グラス、ガラス",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 720,
+      "english": "figure",
+      "japanese": "図、(幾何学的)図形、数字",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 721,
+      "english": "funny",
+      "japanese": "面白い、おかしい",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 722,
+      "english": "husband",
+      "japanese": "夫",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 723,
+      "english": "grass",
+      "japanese": "草",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 724,
+      "english": "presentation",
+      "japanese": "発表、プレゼンテーション",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 725,
+      "english": "shake",
+      "japanese": "〜を振る、揺れる、を揺さぶる",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 726,
+      "english": "factory",
+      "japanese": "工場",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 727,
+      "english": "quite",
+      "japanese": "かなり",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 728,
+      "english": "coat",
+      "japanese": "コート",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 729,
+      "english": "death",
+      "japanese": "死、死亡",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 730,
+      "english": "blood",
+      "japanese": "血",
+      "category": "body",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 731,
+      "english": "bright",
+      "japanese": "頭がいい、明るい",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 732,
+      "english": "mathematics",
+      "japanese": "数学",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 733,
+      "english": "cloud",
+      "japanese": "雲",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 734,
+      "english": "accurate",
+      "japanese": "正確な",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 735,
+      "english": "runner",
+      "japanese": "走る人、ランナー",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 736,
+      "english": "traffic",
+      "japanese": "交通",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 737,
+      "english": "burn",
+      "japanese": "～を燃やす、燃える",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 738,
+      "english": "driver",
+      "japanese": "運転手、ドライバー",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 739,
+      "english": "rival",
+      "japanese": "競争相手、ライバル",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 740,
+      "english": "magazine",
+      "japanese": "雑誌",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 741,
+      "english": "quit",
+      "japanese": "～をやめる、退職する",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 742,
+      "english": "billion",
+      "japanese": "10億",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 743,
+      "english": "carrot",
+      "japanese": "にんじん",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 744,
+      "english": "active",
+      "japanese": "活動的な、積極的な",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 745,
+      "english": "everybody",
+      "japanese": "みんな、みなさん",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 746,
+      "english": "impossible",
+      "japanese": "不可能な、ありえない",
+      "category": "adjective",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 747,
+      "english": "heat",
+      "japanese": "熱、暑さ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 748,
+      "english": "nation",
+      "japanese": "国家、民族",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 749,
+      "english": "neighbor",
+      "japanese": "隣人、近所の人",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 750,
+      "english": "repeat",
+      "japanese": "～をくり返す、復唱する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 751,
+      "english": "pretty",
+      "japanese": "かわいらしい",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 752,
+      "english": "pot",
+      "japanese": "つぼ、鍋",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 753,
+      "english": "act",
+      "japanese": "行動する",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 754,
+      "english": "joy",
+      "japanese": "喜び",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 755,
+      "english": "musician",
+      "japanese": "音楽家",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 756,
+      "english": "usual",
+      "japanese": "いつもの、通常の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 757,
+      "english": "guest",
+      "japanese": "客、ゲスト",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 758,
+      "english": "patient",
+      "japanese": "患者",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 759,
+      "english": "broken",
+      "japanese": "壊れた、故障した、片言の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 760,
+      "english": "cheese",
+      "japanese": "チーズ",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 761,
+      "english": "fat",
+      "japanese": "太っている",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 762,
+      "english": "celebrate",
+      "japanese": "〜を祝う、祝賀する",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 763,
+      "english": "pocket",
+      "japanese": "ポケット",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 764,
+      "english": "quietly",
+      "japanese": "静かに",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 765,
+      "english": "noise",
+      "japanese": "物音、騒音、雑音",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 766,
+      "english": "sink",
+      "japanese": "沈む、沈める",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 767,
+      "english": "sugar",
+      "japanese": "砂糖",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 768,
+      "english": "fourteen",
+      "japanese": "14",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 769,
+      "english": "rate",
+      "japanese": "割合、料金",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 770,
+      "english": "wide",
+      "japanese": "広い、幅広い",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 771,
+      "english": "mark",
+      "japanese": "～に印をつける",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 772,
+      "english": "hill",
+      "japanese": "丘、小山",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 773,
+      "english": "dirty",
+      "japanese": "汚い",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 774,
+      "english": "volume",
+      "japanese": "音量、量、体積、巻",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 775,
+      "english": "decision",
+      "japanese": "決定、決断",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 776,
+      "english": "address",
+      "japanese": "住所",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 777,
+      "english": "van",
+      "japanese": "バン",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 778,
+      "english": "theory",
+      "japanese": "理論、説、学説",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 779,
+      "english": "soft",
+      "japanese": "やわらかい",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 780,
+      "english": "thirteen",
+      "japanese": "13",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 781,
+      "english": "sixteen",
+      "japanese": "十六",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 782,
+      "english": "hobby",
+      "japanese": "趣味",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 783,
+      "english": "noisy",
+      "japanese": "うるさい、やかましい、騒がしい、騒々しい",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 784,
+      "english": "gentleman",
+      "japanese": "紳士",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 785,
+      "english": "recently",
+      "japanese": "（ついこの間）最近",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 786,
+      "english": "beat",
+      "japanese": "～を打つ、負かす",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 787,
+      "english": "forever",
+      "japanese": "永遠に",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 788,
+      "english": "gain",
+      "japanese": "～を得る、〜を獲得する",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 789,
+      "english": "board",
+      "japanese": "板、掲示板",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 790,
+      "english": "dress",
+      "japanese": "ドレス",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 791,
+      "english": "sale",
+      "japanese": "安売り、販売、特売",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 792,
+      "english": "eighteen",
+      "japanese": "18歳、18",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 793,
+      "english": "roof",
+      "japanese": "屋根",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 794,
+      "english": "mix",
+      "japanese": "～を混ぜる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 795,
+      "english": "beef",
+      "japanese": "牛肉",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 796,
+      "english": "employer",
+      "japanese": "雇用者、雇い主",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 797,
+      "english": "weekday",
+      "japanese": "平日",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 798,
+      "english": "elbow",
+      "japanese": "肘",
+      "category": "body",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 799,
+      "english": "role",
+      "japanese": "役割、役目",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 800,
+      "english": "nest",
+      "japanese": "巣",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 801,
+      "english": "anger",
+      "japanese": "怒り",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 802,
+      "english": "everywhere",
+      "japanese": "どこでも",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 803,
+      "english": "irritate",
+      "japanese": "〜をいらいらさせる",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 804,
+      "english": "acquire",
+      "japanese": "～を習得する、獲得する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 805,
+      "english": "pound",
+      "japanese": "ポンド、ポンド（重さ）、ポンド（通貨）",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 806,
+      "english": "thin",
+      "japanese": "薄い、細い、痩せている",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 807,
+      "english": "rude",
+      "japanese": "無礼な、失礼な、粗野な",
+      "category": "adjective",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 808,
+      "english": "film",
+      "japanese": "映画",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 809,
+      "english": "jeans",
+      "japanese": "ジーンズ、ジーパン",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 810,
+      "english": "scene",
+      "japanese": "場面、シーン",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 811,
+      "english": "passenger",
+      "japanese": "乗客",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 812,
+      "english": "powder",
+      "japanese": "粉、粉末",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 813,
+      "english": "wedding",
+      "japanese": "結婚式",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 814,
+      "english": "zero",
+      "japanese": "ゼロ",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 815,
+      "english": "knife",
+      "japanese": "ナイフ、包丁",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 816,
+      "english": "import",
+      "japanese": "～を輸入する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 817,
+      "english": "extend",
+      "japanese": "～を延長する、を伸ばす、を拡張する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 818,
+      "english": "jacket",
+      "japanese": "上着、ジャケット",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 819,
+      "english": "wet",
+      "japanese": "ぬれた、湿った",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 820,
+      "english": "lift",
+      "japanese": "～を持ち上げる",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 821,
+      "english": "diamond",
+      "japanese": "ダイヤモンド、ひし形",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 822,
+      "english": "powerful",
+      "japanese": "力強い、強力な",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 823,
+      "english": "double",
+      "japanese": "2倍の、二重の",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 824,
+      "english": "dancer",
+      "japanese": "ダンサー",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 825,
+      "english": "downstairs",
+      "japanese": "階下に",
+      "category": "place",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 826,
+      "english": "image",
+      "japanese": "イメージ、画像",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 827,
+      "english": "export",
+      "japanese": "〜を輸出する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 828,
+      "english": "glue",
+      "japanese": "接着剤",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 829,
+      "english": "exist",
+      "japanese": "存在する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 830,
+      "english": "zone",
+      "japanese": "区域、地帯",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 831,
+      "english": "safety",
+      "japanese": "安全、安全性",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 832,
+      "english": "minister",
+      "japanese": "大臣、牧師",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 833,
+      "english": "drugstore",
+      "japanese": "ドラッグストア",
+      "category": "place",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 834,
+      "english": "deliver",
+      "japanese": "〜を配達する、〜を届ける、スピーチをする",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 835,
+      "english": "achieve",
+      "japanese": "～を達成する、〜を成し遂げる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 836,
+      "english": "silver",
+      "japanese": "銀",
+      "category": "color",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 837,
+      "english": "hairdresser",
+      "japanese": "美容師",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 838,
+      "english": "audience",
+      "japanese": "聴衆、観客、視聴者",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 839,
+      "english": "sail",
+      "japanese": "帆",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 840,
+      "english": "cream",
+      "japanese": "クリーム",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 841,
+      "english": "lack",
+      "japanese": "不足、欠乏",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 842,
+      "english": "length",
+      "japanese": "長さ、期間",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 843,
+      "english": "gray",
+      "japanese": "灰色、グレーの",
+      "category": "color",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 844,
+      "english": "hate",
+      "japanese": "〜が大嫌いだ、〜をひどく嫌う",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 845,
+      "english": "theme",
+      "japanese": "主題、テーマ",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 846,
+      "english": "bedroom",
+      "japanese": "寝室、ベッドルーム",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 847,
+      "english": "bill",
+      "japanese": "勘定、法案、紙幣、請求書",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 848,
+      "english": "accidentally",
+      "japanese": "誤って",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 849,
+      "english": "trust",
+      "japanese": "～を信頼する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 850,
+      "english": "weight",
+      "japanese": "重さ、体重",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 851,
+      "english": "expert",
+      "japanese": "専門家",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 852,
+      "english": "lock",
+      "japanese": "～にかぎをかける、をロックする",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 853,
+      "english": "chest",
+      "japanese": "胸、収納箱",
+      "category": "body",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 854,
+      "english": "travel to",
+      "japanese": "～へ旅行する",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 855,
+      "english": "final",
+      "japanese": "最後の、最終的な、決勝の",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 856,
+      "english": "each other",
+      "japanese": "お互いに、お互い",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 857,
+      "english": "thick",
+      "japanese": "厚い、濃い",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 858,
+      "english": "partner",
+      "japanese": "パートナー、相手",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 859,
+      "english": "copy",
+      "japanese": "コピー、複製、写し",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 860,
+      "english": "media",
+      "japanese": "マスメディア",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 861,
+      "english": "recall",
+      "japanese": "～を思い出す",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 862,
+      "english": "heaven",
+      "japanese": "天国",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 863,
+      "english": "in front of",
+      "japanese": "～の前に、人前で",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 864,
+      "english": "smoke",
+      "japanese": "煙",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 865,
+      "english": "kick",
+      "japanese": "〜を蹴る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 866,
+      "english": "ignore",
+      "japanese": "～を無視する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 867,
+      "english": "online",
+      "japanese": "オンラインの",
+      "category": "abstract",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 868,
+      "english": "traveler",
+      "japanese": "旅行者",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 869,
+      "english": "live in",
+      "japanese": "～に住む",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 870,
+      "english": "centimeter",
+      "japanese": "センチメートル",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 871,
+      "english": "scream",
+      "japanese": "悲鳴を上げる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 872,
+      "english": "listen to",
+      "japanese": "～を聞く、耳を傾ける",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "👂"
+    },
+    {
+      "id": 873,
+      "english": "female",
+      "japanese": "女性の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 874,
+      "english": "last year",
+      "japanese": "昨年、去年",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 875,
+      "english": "block",
+      "japanese": "街区",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 876,
+      "english": "review",
+      "japanese": "復習",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 877,
+      "english": "midnight",
+      "japanese": "真夜中、午前0時",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 878,
+      "english": "bubble",
+      "japanese": "泡",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 879,
+      "english": "resort",
+      "japanese": "～に訴える",
+      "category": "place",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 880,
+      "english": "printer",
+      "japanese": "プリンター、印刷機",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 881,
+      "english": "approach",
+      "japanese": "近づく、取り組む",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 882,
+      "english": "intelligent",
+      "japanese": "賢い、知的な",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 883,
+      "english": "neck",
+      "japanese": "首",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 884,
+      "english": "storm",
+      "japanese": "嵐",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 885,
+      "english": "bathroom",
+      "japanese": "トイレ",
+      "category": "place",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 886,
+      "english": "hurry to",
+      "japanese": "〜へ急ぐ、急いで〜する",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 887,
+      "english": "be scared of",
+      "japanese": "〜を怖がる",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 888,
+      "english": "absolute",
+      "japanese": "完全な、絶対的な",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 889,
+      "english": "turn left",
+      "japanese": "左に曲がる、左折する",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 890,
+      "english": "sauce",
+      "japanese": "ソース",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 891,
+      "english": "secondary",
+      "japanese": "中等教育の、二次的な",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 892,
+      "english": "make money",
+      "japanese": "お金を稼ぐ、収入を得る",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 893,
+      "english": "quick",
+      "japanese": "すばやい、迅速な",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 894,
+      "english": "chat",
+      "japanese": "おしゃべりする、チャットする",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 895,
+      "english": "frozen",
+      "japanese": "凍った、冷凍された、凍りついた",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 896,
+      "english": "go to bed",
+      "japanese": "寝る、就寝する",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 897,
+      "english": "onion",
+      "japanese": "たまねぎ",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 898,
+      "english": "knock",
+      "japanese": "ノックする",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 899,
+      "english": "flavor",
+      "japanese": "風味",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 900,
+      "english": "decrease",
+      "japanese": "減る、減少する",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 901,
+      "english": "rank",
+      "japanese": "順位",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 902,
+      "english": "waitress",
+      "japanese": "ウェイトレス",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 903,
+      "english": "go to school",
+      "japanese": "学校へ行く、学校に通う、通学する",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "🏫"
+    },
+    {
+      "id": 904,
+      "english": "profile",
+      "japanese": "プロフィール、人物紹介",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 905,
+      "english": "get off",
+      "japanese": "〜から降りる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 906,
+      "english": "soap",
+      "japanese": "石鹸",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 907,
+      "english": "go down",
+      "japanese": "降りる、減少する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 908,
+      "english": "gene",
+      "japanese": "遺伝子",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 909,
+      "english": "be afraid of",
+      "japanese": "〜を恐れている",
+      "category": "adjective",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 910,
+      "english": "single",
+      "japanese": "たった１つの、独身の",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 911,
+      "english": "nearby",
+      "japanese": "近くに",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 912,
+      "english": "scale",
+      "japanese": "縮尺、規模",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 913,
+      "english": "these days",
+      "japanese": "（近ごろ）最近",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 914,
+      "english": "patience",
+      "japanese": "忍耐、我慢、辛抱",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 915,
+      "english": "era",
+      "japanese": "時代",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 916,
+      "english": "get on",
+      "japanese": "〜に乗る、仲良くする",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 917,
+      "english": "go up",
+      "japanese": "上昇する、上がる、階段を上る",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 918,
+      "english": "be proud of",
+      "japanese": "〜を誇りに思う",
+      "category": "adjective",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 919,
+      "english": "according to",
+      "japanese": "によれば",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 920,
+      "english": "flag",
+      "japanese": "旗",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 921,
+      "english": "jewelry",
+      "japanese": "アクセサリー、装身具、宝飾品",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 922,
+      "english": "sharp",
+      "japanese": "するどい、急な",
+      "category": "adjective",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 923,
+      "english": "over there",
+      "japanese": "向こうに、あそこに、あちらに、あっちに",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 924,
+      "english": "prepare for",
+      "japanese": "～の準備をする",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 925,
+      "english": "some day",
+      "japanese": "いつか",
+      "category": "time",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 926,
+      "english": "attitude",
+      "japanese": "態度、考え方",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 927,
+      "english": "industry",
+      "japanese": "産業、業界、工業",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 928,
+      "english": "pepper",
+      "japanese": "コショウ",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 929,
+      "english": "minimum",
+      "japanese": "最低点、最小値、最低限",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 930,
+      "english": "soul",
+      "japanese": "魂",
+      "category": "abstract",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 931,
+      "english": "latest",
+      "japanese": "最新の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 932,
+      "english": "height",
+      "japanese": "高さ、身長",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 933,
+      "english": "spider",
+      "japanese": "クモ",
+      "category": "animal",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 934,
+      "english": "liter",
+      "japanese": "リットル",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 935,
+      "english": "grab",
+      "japanese": "〜をつかむ、つかみ取る",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 936,
+      "english": "lately",
+      "japanese": "（近ごろずっと）最近",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 937,
+      "english": "rare",
+      "japanese": "珍しい、まれな、希少な",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 938,
+      "english": "editor",
+      "japanese": "編集者",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 939,
+      "english": "achievement",
+      "japanese": "業績、成果、達成",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 940,
+      "english": "file",
+      "japanese": "ファイル、電子ファイル",
+      "category": "thing",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 941,
+      "english": "largely",
+      "japanese": "おおむね、主に",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 942,
+      "english": "philosophy",
+      "japanese": "哲学、理念",
+      "category": "abstract",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 943,
+      "english": "thief",
+      "japanese": "泥棒、窃盗犯",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 944,
+      "english": "alcohol",
+      "japanese": "アルコール、酒、酒精",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 945,
+      "english": "immediately",
+      "japanese": "すぐに、直ちに",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 946,
+      "english": "expense",
+      "japanese": "費用、出費、(所要)経費",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 947,
+      "english": "counter",
+      "japanese": "カウンター",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 948,
+      "english": "receipt",
+      "japanese": "レシート、領収書",
+      "category": "thing",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 949,
+      "english": "acceptable",
+      "japanese": "受け入れられる、許容できる",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 950,
+      "english": "flash",
+      "japanese": "ピカッとひかる、点滅する",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 951,
+      "english": "politician",
+      "japanese": "政治家",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 952,
+      "english": "gasoline",
+      "japanese": "ガソリン",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 953,
+      "english": "nephew",
+      "japanese": "甥",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 954,
+      "english": "grammar",
+      "japanese": "文法",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 955,
+      "english": "carpet",
+      "japanese": "カーペット、じゅうたん",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 956,
+      "english": "activist",
+      "japanese": "活動家、運動家",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 957,
+      "english": "due to",
+      "japanese": "～のために、〜が原因で",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 958,
+      "english": "liquid",
+      "japanese": "液体の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 959,
+      "english": "needle",
+      "japanese": "針、縫い針、注射針",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 960,
+      "english": "drag",
+      "japanese": "引きずる、無理やり連れて行く、引き延ばす",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 961,
+      "english": "maximum",
+      "japanese": "最大値",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 962,
+      "english": "fur",
+      "japanese": "毛皮",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 963,
+      "english": "plot",
+      "japanese": "（小説などの）筋、陰謀",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 964,
+      "english": "have a baby",
+      "japanese": "赤ちゃんを産む",
+      "category": "person",
+      "difficulty": 3,
+      "emoji": "👶"
+    },
+    {
+      "id": 965,
+      "english": "rumor",
+      "japanese": "噂、風説",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 966,
+      "english": "tell a lie",
+      "japanese": "嘘をつく",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 967,
+      "english": "in a group",
+      "japanese": "グループで、集団で",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 968,
+      "english": "sleep well",
+      "japanese": "よく眠る",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "😴"
+    },
+    {
+      "id": 969,
+      "english": "plenty of",
+      "japanese": "たくさんの～",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 970,
+      "english": "in reality",
+      "japanese": "実際は",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 971,
+      "english": "download",
+      "japanese": "～をダウンロードする",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 972,
+      "english": "growth",
+      "japanese": "成長",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 973,
+      "english": "actual",
+      "japanese": "実際の",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 974,
+      "english": "boss",
+      "japanese": "上司",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "❓"
+    },
+    {
+      "id": 975,
+      "english": "monitor",
+      "japanese": "～を監視する",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": 976,
+      "english": "recover from",
+      "japanese": "～から回復する",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 977,
+      "english": "stick to",
+      "japanese": "～を守る、固執する",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 978,
+      "english": "take action",
+      "japanese": "行動を起こす、行動に移す",
+      "category": "action",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 979,
+      "english": "realistic",
+      "japanese": "現実的な",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 980,
+      "english": "terrorist",
+      "japanese": "テロリスト",
+      "category": "other",
+      "difficulty": 3,
+      "emoji": "❓"
+    },
+    {
+      "id": 981,
+      "english": "gamble",
+      "japanese": "〜を賭ける、ギャンブルをする",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "❓"
     }
   ]
 }
