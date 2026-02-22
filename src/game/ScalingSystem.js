@@ -150,11 +150,12 @@ export class ScalingSystem {
         if (this.comboCount < 2) return '';
         const mult = this.getComboMultiplier().toFixed(1);
         const postfix = ` ×${mult}`;
+        const countText = ` ${this.comboCount} コンボ!`;
 
-        if (this.comboCount < 4) return '🔥 GOOD!' + postfix;
-        if (this.comboCount < 6) return '🔥🔥 GREAT!' + postfix;
-        if (this.comboCount < 8) return '🔥🔥🔥 EXCELLENT!' + postfix;
-        return '🔥🔥🔥🔥 AMAZING!' + postfix;
+        if (this.comboCount < 4) return '🔥 GOOD!' + countText + postfix;
+        if (this.comboCount < 6) return '🔥🔥 GREAT!' + countText + postfix;
+        if (this.comboCount < 8) return '🔥🔥🔥 EXCELLENT!' + countText + postfix;
+        return '🔥🔥🔥🔥 AMAZING!' + countText + postfix;
     }
 
     /**
