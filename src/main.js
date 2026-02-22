@@ -257,18 +257,9 @@ function renderBattle() {
     battleField.style.backgroundImage = bgMap[game.currentFloor] || bgMap[1];
   }
 
-  // ログの初期化
-  const logContainer = document.getElementById('battle-log');
-  if (logContainer) logContainer.innerHTML = '';
-
   // 敵の効果をリスニング
   currentBattle.on('enemy_turn', (result) => {
     showEnemyTurnEffects(result);
-  });
-
-  // バトルログをリスニング
-  currentBattle.on('log', ({ message }) => {
-    addLogMessage(message);
   });
 
   // 敵表示
@@ -283,7 +274,6 @@ function renderBattle() {
   // バトル開始
   b.start();
   drawnCards.clear(); // バトル開始時に描画履歴をリセット
-
   renderHand();
 }
 
@@ -619,28 +609,6 @@ function showDamageNumber(value, type, isPlayer = false) {
   el.style.top = '30%';
   container.appendChild(el);
   setTimeout(() => el.remove(), 1000);
-}
-
-function addLogMessage(message) {
-  const container = document.getElementById('battle-log');
-  if (!container) return;
-
-  const entry = document.createElement('div');
-  entry.className = 'log-entry new';
-  entry.textContent = message;
-
-  // 以前の「最新」ログから強調を外す
-  const lastEntry = container.querySelector('.log-entry.new');
-  if (lastEntry) lastEntry.classList.remove('new');
-
-  container.appendChild(entry);
-
-  // 5件以上の場合は古いものを消す
-  while (container.children.length > 5) {
-    container.removeChild(container.firstChild);
-  }
-
-  // 自動消去設定（任意だが、ここでは残しつつ古いのはフェードアウトのような見た目をCSSで表現しても良い）
 }
 
 function showEnemyTurnEffects(result) {
