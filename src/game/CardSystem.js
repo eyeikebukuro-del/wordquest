@@ -44,7 +44,7 @@ export const CARD_DEFINITIONS = {
         baseDamage: 14,
         emoji: '🔥',
         description: '14ダメージを与える',
-        quizMode: QUIZ_MODES.TYPING,
+        quizMode: QUIZ_MODES.CHOICE,
         rarity: 'uncommon',
         color: '#ff4500'
     },
@@ -95,7 +95,7 @@ export const CARD_DEFINITIONS = {
         baseDamage: 24,
         emoji: '☄️',
         description: '24ダメージを与える',
-        quizMode: QUIZ_MODES.TYPING,
+        quizMode: QUIZ_MODES.CHOICE,
         rarity: 'rare',
         color: '#e056fd'
     },
@@ -132,7 +132,7 @@ export const CARD_DEFINITIONS = {
         baseDamage: 10,
         emoji: '🔪',
         description: '10ダメージ。コンボ数×5の追加ダメージ',
-        quizMode: QUIZ_MODES.TYPING,
+        quizMode: QUIZ_MODES.CHOICE,
         comboMultiplierBonus: 5, // BattleSystem側で特別処理
         rarity: 'rare',
         color: '#ff9f43'
@@ -145,7 +145,7 @@ export const CARD_DEFINITIONS = {
         baseDamage: 0,
         emoji: '📚',
         description: '英単語の文字数×3のダメージとブロック',
-        quizMode: QUIZ_MODES.TYPING,
+        quizMode: QUIZ_MODES.CHOICE,
         lengthSynergy: 3, // BattleSystem側で特別処理
         rarity: 'rare',
         color: '#5f27cd'
@@ -172,7 +172,7 @@ export const CARD_DEFINITIONS = {
         baseBlock: 12,
         emoji: '🏰',
         description: '12ブロックを得る',
-        quizMode: QUIZ_MODES.TYPING,
+        quizMode: QUIZ_MODES.CHOICE,
         rarity: 'uncommon',
         color: '#636e72'
     },
@@ -261,7 +261,7 @@ export const CARD_DEFINITIONS = {
         healAmount: 12,
         emoji: '💖',
         description: 'HPを12回復する',
-        quizMode: QUIZ_MODES.TYPING,
+        quizMode: QUIZ_MODES.CHOICE,
         rarity: 'rare',
         color: '#fd79a8'
     },
@@ -272,7 +272,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         emoji: '🧪',
         description: '毒5を与え、その後敵の毒を2倍にする',
-        quizMode: QUIZ_MODES.TYPING,
+        quizMode: QUIZ_MODES.CHOICE,
         poison: 5,
         catalyst: true, // BattleSystem側で特別処理
         rarity: 'rare',

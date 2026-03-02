@@ -16,7 +16,8 @@ export class WordDatabase {
    * @returns {Array} フィルタリングされた単語配列
    */
   getWordsByDifficulty(maxDifficulty) {
-    return this.words.filter(w => w.difficulty <= maxDifficulty);
+    // スペースを含む熟語は出題対象から除外
+    return this.words.filter(w => w.difficulty <= maxDifficulty && !w.english.includes(' '));
   }
 
   /**
