@@ -1290,7 +1290,8 @@ document.addEventListener('DOMContentLoaded', () => {
     school: '🏫 がっこう', nature: '🌳 しぜん', weather: '☀️ てんき',
     clothes: '👕 ふく', home: '🏠 おうち', action: '🏃 うごき',
     feeling: '😊 きもち', place: '🏞️ ばしょ', time: '⏰ じかん',
-    shape: '🔺 かたち', transport: '🚗 のりもの', toy: '🎮 おもちゃ'
+    shape: '🔺 かたち', transport: '🚗 のりもの', toy: '🎮 おもちゃ',
+    pronoun: '🙋 だいめいし', other: '✨ その他'
   };
 
   function showWordList(filterCat = 'all') {

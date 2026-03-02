@@ -225,6 +225,30 @@
       "emoji": "🍄"
     },
     {
+      "english": "nut",
+      "japanese": "きのみ",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "🥜",
+      "id": 29
+    },
+    {
+      "english": "jam",
+      "japanese": "ジャム",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🍯",
+      "id": 30
+    },
+    {
+      "english": "gum",
+      "japanese": "ガム",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🍬",
+      "id": 31
+    },
+    {
       "id": 101,
       "english": "cat",
       "japanese": "ねこ",
@@ -463,6 +487,54 @@
       "category": "animal",
       "difficulty": 3,
       "emoji": "🐿️"
+    },
+    {
+      "english": "ant",
+      "japanese": "あり",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐜",
+      "id": 131
+    },
+    {
+      "english": "bat",
+      "japanese": "こうもり",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🦇",
+      "id": 132
+    },
+    {
+      "english": "bug",
+      "japanese": "むし",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐛",
+      "id": 133
+    },
+    {
+      "english": "rat",
+      "japanese": "ねずみ",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐀",
+      "id": 134
+    },
+    {
+      "english": "hen",
+      "japanese": "めんどり",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐔",
+      "id": 135
+    },
+    {
+      "english": "pet",
+      "japanese": "ペット",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐕",
+      "id": 136
     },
     {
       "id": 201,
@@ -841,6 +913,30 @@
       "emoji": "👅"
     },
     {
+      "english": "lip",
+      "japanese": "くちびる",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "👄",
+      "id": 417
+    },
+    {
+      "english": "fin",
+      "japanese": "ひれ",
+      "category": "body",
+      "difficulty": 2,
+      "emoji": "🦈",
+      "id": 418
+    },
+    {
+      "english": "leg",
+      "japanese": "あし",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "🦵",
+      "id": 419
+    },
+    {
       "id": 501,
       "english": "mother",
       "japanese": "おかあさん",
@@ -941,6 +1037,22 @@
       "category": "family",
       "difficulty": 2,
       "emoji": "🤴"
+    },
+    {
+      "english": "mom",
+      "japanese": "ママ",
+      "category": "family",
+      "difficulty": 1,
+      "emoji": "👩",
+      "id": 513
+    },
+    {
+      "english": "dad",
+      "japanese": "パパ",
+      "category": "family",
+      "difficulty": 1,
+      "emoji": "👨",
+      "id": 514
     },
     {
       "id": 601,
@@ -1077,6 +1189,14 @@
       "category": "school",
       "difficulty": 3,
       "emoji": "📅"
+    },
+    {
+      "english": "map",
+      "japanese": "ちず",
+      "category": "school",
+      "difficulty": 1,
+      "emoji": "🗺️",
+      "id": 618
     },
     {
       "id": 701,
@@ -1253,6 +1373,22 @@
       "category": "nature",
       "difficulty": 3,
       "emoji": "🏜️"
+    },
+    {
+      "english": "log",
+      "japanese": "まるた",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "🪵",
+      "id": 723
+    },
+    {
+      "english": "mud",
+      "japanese": "どろ",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "🟤",
+      "id": 724
     },
     {
       "id": 801,
@@ -1463,6 +1599,22 @@
       "emoji": "🩳"
     },
     {
+      "english": "cap",
+      "japanese": "キャップ（ぼうし）",
+      "category": "clothes",
+      "difficulty": 1,
+      "emoji": "🧢",
+      "id": 915
+    },
+    {
+      "english": "zip",
+      "japanese": "チャック",
+      "category": "clothes",
+      "difficulty": 1,
+      "emoji": "🤐",
+      "id": 916
+    },
+    {
       "id": 1001,
       "english": "bed",
       "japanese": "ベッド",
@@ -1597,6 +1749,102 @@
       "category": "home",
       "difficulty": 3,
       "emoji": "🛏️"
+    },
+    {
+      "english": "fan",
+      "japanese": "せんぷうき",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🎐",
+      "id": 1018
+    },
+    {
+      "english": "cup",
+      "japanese": "コップ",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🥤",
+      "id": 1019
+    },
+    {
+      "english": "hut",
+      "japanese": "こや",
+      "category": "home",
+      "difficulty": 2,
+      "emoji": "🛖",
+      "id": 1020
+    },
+    {
+      "english": "mug",
+      "japanese": "マグカップ",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "☕",
+      "id": 1021
+    },
+    {
+      "english": "mat",
+      "japanese": "マット",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🟫",
+      "id": 1022
+    },
+    {
+      "english": "pan",
+      "japanese": "フライパン",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🍳",
+      "id": 1023
+    },
+    {
+      "english": "bin",
+      "japanese": "ごみばこ",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🗑️",
+      "id": 1024
+    },
+    {
+      "english": "lid",
+      "japanese": "ふた",
+      "category": "home",
+      "difficulty": 2,
+      "emoji": "🥘",
+      "id": 1025
+    },
+    {
+      "english": "jug",
+      "japanese": "水さし",
+      "category": "home",
+      "difficulty": 2,
+      "emoji": "🏺",
+      "id": 1026
+    },
+    {
+      "english": "box",
+      "japanese": "はこ",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "📦",
+      "id": 1027
+    },
+    {
+      "english": "pot",
+      "japanese": "おなべ",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🍲",
+      "id": 1028
+    },
+    {
+      "english": "mop",
+      "japanese": "モップ",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🧹",
+      "id": 1029
     },
     {
       "id": 1101,
@@ -1855,6 +2103,94 @@
       "emoji": "🛑"
     },
     {
+      "english": "can",
+      "japanese": "できる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "👍",
+      "id": 1133
+    },
+    {
+      "english": "hum",
+      "japanese": "はなうたをうたう",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "🎶",
+      "id": 1134
+    },
+    {
+      "english": "jog",
+      "japanese": "ゆっくりはしる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "🏃",
+      "id": 1135
+    },
+    {
+      "english": "hug",
+      "japanese": "だきしめる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🫂",
+      "id": 1136
+    },
+    {
+      "english": "nod",
+      "japanese": "うなずく",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "↕️",
+      "id": 1137
+    },
+    {
+      "english": "cut",
+      "japanese": "きる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "✂️",
+      "id": 1138
+    },
+    {
+      "english": "hop",
+      "japanese": "はねる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🐇",
+      "id": 1139
+    },
+    {
+      "english": "ski",
+      "japanese": "スキー",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "🎿",
+      "id": 1140
+    },
+    {
+      "english": "win",
+      "japanese": "かつ",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🏆",
+      "id": 1141
+    },
+    {
+      "english": "hit",
+      "japanese": "うつ",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🥊",
+      "id": 1142
+    },
+    {
+      "english": "sit",
+      "japanese": "すわる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🪑",
+      "id": 1143
+    },
+    {
       "id": 1201,
       "english": "happy",
       "japanese": "うれしい",
@@ -2013,6 +2349,30 @@
       "category": "feeling",
       "difficulty": 3,
       "emoji": "😋"
+    },
+    {
+      "english": "mad",
+      "japanese": "プンプンおこる",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "😠",
+      "id": 1221
+    },
+    {
+      "english": "fun",
+      "japanese": "たのしい",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "😆",
+      "id": 1222
+    },
+    {
+      "english": "wet",
+      "japanese": "ぬれている",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "💦",
+      "id": 1223
     },
     {
       "id": 1301,
@@ -2239,6 +2599,14 @@
       "emoji": "📅"
     },
     {
+      "english": "now",
+      "japanese": "いま",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "⏰",
+      "id": 1414
+    },
+    {
       "id": 1501,
       "english": "circle",
       "japanese": "まる",
@@ -2301,6 +2669,14 @@
       "category": "shape",
       "difficulty": 3,
       "emoji": "🎲"
+    },
+    {
+      "english": "dot",
+      "japanese": "てん",
+      "category": "shape",
+      "difficulty": 2,
+      "emoji": "⏺️",
+      "id": 1509
     },
     {
       "id": 1601,
@@ -2407,6 +2783,14 @@
       "emoji": "🚇"
     },
     {
+      "english": "van",
+      "japanese": "ワゴンしゃ",
+      "category": "transport",
+      "difficulty": 1,
+      "emoji": "🚐",
+      "id": 1614
+    },
+    {
       "id": 1701,
       "english": "ball",
       "japanese": "ボール",
@@ -2501,6 +2885,86 @@
       "category": "toy",
       "difficulty": 2,
       "emoji": "🎁"
+    },
+    {
+      "english": "top",
+      "japanese": "こま",
+      "category": "toy",
+      "difficulty": 2,
+      "emoji": "🚁",
+      "id": 1713
+    },
+    {
+      "english": "net",
+      "japanese": "あみ",
+      "category": "toy",
+      "difficulty": 1,
+      "emoji": "🥅",
+      "id": 1714
+    },
+    {
+      "english": "he",
+      "japanese": "かれ",
+      "category": "pronoun",
+      "difficulty": 1,
+      "emoji": "👦",
+      "id": 1801
+    },
+    {
+      "english": "she",
+      "japanese": "かのじょ",
+      "category": "pronoun",
+      "difficulty": 1,
+      "emoji": "👧",
+      "id": 1802
+    },
+    {
+      "english": "I",
+      "japanese": "わたし",
+      "category": "pronoun",
+      "difficulty": 1,
+      "emoji": "🙋",
+      "id": 1803
+    },
+    {
+      "english": "we",
+      "japanese": "わたしたち",
+      "category": "pronoun",
+      "difficulty": 1,
+      "emoji": "🧑‍🤝‍🧑",
+      "id": 1804
+    },
+    {
+      "english": "you",
+      "japanese": "あなた",
+      "category": "pronoun",
+      "difficulty": 1,
+      "emoji": "👉",
+      "id": 1805
+    },
+    {
+      "english": "job",
+      "japanese": "しごと",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "💼",
+      "id": 1901
+    },
+    {
+      "english": "cop",
+      "japanese": "けいかん",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "👮",
+      "id": 1902
+    },
+    {
+      "english": "pin",
+      "japanese": "ピン",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "📌",
+      "id": 1903
     }
   ]
 }
