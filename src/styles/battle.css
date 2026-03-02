@@ -99,8 +99,8 @@
 }
 
 .player-image {
-    max-height: 250px;
-    /* 固定最大高さ */
+    max-height: 160px;
+    /* 固定最大高さ（モバイル考慮） */
     width: auto;
     max-width: 100%;
     object-fit: contain;
