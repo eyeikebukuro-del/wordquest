@@ -311,20 +311,100 @@ export function createCard(definitionId) {
  * @returns {boolean} レベルアップしたかどうか
  */
 export function addCardXP(card) {
+    // レベル3のカードはこれ以上強化できない
+    if (card.level >= 3) return false;
+
     card.xp++;
-    if (card.xp >= card.xpToNext && card.level < 3) {
+    if (card.xp >= card.xpToNext) {
         card.level++;
         card.xp = 0;
         card.xpToNext = card.level * 3;
 
-        // レベルアップボーナス
+        // レベルアップボーナス（攻撃・防御・回復）
         if (card.baseDamage) card.baseDamage = Math.ceil(card.baseDamage * 1.3);
         if (card.baseBlock) card.baseBlock = Math.ceil(card.baseBlock * 1.3);
         if (card.healAmount) card.healAmount = Math.ceil(card.healAmount * 1.3);
 
+        // レベルアップボーナス（スキル系）
+        if (card.drawCount) card.drawCount += 1;
+        if (card.poison) card.poison = Math.ceil(card.poison * 1.4);
+        if (card.comboBonus) card.comboBonus = Math.ceil(card.comboBonus * 1.3);
+        if (card.debuff) card.debuff = { ...card.debuff, value: card.debuff.value + 1 };
+        if (card.buff) {
+            if (card.buff.type === 'strength') {
+                // パワーアップ: 倍率を+0.25ずつ上昇
+                card.buff = { ...card.buff, value: +(card.buff.value + 0.25).toFixed(2) };
+            } else if (card.buff.type === 'next_turn_energy') {
+                // フォーカス: エナジー+1ずつ上昇
+                card.buff = { ...card.buff, value: card.buff.value + 1 };
+            }
+        }
+
         return true;
     }
     return false;
+}
+
+/**
+ * カードの現在のステータスに基づいて説明テキストを動的に生成
+ * @param {Object} card - カードインスタンス
+ * @returns {string} 説明テキスト
+ */
+export function getCardDescription(card) {
+    // カードIDごとに、現在の数値を反映した説明を生成
+    const suffix = card.type === CARD_TYPES.SKILL ? ' 廃棄する。' : '';
+    switch (card.id) {
+        // === 攻撃カード ===
+        case 'slash':
+            return `${card.baseDamage}ダメージを与える`;
+        case 'fireball':
+            return `${card.baseDamage}ダメージを与える`;
+        case 'double_strike':
+            return `${card.baseDamage}ダメージを${card.hits}回与える`;
+        case 'thunder':
+            return `${card.baseDamage}ダメージ。コンボ中+${card.comboBonus}`;
+        case 'ice_lance':
+            return `${card.baseDamage}ダメージ。敵の攻撃力-${card.debuff.value}（${card.debuff.turns}ターン）`;
+        case 'meteor':
+            return `${card.baseDamage}ダメージを与える`;
+        case 'quick_slash':
+            return `${card.baseDamage}ダメージ。コスト0`;
+        case 'poison_blade':
+            return `${card.baseDamage}ダメージ+毒${card.poison}（毎ターン${card.poison}ダメージ）`;
+        case 'combo_blade':
+            return `${card.baseDamage}ダメージ。コンボ数×${card.comboMultiplierBonus}の追加ダメージ`;
+        case 'longword_burst':
+            return `英単語の文字数×${card.lengthSynergy}のダメージとブロック`;
+
+        // === 防御カード ===
+        case 'shield':
+            return `${card.baseBlock}ブロックを得る`;
+        case 'iron_wall':
+            return `${card.baseBlock}ブロックを得る`;
+        case 'counter':
+            return `${card.baseBlock}ブロック+${card.baseDamage}ダメージ`;
+        case 'barrier':
+            return `${card.baseBlock}ブロック。次のターンも${card.persistBlock}ブロック残る`;
+
+        // === スキルカード ===
+        case 'heal':
+            return `HPを${card.healAmount}回復する` + suffix;
+        case 'power_up': {
+            const pct = Math.round((card.buff.value - 1) * 100);
+            return `次の攻撃のダメージ+${pct}%` + suffix;
+        }
+        case 'draw_card':
+            return `カードを${card.drawCount}枚引く` + suffix;
+        case 'focus':
+            return `次のターン、エナジー+${card.buff.value}` + suffix;
+        case 'mega_heal':
+            return `HPを${card.healAmount}回復する` + suffix;
+        case 'poison_catalyst':
+            return `毒${card.poison}を与え、その後敵の毒を2倍にする` + suffix;
+
+        default:
+            return card.description;
+    }
 }
 
 /**

@@ -2,7 +2,7 @@
 // ゲームエンジンとUIの統合、イベントバインディングを担当する
 
 import { GameEngine, SCREENS } from './game/GameEngine.js';
-import { CARD_TYPES, addCardXP } from './game/CardSystem.js';
+import { CARD_TYPES, addCardXP, getCardDescription } from './game/CardSystem.js';
 import { BATTLE_STATES } from './game/BattleSystem.js';
 import { NODE_TYPES, NODE_ICONS, FLOOR_THEMES } from './game/MapGenerator.js';
 import { RELIC_DEFINITIONS, POTION_DEFINITIONS } from './game/ScalingSystem.js';
@@ -56,7 +56,7 @@ function createCardHTML(card, isLarge = false, clickable = true) {
       <div class="card-cost">${card.cost}</div>
       <div class="card-emoji">${card.emoji}</div>
       <div class="card-name">${card.name}</div>
-      <div class="card-desc">${card.description}</div>
+      <div class="card-desc">${getCardDescription(card)}</div>
       ${card.level > 1 ? `<div class="card-level">Lv.${card.level}</div>` : ''}
     </div>
   `;
@@ -946,7 +946,12 @@ function renderEvent() {
       if (result.needCardSelect) {
         document.getElementById('btn-close-event').style.display = 'none';
         setTimeout(() => {
-          showCardSelect([...game.playerDeck], (card) => {
+          const upgradable = game.playerDeck.filter(c => c.level < 3);
+          if (upgradable.length === 0) {
+            game.changeScreen(SCREENS.MAP);
+            return;
+          }
+          showCardSelect(upgradable, (card) => {
             addCardXP(card);
             addCardXP(card);
             addCardXP(card);
@@ -1242,7 +1247,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('btn-rest-upgrade').addEventListener('click', () => {
-    showCardSelect([...game.playerDeck], (card) => {
+    const upgradable = game.playerDeck.filter(c => c.level < 3);
+    if (upgradable.length === 0) return; // 全カードがレベル3
+    showCardSelect(upgradable, (card) => {
       addCardXP(card);
       addCardXP(card);
       addCardXP(card);
