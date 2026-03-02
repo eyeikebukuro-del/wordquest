@@ -189,6 +189,7 @@ export const CARD_DEFINITIONS = {
         description: '⛄ 初めはたった1ダメージ！でも使うたびに永久+3！雪だるま式に強くなる！',
         quizMode: QUIZ_MODES.CHOICE,
         snowball: true, // BattleSystem側で特別処理
+        snowballBuff: 3,
         rarity: 'rare',
         color: '#74b9ff'
     },
@@ -370,6 +371,7 @@ export const CARD_DEFINITIONS = {
         description: '🎯 敵の毒が3以上なら、つぎの攻撃が2倍に！コスト0！',
         quizMode: QUIZ_MODES.CHOICE,
         weakPoint: true, // BattleSystem側でnextAttackDoubled フラグ
+        weakPointThreshold: 3, // 初期は毒3必要
         rarity: 'uncommon',
         color: '#00b894'
     },
@@ -382,6 +384,7 @@ export const CARD_DEFINITIONS = {
         description: '🪞 さっきつかったカードをもう1回！どんな大技もコピー！',
         quizMode: QUIZ_MODES.CHOICE,
         mirrorCopy: true, // BattleSystem側でlastCardUsedを再実行
+        mirrorRatio: 1, // 初期は1倍
         rarity: 'rare',
         color: '#e17055'
     }
@@ -439,6 +442,9 @@ export function addCardXP(card) {
         if (card.debuff) card.debuff = { ...card.debuff, value: card.debuff.value + 1 };
         if (card.thornArmor) card.thornArmor = Math.ceil(card.thornArmor * 1.3);
         if (card.accumulate) card.accumulate += 1;
+        if (card.snowballBuff) card.snowballBuff += 1; // 3->4->5
+        if (card.weakPointThreshold && card.weakPointThreshold > 1) card.weakPointThreshold -= 1; // 3->2->1
+        if (card.mirrorRatio) card.mirrorRatio += 0.5; // 1->1.5->2.0
         if (card.buff) {
             if (card.buff.type === 'strength') {
                 // パワーアップ: 倍率を+0.25ずつ上昇
@@ -489,7 +495,7 @@ export function getCardDescription(card) {
         case 'rage_flame':
             return `😡 ${card.baseDamage}ダメージ＋失ったHP÷5のダメージ！ピンチほど燃えあがる！`;
         case 'snowball':
-            return `⛄ ${card.baseDamage}ダメージ！使うたびに永久+3！（現在${card.baseDamage}→次は${card.baseDamage + 3}）`;
+            return `⛄ ${card.baseDamage}ダメージ！使うたびに永久+${card.snowballBuff}！（現在${card.baseDamage}→次は${card.baseDamage + card.snowballBuff}）`;
         case 'vortex':
             return `🌊 ${card.baseDamage}ダメージ＋手札の枚数×2のダメージ！カードを引いてから使おう！`;
 
@@ -523,9 +529,11 @@ export function getCardDescription(card) {
         case 'accumulate':
             return `🌀 全攻撃ダメージが永久+${card.accumulate}！今すぐ重ねよう！` + suffix;
         case 'weak_point':
-            return `🎯 敵の毒が3以上なら、つぎの攻撃が2倍！コスト0！` + suffix;
-        case 'mirror_copy':
-            return `🪞 さっきつかったカードをもう1回！` + suffix;
+            return `🎯 敵の毒が${card.weakPointThreshold}以上なら、つぎの攻撃が2倍！コスト0！` + suffix;
+        case 'mirror_copy': {
+            const ratioStr = card.mirrorRatio > 1 ? `（威力${card.mirrorRatio}倍！）` : '';
+            return `🪞 さっきつかったカードをもう1回${ratioStr}！` + suffix;
+        }
 
         default:
             return card.description;

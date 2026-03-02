@@ -386,9 +386,10 @@ export class BattleSystem {
 
             result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
 
-            // ゆきだるま：使用後にbaseDamageを永続+3
+            // ゆきだるま：使用後にbaseDamageを永続成長
             if (card.snowball) {
-                card.baseDamage += 3;
+                const buff = card.snowballBuff || 3;
+                card.baseDamage += buff;
                 result.effects.push({ type: 'snowball_grow', newDamage: card.baseDamage });
             }
 
@@ -467,15 +468,16 @@ export class BattleSystem {
             this.log.push(`ちくせきの力！ 永続ダメージバフ合計: +${this.damagePermanentBuff}`);
         }
 
-        // ウィークポイント：敵の毒が3以上なら次の攻撃2倍フラグをセット
+        // ウィークポイント：敵の毒が規定値以上なら次の攻撃2倍フラグをセット
         if (card.weakPoint) {
-            if (this.enemyPoison >= 3) {
+            const threshold = card.weakPointThreshold || 3;
+            if (this.enemyPoison >= threshold) {
                 this.nextAttackDoubled = true;
                 result.effects.push({ type: 'weak_point_set' });
                 this.log.push('ウィークポイント！ 次の攻撃ダメージが2倍になる！');
             } else {
                 result.effects.push({ type: 'weak_point_fail', poison: this.enemyPoison });
-                this.log.push(`ウィークポイント不発（毒が${this.enemyPoison}、3以上必要）`);
+                this.log.push(`ウィークポイント不発（毒が${this.enemyPoison}、${threshold}以上必要）`);
             }
         }
 
@@ -487,6 +489,9 @@ export class BattleSystem {
                 if (lastDef) {
                     // 攻撃カードのダメージのみコピー（副作用系は除く）
                     let copyDamage = (lastDef.baseDamage || 0) + this.damagePermanentBuff;
+                    if (card.mirrorRatio && card.mirrorRatio !== 1) {
+                        copyDamage = Math.floor(copyDamage * card.mirrorRatio);
+                    }
                     if (this.nextAttackDoubled) {
                         copyDamage *= 2;
                         this.nextAttackDoubled = false;
