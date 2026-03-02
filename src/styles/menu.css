@@ -509,3 +509,116 @@
         font-size: 3rem;
     }
 }
+
+/* === たんごリスト === */
+.wordlist-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+    justify-content: center;
+}
+
+.wordlist-cat-btn {
+    padding: 6px 12px;
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: var(--font-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.wordlist-cat-btn:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--accent-purple);
+}
+
+.wordlist-cat-btn.active {
+    background: linear-gradient(135deg, hsla(270, 80%, 60%, 0.3), hsla(210, 80%, 60%, 0.3));
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+}
+
+.wordlist-content {
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.wordlist-category {
+    margin-bottom: 16px;
+}
+
+.wordlist-cat-title {
+    font-size: var(--font-md);
+    font-weight: 800;
+    color: var(--accent-purple);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wordlist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.wordlist-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.wordlist-item:hover {
+    background: var(--bg-glass-hover);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.wordlist-item.diff-1 {
+    border-left: 3px solid var(--accent-green);
+}
+
+.wordlist-item.diff-2 {
+    border-left: 3px solid var(--accent-yellow);
+}
+
+.wordlist-item.diff-3 {
+    border-left: 3px solid var(--accent-red);
+}
+
+.wordlist-emoji {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+}
+
+.wordlist-english {
+    font-size: var(--font-sm);
+    font-weight: 700;
+    color: var(--accent-cyan);
+    min-width: 0;
+}
+
+.wordlist-japanese {
+    font-size: var(--font-xs);
+    color: var(--text-secondary);
+    margin-left: auto;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+.wordlist-diff {
+    font-size: 0.6rem;
+    flex-shrink: 0;
+}

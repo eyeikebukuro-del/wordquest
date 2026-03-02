@@ -6,6 +6,7 @@ import { CARD_TYPES, addCardXP, getCardDescription } from './game/CardSystem.js'
 import { BATTLE_STATES } from './game/BattleSystem.js';
 import { NODE_TYPES, NODE_ICONS, FLOOR_THEMES } from './game/MapGenerator.js';
 import { RELIC_DEFINITIONS, POTION_DEFINITIONS } from './game/ScalingSystem.js';
+import { WordDatabase } from './vocabulary/WordDatabase.js';
 
 // マップ背景画像のアセットインポート (Viteで正しくパス解決させるため)
 import bgForestMap from './assets/bg_forest_map.png';
@@ -1279,5 +1280,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('btn-close-stats').addEventListener('click', () => {
     document.getElementById('modal-stats').style.display = 'none';
+  });
+
+  // === たんごリスト ===
+  const wordListDb = new WordDatabase();
+  const CATEGORY_LABELS = {
+    food: '🍎 たべもの', animal: '🐱 どうぶつ', color: '🎨 いろ',
+    number: '🔢 かず', body: '🤚 からだ', family: '👨‍👩‍👧 かぞく',
+    school: '🏫 がっこう', nature: '🌳 しぜん', weather: '☀️ てんき',
+    clothes: '👕 ふく', home: '🏠 おうち', action: '🏃 うごき',
+    feeling: '😊 きもち', place: '🏞️ ばしょ', time: '⏰ じかん',
+    shape: '🔺 かたち', transport: '🚗 のりもの', toy: '🎮 おもちゃ'
+  };
+
+  function showWordList(filterCat = 'all') {
+    const modal = document.getElementById('modal-wordlist');
+    modal.style.display = 'block';
+
+    // カテゴリフィルタボタン生成
+    const filterEl = document.getElementById('wordlist-filter');
+    const cats = wordListDb.categories;
+    filterEl.innerHTML = `<button class="wordlist-cat-btn ${filterCat === 'all' ? 'active' : ''}" data-cat="all">🌟 ぜんぶ</button>` +
+      cats.map(c => `<button class="wordlist-cat-btn ${filterCat === c ? 'active' : ''}" data-cat="${c}">${CATEGORY_LABELS[c] || c}</button>`).join('');
+
+    filterEl.querySelectorAll('.wordlist-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => showWordList(btn.dataset.cat));
+    });
+
+    // 単語リスト生成
+    const contentEl = document.getElementById('wordlist-content');
+    const words = filterCat === 'all' ? wordListDb.words : wordListDb.words.filter(w => w.category === filterCat);
+
+    // カテゴリごとにグルーピング
+    const grouped = {};
+    words.forEach(w => {
+      if (!grouped[w.category]) grouped[w.category] = [];
+      grouped[w.category].push(w);
+    });
+
+    let html = '';
+    for (const [cat, catWords] of Object.entries(grouped)) {
+      html += `<div class="wordlist-category">`;
+      html += `<h3 class="wordlist-cat-title">${CATEGORY_LABELS[cat] || cat}</h3>`;
+      html += `<div class="wordlist-grid">`;
+      catWords.forEach(w => {
+        const diffStars = '⭐'.repeat(w.difficulty);
+        html += `<div class="wordlist-item diff-${w.difficulty}">`;
+        html += `<span class="wordlist-emoji">${w.emoji}</span>`;
+        html += `<span class="wordlist-english">${w.english}</span>`;
+        html += `<span class="wordlist-japanese">${w.japanese}</span>`;
+        html += `<span class="wordlist-diff">${diffStars}</span>`;
+        html += `</div>`;
+      });
+      html += `</div></div>`;
+    }
+    contentEl.innerHTML = html;
+  }
+
+  document.getElementById('btn-word-list').addEventListener('click', () => showWordList());
+  document.getElementById('btn-close-wordlist').addEventListener('click', () => {
+    document.getElementById('modal-wordlist').style.display = 'none';
   });
 });

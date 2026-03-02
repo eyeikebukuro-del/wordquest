@@ -36,6 +36,10 @@
             <span class="btn-icon">🗡️</span>
             <span>ぼうけんに出る</span>
           </button>
+          <button id="btn-word-list" class="btn btn-secondary">
+            <span class="btn-icon">📖</span>
+            <span>たんごリスト</span>
+          </button>
           <button id="btn-stats" class="btn btn-secondary">
             <span class="btn-icon">📊</span>
             <span>がくしゅう記録</span>
@@ -294,6 +298,17 @@
           <h2 class="modal-title" id="card-select-title">カードを選んでください</h2>
           <div class="modal-content" id="card-select-list"></div>
           <button id="btn-skip-card" class="btn btn-secondary">スキップ</button>
+        </div>
+      </div>
+    </div>
+    <!-- たんごリストモーダル -->
+    <div id="modal-wordlist" class="modal" style="display:none;">
+      <div class="modal-overlay">
+        <div class="modal-panel">
+          <h2 class="modal-title">📖 たんごリスト</h2>
+          <div class="wordlist-filter" id="wordlist-filter"></div>
+          <div class="modal-content wordlist-content" id="wordlist-content"></div>
+          <button id="btn-close-wordlist" class="btn btn-secondary">とじる</button>
         </div>
       </div>
     </div>
