@@ -457,11 +457,6 @@ body {
   line-height: 1.25;
   margin-bottom: 6px;
   flex: 1;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  /* 高さ固定に伴い、最大3行で省略表示にする */
-  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
