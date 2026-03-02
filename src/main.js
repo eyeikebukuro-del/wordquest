@@ -60,7 +60,7 @@ function createCardHTML(card, isLarge = false, clickable = true) {
       <div class="card-emoji">${card.emoji}</div>
       <div class="card-name">${card.name}</div>
       <div class="card-desc">${getCardDescription(card)}</div>
-      ${card.rarity === 'rare' ? '<div class="card-rarity-badge">✨ RARE</div>' : ''}
+      <div class="card-rarity-badge">${card.rarity === 'rare' ? '✨ RARE' : (card.rarity === 'uncommon' ? '✴️ UNCOMMON' : '')}</div>
       ${card.level > 1 ? `<div class="card-level">Lv.${card.level}</div>` : ''}
     </div>
   `;
@@ -372,8 +372,42 @@ function updateBattleUI() {
   let statusHTML = '';
   if (enemy.block > 0) statusHTML += `<span class="status-badge">🛡️${enemy.block}</span>`;
   if (enemy.buffs.strength) statusHTML += `<span class="status-badge">💪+${enemy.buffs.strength}</span>`;
-  if (b.enemyPoison > 0) statusHTML += `<span class="status-badge">🟣${b.enemyPoison}</span>`;
+  if (b.enemyPoison > 0) statusHTML += `<span class="status-badge status-poison">🟣${b.enemyPoison}</span>`;
+  // 敵デバフ（weakened等）
+  if (b.enemyDebuffs) {
+    for (const [key, debuff] of Object.entries(b.enemyDebuffs)) {
+      if (debuff.turns > 0) {
+        if (key === 'weakened') statusHTML += `<span class="status-badge status-debuff">⬇️-${debuff.value} (${debuff.turns}T)</span>`;
+      }
+    }
+  }
   statusEl.innerHTML = statusHTML;
+
+  // プレイヤーステータス（バフ/デバフアイコン）
+  const playerStatusEl = document.getElementById('player-status');
+  let playerStatusHTML = '';
+  if (b.scaling && b.scaling.buffs) {
+    if (b.scaling.buffs.strength && b.scaling.buffs.strength.turns > 0) {
+      const pct = Math.round((b.scaling.buffs.strength.value - 1) * 100);
+      playerStatusHTML += `<span class="status-badge status-buff">💪+${pct}%</span>`;
+    }
+    if (b.scaling.buffs.next_turn_energy && b.scaling.buffs.next_turn_energy.turns > 0) {
+      playerStatusHTML += `<span class="status-badge status-buff">⚡+${b.scaling.buffs.next_turn_energy.value}</span>`;
+    }
+  }
+  if (b.damagePermanentBuff > 0) {
+    playerStatusHTML += `<span class="status-badge status-buff">🌀+${b.damagePermanentBuff}</span>`;
+  }
+  if (b.thornArmorDamage > 0) {
+    playerStatusHTML += `<span class="status-badge status-thorn">🦔${b.thornArmorDamage}</span>`;
+  }
+  if (b.nextAttackDoubled) {
+    playerStatusHTML += `<span class="status-badge status-buff">🎯x2</span>`;
+  }
+  if (b.playerBlock > 0) {
+    playerStatusHTML += `<span class="status-badge">🛡️${b.playerBlock}</span>`;
+  }
+  playerStatusEl.innerHTML = playerStatusHTML;
 
   // コンボ
   const comboText = b.scaling.getComboText();
@@ -405,6 +439,10 @@ function renderHand() {
     // 新しく手札に加わった（描画履歴にない）カードのみアニメーションを付与し、チラつきを防ぐ
     if (!drawnCards.has(card.instanceId)) {
       cardNode.classList.add('anim-card-draw');
+      // レアカードのシマー（キラキラ）も、新規描画時のみアニメを適用する
+      if (card.rarity === 'rare') {
+        cardNode.classList.add('shimmer-animate');
+      }
       drawnCards.add(card.instanceId);
     }
 
@@ -656,12 +694,32 @@ function showEnemyTurnEffects(result) {
       const expected = eff.type === 'damage' ? eff.value : (eff.perHit * eff.hits);
 
       if (actual > 0) {
-        playAttackEffect(true, false); // プレイヤーへの攻撃（敵からメテオは来ない想定）
+        playAttackEffect(true, false);
         setTimeout(() => showDamageNumber(actual, 'damage', true), 300);
         totalDamage += actual;
       } else if (expected > 0 && actual === 0) {
         blockedAll = true;
       }
+    }
+
+    // 毒ダメージ専用エフェクト（紫フロート）
+    if (eff.type === 'poison_damage' && eff.value > 0) {
+      setTimeout(() => {
+        showDamageNumber(eff.value, 'poison', false);
+        // 敵に毒ヒットアニメーション
+        const hitTarget = currentBattle && currentBattle.enemy.image
+          ? document.getElementById('enemy-image')
+          : document.getElementById('enemy-emoji');
+        if (hitTarget) {
+          hitTarget.classList.add('anim-poison-hit');
+          setTimeout(() => hitTarget.classList.remove('anim-poison-hit'), 500);
+        }
+      }, 100);
+    }
+
+    // とげのよろい反撃エフェクト
+    if (eff.type === 'thorn_counter' && eff.value > 0) {
+      setTimeout(() => showDamageNumber(eff.value, 'thorn', false), 400);
     }
   }
 
@@ -1301,6 +1359,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('modal-wordlist');
     modal.style.display = 'block';
 
+    const learningData = game.spacedRep.learningData;
+
     // カテゴリフィルタボタン生成
     const filterEl = document.getElementById('wordlist-filter');
     const cats = wordListDb.categories;
@@ -1324,17 +1384,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let html = '';
     for (const [cat, catWords] of Object.entries(grouped)) {
+      // カテゴリ進捗計算
+      const totalWords = catWords.length;
+      const attemptedWords = catWords.filter(w => learningData[w.id]).length;
+      const progressPct = Math.round((attemptedWords / totalWords) * 100);
+
       html += `<div class="wordlist-category">`;
-      html += `<h3 class="wordlist-cat-title">${CATEGORY_LABELS[cat] || cat}</h3>`;
+      html += `<h3 class="wordlist-cat-title">${CATEGORY_LABELS[cat] || cat} (${progressPct}%)</h3>`;
+      html += `<div class="cat-progress-container"><div class="cat-progress-bar" style="width: ${progressPct}%"></div></div>`;
       html += `<div class="wordlist-grid">`;
       catWords.forEach(w => {
+        const data = learningData[w.id] || { correct: 0, incorrect: 0, weight: 1 };
+        const mastery = data.correct >= 5 ? '👑' : (data.correct >= 2 ? '✅' : '');
         const diffStars = '⭐'.repeat(w.difficulty);
-        html += `<div class="wordlist-item diff-${w.difficulty}">`;
-        html += `<span class="wordlist-emoji">${w.emoji}</span>`;
-        html += `<span class="wordlist-english">${w.english}</span>`;
-        html += `<span class="wordlist-japanese">${w.japanese}</span>`;
-        html += `<span class="wordlist-diff">${diffStars}</span>`;
-        html += `</div>`;
+
+        html += `<div class="wordlist-item diff-${w.difficulty}">
+          <span class="wordlist-emoji">${w.emoji}</span>
+          <div class="wordlist-english-area">
+            <span class="wordlist-english">${w.english}</span>
+            <span class="wordlist-japanese">${w.japanese}</span>
+          </div>
+          <div class="wordlist-stats">
+            <span class="word-mastery">${mastery}</span>
+            <span class="word-count-badge correct">○ ${data.correct}</span>
+            <span class="word-count-badge incorrect">× ${data.incorrect}</span>
+          </div>
+          <span class="wordlist-diff">${diffStars}</span>
+        </div>`;
       });
       html += `</div></div>`;
     }

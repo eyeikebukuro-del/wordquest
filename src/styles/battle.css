@@ -54,8 +54,8 @@
     /* キャラクターを下揃えにするため追加 */
     justify-content: space-around;
     position: relative;
-    padding: 0 20px 15vh 20px;
-    /* 下部UIに重ならないように下余白を追加 */
+    padding: 0 20px 5vh 20px;
+    /* さらに配置を下げた（10vh -> 5vh） */
     gap: 20px;
     width: 100%;
     /* 背景画像をカバー表示するため */
@@ -89,7 +89,7 @@
 
 .player-emoji,
 .enemy-emoji {
-    font-size: 4.5rem;
+    font-size: 3.5rem;
     line-height: 1;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
 }
@@ -99,8 +99,8 @@
 }
 
 .player-image {
-    max-height: 160px;
-    /* 固定最大高さ（モバイル考慮） */
+    max-height: 100px;
+    /* さらに少し小さく（120px -> 100px） */
     width: auto;
     max-width: 100%;
     object-fit: contain;
@@ -161,15 +161,15 @@
 }
 
 .enemy-emoji {
-    font-size: 4rem;
+    font-size: 3.5rem;
     line-height: 1;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
     animation: enemyIdle 3s ease-in-out infinite;
 }
 
 .enemy-image {
-    max-height: 350px;
-    /* 固定最大高さ */
+    max-height: 100px;
+    /* 敵キャラも小さく */
     width: auto;
     max-width: 100%;
     object-fit: contain;
@@ -517,6 +517,80 @@
 
 .damage-number.block {
     color: var(--accent-blue);
+}
+
+/* 毒ダメージ（紫フロート） */
+.damage-number.poison {
+    color: hsl(280, 80%, 65%);
+    text-shadow: 0 0 8px hsla(280, 80%, 65%, 0.6), 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: var(--font-xl);
+}
+
+/* とげ反撃ダメージ（緑フロート） */
+.damage-number.thorn {
+    color: hsl(150, 70%, 55%);
+    text-shadow: 0 0 8px hsla(150, 70%, 55%, 0.5), 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: var(--font-xl);
+}
+
+/* 毒ヒットアニメーション（紫パルス） */
+@keyframes poisonPulse {
+    0% {
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    }
+
+    50% {
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) brightness(0.7) hue-rotate(60deg);
+    }
+
+    100% {
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    }
+}
+
+.anim-poison-hit {
+    animation: poisonPulse 0.5s ease !important;
+}
+
+/* プレイヤーステータスエリア */
+.player-status,
+.enemy-status {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    min-height: 24px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* バフ/デバフバッジ */
+.status-badge {
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-glass);
+    font-weight: 600;
+    font-size: var(--font-xs);
+}
+
+.status-buff {
+    border: 1px solid hsla(150, 70%, 50%, 0.5);
+    color: var(--accent-green);
+}
+
+.status-debuff {
+    border: 1px solid hsla(0, 80%, 58%, 0.5);
+    color: var(--accent-red);
+}
+
+.status-poison {
+    border: 1px solid hsla(280, 80%, 65%, 0.5);
+    color: hsl(280, 80%, 65%);
+}
+
+.status-thorn {
+    border: 1px solid hsla(150, 70%, 55%, 0.5);
+    color: hsl(150, 70%, 55%);
 }
 
 /* レスポンシブ（短い画面） */
