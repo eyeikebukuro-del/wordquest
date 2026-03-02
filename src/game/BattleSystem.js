@@ -1,7 +1,7 @@
 // バトルシステム
 // ターン制バトルの進行管理・カード使用時の英単語出題フローを制御する
 
-import { CARD_TYPES, QUIZ_MODES, addCardXP, DeckManager } from './CardSystem.js';
+import { CARD_TYPES, QUIZ_MODES, addCardXP, DeckManager, CARD_DEFINITIONS } from './CardSystem.js';
 import { ENEMY_INTENTS, getEnemyIntent, advanceEnemyPattern } from './EnemySystem.js';
 
 /**
@@ -70,6 +70,14 @@ export class BattleSystem {
         this.awakeningMultiplier = 1.0;
         /** 智恵スコア（難易度に応じたボーナス） */
         this.wisdomScore = 0;
+        /** ちくせきの力：バトル内永続ダメージバフ（スタック加算） */
+        this.damagePermanentBuff = 0;
+        /** とげのよろい：今ターンの反撃ダメージ（1ヒットごとに発動） */
+        this.thornArmorDamage = 0;
+        /** ウィークポイント：次の攻撃を2倍にするフラグ */
+        this.nextAttackDoubled = false;
+        /** ミラーコピー用：最後に使ったカードの定義ID */
+        this.lastCardId = null;
 
         // 次の敵の行動を計算
         this.nextEnemyIntent = getEnemyIntent(enemy);
@@ -221,7 +229,7 @@ export class BattleSystem {
 
             // 進化する古文書：マルチプライヤー上昇
             if (this.enemy.id === 'evolving_archive') {
-                this.awakeningMultiplier *= 1.2;
+                this.awakeningMultiplier *= 1.15;
                 this.log.push(`覚醒する知性！ ダメージ倍率: ${this.awakeningMultiplier.toFixed(2)}倍`);
             }
 
@@ -302,6 +310,11 @@ export class BattleSystem {
         if (card.baseDamage !== undefined) {
             let damage = this.scaling.calculateDamage(card);
 
+            // バトル永続バフ（ちくせきの力）を加算
+            if (this.damagePermanentBuff > 0) {
+                damage += this.damagePermanentBuff;
+            }
+
             // 覚醒する知性マルチプライヤー適用
             if (this.awakeningMultiplier > 1.0) {
                 damage = Math.ceil(damage * this.awakeningMultiplier);
@@ -312,22 +325,52 @@ export class BattleSystem {
                 damage += card.comboBonus;
             }
 
-            // 新シナジー：コンボ・ブレード（コンボ数×5）
+            // コンボ・ブレード（コンボ数×倍率）
             if (card.comboMultiplierBonus && this.scaling.comboCount > 0) {
                 damage += this.scaling.comboCount * card.comboMultiplierBonus;
             }
 
-            // 新シナジー：長文バースト（文字数×3）
+            // 長文バースト（文字数×係数）
             if (card.lengthSynergy && this.currentQuiz && this.currentQuiz.word.english) {
                 damage += this.currentQuiz.word.english.length * card.lengthSynergy;
-                // ブロックも文字数分追加
                 const blockAmount = this.currentQuiz.word.english.length * card.lengthSynergy;
                 this.playerBlock += blockAmount;
                 result.effects.push({ type: 'block', value: blockAmount });
                 if (window.sm) window.sm.playBlock();
             }
 
-            // 敵のブロックを計算
+            // ソウルブレード：このバトルの正解数×2の追加ダメージ
+            if (card.soulBlade) {
+                const bonus = this.correctCount * 2;
+                damage += bonus;
+                result.effects.push({ type: 'soul_bonus', value: bonus });
+            }
+
+            // いかりの炎：失ったHP÷5の追加ダメージ
+            if (card.rageFlame) {
+                const lostHp = this.player.maxHp - this.player.hp;
+                const bonus = Math.floor(lostHp / 5);
+                damage += bonus;
+                result.effects.push({ type: 'rage_bonus', value: bonus });
+            }
+
+            // うずしお：手札の枚数×2の追加ダメージ
+            if (card.vortex) {
+                // 自分自身は手札の外なので手札枚数そのまま使う
+                const handCount = this.deck.hand.length;
+                const bonus = handCount * 2;
+                damage += bonus;
+                result.effects.push({ type: 'vortex_bonus', value: bonus, hand: handCount });
+            }
+
+            // ウィークポイント：次の攻撃2倍フラグ適用
+            if (this.nextAttackDoubled) {
+                damage *= 2;
+                this.nextAttackDoubled = false;
+                result.effects.push({ type: 'weak_point_triggered' });
+            }
+
+            // 敵のブロックを計算してダメージ適用
             const actualDamage = Math.max(0, damage - this.enemy.block);
             this.enemy.block = Math.max(0, this.enemy.block - damage);
             this.enemy.hp = Math.max(0, this.enemy.hp - actualDamage);
@@ -342,6 +385,15 @@ export class BattleSystem {
             }
 
             result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
+
+            // ゆきだるま：使用後にbaseDamageを永続+3
+            if (card.snowball) {
+                card.baseDamage += 3;
+                result.effects.push({ type: 'snowball_grow', newDamage: card.baseDamage });
+            }
+
+            // ミラーコピー使用後のlastCardId更新（攻撃カードのみ記録）
+            if (!card.mirrorCopy) this.lastCardId = card.id;
         }
 
         // 防御
@@ -350,6 +402,12 @@ export class BattleSystem {
             this.playerBlock += block;
             if (window.sm) window.sm.playBlock();
             result.effects.push({ type: 'block', value: block });
+        }
+
+        // とげのよろい：このターン中の敵ヒット1回ごとに反撃ダメージを設定
+        if (card.thornArmor) {
+            this.thornArmorDamage = card.thornArmor;
+            result.effects.push({ type: 'thorn_armor', value: card.thornArmor });
         }
 
         // 回復
@@ -390,10 +448,10 @@ export class BattleSystem {
             result.effects.push({ type: 'poison', value: card.poison });
         }
 
-        // 新シナジー：毒の触媒（毒を2倍にする）
+        // 毒の触媒（毒を2倍にする）
         if (card.catalyst) {
             if (this.enemyPoison > 0) {
-                if (window.sm) window.sm.playPoison(); // SE再生
+                if (window.sm) window.sm.playPoison();
                 const addedPoison = this.enemyPoison;
                 this.enemyPoison *= 2;
                 result.effects.push({ type: 'poison_catalyst', value: addedPoison });
@@ -402,10 +460,61 @@ export class BattleSystem {
             }
         }
 
-        // 元の触媒の後に毒のpushが残っていた不自然な記述（バグの原因にもなる）があったため修正
-        // ここでの push({type: 'poison'}) は二重に記録されてしまうため不要であれば削除するが、念のため既存に合わせて残す場合でも
-        // 先程の部分ですでに poison 処理は終わっているので削除。
-        // （元は354行目の if(card.poison) で処理済み）
+        // ちくせきの力：バトル内永続攻撃バフをスタック加算
+        if (card.accumulate) {
+            this.damagePermanentBuff += card.accumulate;
+            result.effects.push({ type: 'accumulate', total: this.damagePermanentBuff });
+            this.log.push(`ちくせきの力！ 永続ダメージバフ合計: +${this.damagePermanentBuff}`);
+        }
+
+        // ウィークポイント：敵の毒が3以上なら次の攻撃2倍フラグをセット
+        if (card.weakPoint) {
+            if (this.enemyPoison >= 3) {
+                this.nextAttackDoubled = true;
+                result.effects.push({ type: 'weak_point_set' });
+                this.log.push('ウィークポイント！ 次の攻撃ダメージが2倍になる！');
+            } else {
+                result.effects.push({ type: 'weak_point_fail', poison: this.enemyPoison });
+                this.log.push(`ウィークポイント不発（毒が${this.enemyPoison}、3以上必要）`);
+            }
+        }
+
+        // ミラーコピー：最後に使ったカードを再実行
+        if (card.mirrorCopy) {
+            if (this.lastCardId) {
+                // 静的インポート済みのCARD_DEFINITIONSを参照（awaitなし）
+                const lastDef = CARD_DEFINITIONS[this.lastCardId];
+                if (lastDef) {
+                    // 攻撃カードのダメージのみコピー（副作用系は除く）
+                    let copyDamage = (lastDef.baseDamage || 0) + this.damagePermanentBuff;
+                    if (this.nextAttackDoubled) {
+                        copyDamage *= 2;
+                        this.nextAttackDoubled = false;
+                    }
+                    if (copyDamage > 0) {
+                        const actual = Math.max(0, copyDamage - this.enemy.block);
+                        this.enemy.block = Math.max(0, this.enemy.block - copyDamage);
+                        this.enemy.hp = Math.max(0, this.enemy.hp - actual);
+                        if (!this.maxDamageThisBattle) this.maxDamageThisBattle = 0;
+                        this.maxDamageThisBattle = Math.max(this.maxDamageThisBattle, copyDamage);
+                        if (window.sm) window.sm.playHeavyAttack();
+                        result.effects.push({ type: 'mirror_damage', value: copyDamage, actual, copied: this.lastCardId });
+                        this.log.push(`ミラーコピー：「${lastDef.name}」を複製！ ${copyDamage}ダメージ！`);
+                    } else if (lastDef.poison) {
+                        this.enemyPoison += lastDef.poison;
+                        result.effects.push({ type: 'mirror_poison', value: lastDef.poison });
+                        this.log.push(`ミラーコピー：毒${lastDef.poison}を複製！`);
+                    } else {
+                        result.effects.push({ type: 'mirror_no_effect' });
+                    }
+                } else {
+                    result.effects.push({ type: 'mirror_no_card' });
+                }
+            } else {
+                result.effects.push({ type: 'mirror_no_card' });
+                this.log.push('ミラーコピー：コピーするカードがない！');
+            }
+        }
 
         // エナジーボーナス
         if (card.energyBonus) {
@@ -416,6 +525,11 @@ export class BattleSystem {
         // 持続ブロック
         if (card.persistent) {
             this.persistentBlock += card.persistBlock;
+        }
+
+        // スキルカード以外のlastCardId更新
+        if (card.type !== 'skill' && !card.mirrorCopy) {
+            this.lastCardId = card.id;
         }
 
         return result;
@@ -495,11 +609,21 @@ export class BattleSystem {
                 else if (window.sm && actualDamage <= 0) window.sm.playBlock();
 
                 result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
+
+                // とげのよろい：1ヒットごとに反撃ダメージ
+                if (this.thornArmorDamage > 0) {
+                    const thornActual = Math.max(0, this.thornArmorDamage - this.enemy.block);
+                    this.enemy.block = Math.max(0, this.enemy.block - this.thornArmorDamage);
+                    this.enemy.hp = Math.max(0, this.enemy.hp - thornActual);
+                    result.effects.push({ type: 'thorn_counter', value: this.thornArmorDamage, actual: thornActual });
+                    this.log.push(`とげのよろい！ 反撃 ${this.thornArmorDamage}ダメージ！`);
+                }
                 break;
             }
 
             case ENEMY_INTENTS.MULTI_ATTACK: {
                 let totalActual = 0;
+                let thornTotalCounter = 0;
                 for (let i = 0; i < intent.hits; i++) {
                     let damage = intent.damage;
                     if (this.enemyDebuffs.weakened) {
@@ -515,8 +639,20 @@ export class BattleSystem {
                     else if (window.sm && actualDamage <= 0) setTimeout(() => window.sm.playBlock(), i * 200);
 
                     totalActual += actualDamage;
+
+                    // とげのよろい：マルチヒット1回ごとに反撃ダメージ
+                    if (this.thornArmorDamage > 0) {
+                        const thornActual = Math.max(0, this.thornArmorDamage - this.enemy.block);
+                        this.enemy.block = Math.max(0, this.enemy.block - this.thornArmorDamage);
+                        this.enemy.hp = Math.max(0, this.enemy.hp - thornActual);
+                        thornTotalCounter += thornActual;
+                    }
                 }
                 result.effects.push({ type: 'multi_damage', hits: intent.hits, perHit: intent.damage, total: totalActual });
+                if (thornTotalCounter > 0) {
+                    result.effects.push({ type: 'thorn_counter_multi', hits: intent.hits, perHit: this.thornArmorDamage, total: thornTotalCounter });
+                    this.log.push(`とげのよろい！ ${intent.hits}ヒット分反撃！ 合計 ${thornTotalCounter}ダメージ！`);
+                }
                 break;
             }
 
@@ -564,6 +700,9 @@ export class BattleSystem {
         // ブロックをリセット（持続ブロックは残す）
         this.playerBlock = this.persistentBlock;
         this.persistentBlock = 0;
+
+        // とげのよろいは1ターン限定なのでリセット
+        this.thornArmorDamage = 0;
 
         // デバフのターン経過
         for (const [key, debuff] of Object.entries(this.enemyDebuffs)) {

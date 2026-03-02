@@ -31,7 +31,7 @@ export const CARD_DEFINITIONS = {
         cost: 1,
         baseDamage: 6,
         emoji: '⚔️',
-        description: '6ダメージを与える',
+        description: '⚔️ 6ダメージ！ちからいっぱいきりつける！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'common',
         color: '#ff6b6b'
@@ -43,7 +43,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseDamage: 14,
         emoji: '🔥',
-        description: '14ダメージを与える',
+        description: '🔥 14ダメージ！燃えさかる火の玉をなげつける！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'uncommon',
         color: '#ff4500'
@@ -56,7 +56,7 @@ export const CARD_DEFINITIONS = {
         baseDamage: 5,
         hits: 2,
         emoji: '⚡',
-        description: '5ダメージを2回与える',
+        description: '⚡ 5ダメージを2回！クイズを2問とくよ！',
         quizMode: QUIZ_MODES.CHOICE_DOUBLE,
         rarity: 'uncommon',
         color: '#ffa500'
@@ -68,7 +68,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseDamage: 10,
         emoji: '⛈️',
-        description: '10ダメージ。コンボ中+5',
+        description: '⛈️ 10ダメージ！コンボ中はさらに+5！',
         quizMode: QUIZ_MODES.CHOICE,
         comboBonus: 5,
         rarity: 'uncommon',
@@ -81,7 +81,7 @@ export const CARD_DEFINITIONS = {
         cost: 1,
         baseDamage: 4,
         emoji: '🧊',
-        description: '4ダメージ。敵の攻撃力-2（1ターン）',
+        description: '🧊 4ダメージ＋敵の攻撃力を2さげる（1ターン）',
         quizMode: QUIZ_MODES.CHOICE,
         debuff: { type: 'weakened', value: 2, turns: 1 },
         rarity: 'common',
@@ -94,7 +94,7 @@ export const CARD_DEFINITIONS = {
         cost: 3,
         baseDamage: 24,
         emoji: '☄️',
-        description: '24ダメージを与える',
+        description: '☄️ 24ダメージ！空から岩をおとす大技！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'rare',
         color: '#e056fd'
@@ -106,7 +106,7 @@ export const CARD_DEFINITIONS = {
         cost: 0,
         baseDamage: 3,
         emoji: '💨',
-        description: '3ダメージ。コスト0',
+        description: '💨 3ダメージ！コスト0でつかえる！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'common',
         color: '#a8e6cf'
@@ -118,7 +118,7 @@ export const CARD_DEFINITIONS = {
         cost: 1,
         baseDamage: 3,
         emoji: '🗡️',
-        description: '3ダメージ+毒3（毎ターン3ダメージ）',
+        description: '🗡️ 3ダメージ＋毒3！毒は毎ターン敵にダメージ！',
         quizMode: QUIZ_MODES.CHOICE,
         poison: 3,
         rarity: 'uncommon',
@@ -131,9 +131,9 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseDamage: 10,
         emoji: '🔪',
-        description: '10ダメージ。コンボ数×5の追加ダメージ',
+        description: '🔪 10ダメージ＋コンボ数×5の追加ダメージ！',
         quizMode: QUIZ_MODES.CHOICE,
-        comboMultiplierBonus: 5, // BattleSystem側で特別処理
+        comboMultiplierBonus: 5,
         rarity: 'rare',
         color: '#ff9f43'
     },
@@ -144,11 +144,66 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseDamage: 0,
         emoji: '📚',
-        description: '英単語の文字数×3のダメージとブロック',
+        description: '📚 英単語の文字数×3のダメージとブロック！',
         quizMode: QUIZ_MODES.CHOICE,
-        lengthSynergy: 3, // BattleSystem側で特別処理
+        lengthSynergy: 3,
         rarity: 'rare',
         color: '#5f27cd'
+    },
+
+    // ── 新・攻撃カード ──
+
+    soul_blade: {
+        id: 'soul_blade',
+        name: 'ソウルブレード',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 4,
+        emoji: '💀',
+        description: '💀 4ダメージ＋このバトルの正解数×2のダメージ！じわじわ強くなる！',
+        quizMode: QUIZ_MODES.CHOICE,
+        soulBlade: true, // BattleSystem側で特別処理
+        rarity: 'rare',
+        color: '#8e44ad'
+    },
+    rage_flame: {
+        id: 'rage_flame',
+        name: 'いかりの炎',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 3,
+        emoji: '😡',
+        description: '😡 3ダメージ＋失ったHP÷5のダメージ！ピンチほど燃え上がる！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rageFlame: true, // BattleSystem側で特別処理
+        rarity: 'uncommon',
+        color: '#e74c3c'
+    },
+    snowball: {
+        id: 'snowball',
+        name: 'ゆきだるま',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 1,
+        emoji: '⛄',
+        description: '⛄ 初めはたった1ダメージ！でも使うたびに永久+3！雪だるま式に強くなる！',
+        quizMode: QUIZ_MODES.CHOICE,
+        snowball: true, // BattleSystem側で特別処理
+        rarity: 'rare',
+        color: '#74b9ff'
+    },
+    vortex: {
+        id: 'vortex',
+        name: 'うずしお',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 2,
+        emoji: '🌊',
+        description: '🌊 2ダメージ＋手札の枚数×2のダメージ！カードを引いてから使おう！',
+        quizMode: QUIZ_MODES.CHOICE,
+        vortex: true, // BattleSystem側で特別処理
+        rarity: 'uncommon',
+        color: '#0984e3'
     },
 
     // === 防御カード ===
@@ -159,7 +214,7 @@ export const CARD_DEFINITIONS = {
         cost: 1,
         baseBlock: 5,
         emoji: '🛡️',
-        description: '5ブロックを得る',
+        description: '🛡️ 5ブロック！敵のこうげきをふせぐ！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'common',
         color: '#74b9ff'
@@ -171,7 +226,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseBlock: 12,
         emoji: '🏰',
-        description: '12ブロックを得る',
+        description: '🏰 12ブロック！鉄の壁で守りをかためる！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'uncommon',
         color: '#636e72'
@@ -184,7 +239,7 @@ export const CARD_DEFINITIONS = {
         baseBlock: 3,
         baseDamage: 3,
         emoji: '🔄',
-        description: '3ブロック+3ダメージ',
+        description: '🔄 3ブロック＋3ダメージ！守りながらやりかえす！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'uncommon',
         color: '#fd79a8'
@@ -196,12 +251,25 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         baseBlock: 8,
         emoji: '✨',
-        description: '8ブロック。次のターンも4ブロック残る',
+        description: '✨ 8ブロック！つぎのターンも4ブロックのこる！',
         quizMode: QUIZ_MODES.CHOICE,
         persistent: true,
         persistBlock: 4,
         rarity: 'rare',
         color: '#00cec9'
+    },
+    thorn_armor: {
+        id: 'thorn_armor',
+        name: 'とげのよろい',
+        type: CARD_TYPES.DEFENSE,
+        cost: 1,
+        baseBlock: 4,
+        emoji: '🦔',
+        description: '🦔 4ブロック！このターン、敵が攻撃してくるたびに3ダメージ返す！',
+        quizMode: QUIZ_MODES.CHOICE,
+        thornArmor: 3, // BattleSystem側で1ヒットごとに反撃
+        rarity: 'uncommon',
+        color: '#55efc4'
     },
 
     // === スキルカード ===
@@ -212,7 +280,7 @@ export const CARD_DEFINITIONS = {
         cost: 1,
         healAmount: 5,
         emoji: '💚',
-        description: 'HPを5回復する',
+        description: '💚 HPを5かいふく！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'common',
         color: '#00b894'
@@ -223,7 +291,7 @@ export const CARD_DEFINITIONS = {
         type: CARD_TYPES.SKILL,
         cost: 1,
         emoji: '💪',
-        description: '次の攻撃のダメージ+50%',
+        description: '💪 つぎの攻撃のダメージが+50%！',
         quizMode: QUIZ_MODES.CHOICE,
         buff: { type: 'strength', value: 1.5, turns: 1 },
         rarity: 'uncommon',
@@ -236,7 +304,7 @@ export const CARD_DEFINITIONS = {
         cost: 1,
         drawCount: 2,
         emoji: '🃏',
-        description: 'カードを2枚引く',
+        description: '🃏 カードを2まいひく！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'uncommon',
         color: '#dfe6e9'
@@ -247,7 +315,7 @@ export const CARD_DEFINITIONS = {
         type: CARD_TYPES.SKILL,
         cost: 0,
         emoji: '🔮',
-        description: '次のターン、エナジー+1',
+        description: '🔮 つぎのターン、エナジーが+1！コスト0！',
         quizMode: QUIZ_MODES.CHOICE,
         buff: { type: 'next_turn_energy', value: 1, turns: 1 },
         rarity: 'rare',
@@ -260,7 +328,7 @@ export const CARD_DEFINITIONS = {
         cost: 2,
         healAmount: 12,
         emoji: '💖',
-        description: 'HPを12回復する',
+        description: '💖 HPを12かいふく！ピンチのときのたのもしい味方！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'rare',
         color: '#fd79a8'
@@ -271,12 +339,51 @@ export const CARD_DEFINITIONS = {
         type: CARD_TYPES.SKILL,
         cost: 2,
         emoji: '🧪',
-        description: '毒5を与え、その後敵の毒を2倍にする',
+        description: '🧪 毒5を与えて、さらに敵の毒を2倍に！毒デッキの必殺技！',
         quizMode: QUIZ_MODES.CHOICE,
         poison: 5,
-        catalyst: true, // BattleSystem側で特別処理
+        catalyst: true,
         rarity: 'rare',
         color: '#8e44ad'
+    },
+
+    // ── 新・スキルカード ──
+
+    accumulate: {
+        id: 'accumulate',
+        name: 'ちくせきの力',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        emoji: '🌀',
+        description: '🌀 このバトル中、全攻撃のダメージが永久に+3！何回でも重ねられる！',
+        quizMode: QUIZ_MODES.CHOICE,
+        accumulate: 3, // BattleSystem側でdamagePermanentBuff に加算
+        rarity: 'rare',
+        color: '#6c5ce7'
+    },
+    weak_point: {
+        id: 'weak_point',
+        name: 'ウィークポイント',
+        type: CARD_TYPES.SKILL,
+        cost: 0,
+        emoji: '🎯',
+        description: '🎯 敵の毒が3以上なら、つぎの攻撃が2倍に！コスト0！',
+        quizMode: QUIZ_MODES.CHOICE,
+        weakPoint: true, // BattleSystem側でnextAttackDoubled フラグ
+        rarity: 'uncommon',
+        color: '#00b894'
+    },
+    mirror_copy: {
+        id: 'mirror_copy',
+        name: 'ミラーコピー',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        emoji: '🪞',
+        description: '🪞 さっきつかったカードをもう1回！どんな大技もコピー！',
+        quizMode: QUIZ_MODES.CHOICE,
+        mirrorCopy: true, // BattleSystem側でlastCardUsedを再実行
+        rarity: 'rare',
+        color: '#e17055'
     }
 };
 
@@ -330,6 +437,8 @@ export function addCardXP(card) {
         if (card.poison) card.poison = Math.ceil(card.poison * 1.4);
         if (card.comboBonus) card.comboBonus = Math.ceil(card.comboBonus * 1.3);
         if (card.debuff) card.debuff = { ...card.debuff, value: card.debuff.value + 1 };
+        if (card.thornArmor) card.thornArmor = Math.ceil(card.thornArmor * 1.3);
+        if (card.accumulate) card.accumulate += 1;
         if (card.buff) {
             if (card.buff.type === 'strength') {
                 // パワーアップ: 倍率を+0.25ずつ上昇
@@ -356,51 +465,67 @@ export function getCardDescription(card) {
     switch (card.id) {
         // === 攻撃カード ===
         case 'slash':
-            return `${card.baseDamage}ダメージを与える`;
+            return `⚔️ ${card.baseDamage}ダメージ！ちからいっぱいきりつける！`;
         case 'fireball':
-            return `${card.baseDamage}ダメージを与える`;
+            return `🔥 ${card.baseDamage}ダメージ！燃えさかる火の玉！`;
         case 'double_strike':
-            return `${card.baseDamage}ダメージを${card.hits}回与える`;
+            return `⚡ ${card.baseDamage}ダメージを${card.hits}回！クイズを${card.hits}問いる！`;
         case 'thunder':
-            return `${card.baseDamage}ダメージ。コンボ中+${card.comboBonus}`;
+            return `⛈️ ${card.baseDamage}ダメージ！コンボ中はさらに+${card.comboBonus}！`;
         case 'ice_lance':
-            return `${card.baseDamage}ダメージ。敵の攻撃力-${card.debuff.value}（${card.debuff.turns}ターン）`;
+            return `🧊 ${card.baseDamage}ダメージ＋敵の攻撃力を${card.debuff.value}さげる（${card.debuff.turns}ターン）`;
         case 'meteor':
-            return `${card.baseDamage}ダメージを与える`;
+            return `☄️ ${card.baseDamage}ダメージ！空から岩をおとす大技！`;
         case 'quick_slash':
-            return `${card.baseDamage}ダメージ。コスト0`;
+            return `💨 ${card.baseDamage}ダメージ！コスト0でつかえる！`;
         case 'poison_blade':
-            return `${card.baseDamage}ダメージ+毒${card.poison}（毎ターン${card.poison}ダメージ）`;
+            return `🗡️ ${card.baseDamage}ダメージ＋毒${card.poison}！毒は毎ターン敵にダメージ！`;
         case 'combo_blade':
-            return `${card.baseDamage}ダメージ。コンボ数×${card.comboMultiplierBonus}の追加ダメージ`;
+            return `🔪 ${card.baseDamage}ダメージ＋コンボ数×${card.comboMultiplierBonus}の追加ダメージ！`;
         case 'longword_burst':
-            return `英単語の文字数×${card.lengthSynergy}のダメージとブロック`;
+            return `📚 英単語の文字数×${card.lengthSynergy}のダメージとブロック！`;
+        case 'soul_blade':
+            return `💀 ${card.baseDamage}ダメージ＋このバトルの正解数×2のダメージ！じわじわ強くなる！`;
+        case 'rage_flame':
+            return `😡 ${card.baseDamage}ダメージ＋失ったHP÷5のダメージ！ピンチほど燃えあがる！`;
+        case 'snowball':
+            return `⛄ ${card.baseDamage}ダメージ！使うたびに永久+3！（現在${card.baseDamage}→次は${card.baseDamage + 3}）`;
+        case 'vortex':
+            return `🌊 ${card.baseDamage}ダメージ＋手札の枚数×2のダメージ！カードを引いてから使おう！`;
 
         // === 防御カード ===
         case 'shield':
-            return `${card.baseBlock}ブロックを得る`;
+            return `🛡️ ${card.baseBlock}ブロック！敵のこうげきをふせぐ！`;
         case 'iron_wall':
-            return `${card.baseBlock}ブロックを得る`;
+            return `🏰 ${card.baseBlock}ブロック！鉄の壁で守りをかためる！`;
         case 'counter':
-            return `${card.baseBlock}ブロック+${card.baseDamage}ダメージ`;
+            return `🔄 ${card.baseBlock}ブロック＋${card.baseDamage}ダメージ！守りながらやりかえす！`;
         case 'barrier':
-            return `${card.baseBlock}ブロック。次のターンも${card.persistBlock}ブロック残る`;
+            return `✨ ${card.baseBlock}ブロック！つぎのターンも${card.persistBlock}ブロックのこる！`;
+        case 'thorn_armor':
+            return `🦔 ${card.baseBlock}ブロック！このターン、敵が攻撃してくるたびに${card.thornArmor}ダメージ返す！`;
 
         // === スキルカード ===
         case 'heal':
-            return `HPを${card.healAmount}回復する` + suffix;
+            return `💚 HPを${card.healAmount}かいふく！` + suffix;
         case 'power_up': {
             const pct = Math.round((card.buff.value - 1) * 100);
-            return `次の攻撃のダメージ+${pct}%` + suffix;
+            return `💪 つぎの攻撃のダメージが+${pct}%！` + suffix;
         }
         case 'draw_card':
-            return `カードを${card.drawCount}枚引く` + suffix;
+            return `🃏 カードを${card.drawCount}まいひく！` + suffix;
         case 'focus':
-            return `次のターン、エナジー+${card.buff.value}` + suffix;
+            return `🔮 つぎのターン、エナジー+${card.buff.value}！コスト0！` + suffix;
         case 'mega_heal':
-            return `HPを${card.healAmount}回復する` + suffix;
+            return `💖 HPを${card.healAmount}かいふく！ピンチのときのたのもしい味方！` + suffix;
         case 'poison_catalyst':
-            return `毒${card.poison}を与え、その後敵の毒を2倍にする` + suffix;
+            return `🧪 毒${card.poison}を与えて、敵の毒を2倍に！` + suffix;
+        case 'accumulate':
+            return `🌀 全攻撃ダメージが永久+${card.accumulate}！今すぐ重ねよう！` + suffix;
+        case 'weak_point':
+            return `🎯 敵の毒が3以上なら、つぎの攻撃が2倍！コスト0！` + suffix;
+        case 'mirror_copy':
+            return `🪞 さっきつかったカードをもう1回！` + suffix;
 
         default:
             return card.description;

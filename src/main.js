@@ -51,13 +51,16 @@ function createCardHTML(card, isLarge = false, clickable = true) {
     : card.type === CARD_TYPES.DEFENSE ? 'defense' : 'skill';
   const sizeClass = isLarge ? 'card-large' : '';
   const disabledClass = (!clickable) ? 'disabled' : '';
+  // レアリティCSSクラスを追加（rare/uncommon/common）
+  const rarityClass = card.rarity ? `rarity-${card.rarity}` : '';
 
   return `
-    <div class="card ${typeClass} ${sizeClass} ${disabledClass}" data-instance-id="${card.instanceId}" data-card-id="${card.id}">
+    <div class="card ${typeClass} ${sizeClass} ${disabledClass} ${rarityClass}" data-instance-id="${card.instanceId}" data-card-id="${card.id}" data-rarity="${card.rarity || 'common'}">
       <div class="card-cost">${card.cost}</div>
       <div class="card-emoji">${card.emoji}</div>
       <div class="card-name">${card.name}</div>
       <div class="card-desc">${getCardDescription(card)}</div>
+      ${card.rarity === 'rare' ? '<div class="card-rarity-badge">✨ RARE</div>' : ''}
       ${card.level > 1 ? `<div class="card-level">Lv.${card.level}</div>` : ''}
     </div>
   `;
