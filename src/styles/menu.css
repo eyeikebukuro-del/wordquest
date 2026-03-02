@@ -211,6 +211,23 @@
     line-height: 1;
 }
 
+.char-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 100%;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.char-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
 .char-name {
     font-size: var(--font-md);
     font-weight: 800;

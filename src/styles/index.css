@@ -467,8 +467,8 @@ body {
 
 .card-level {
   position: absolute;
-  bottom: -4px;
-  right: -4px;
+  bottom: 4px;
+  right: 4px;
   font-size: 0.55rem;
   background: var(--accent-purple);
   color: white;

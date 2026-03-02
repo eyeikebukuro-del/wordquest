@@ -13,11 +13,11 @@
   <link
     href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&family=Outfit:wght@400;600;800&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="/src/styles/index.css?v=1.2" />
-  <link rel="stylesheet" href="/src/styles/battle.css?v=1.2" />
-  <link rel="stylesheet" href="/src/styles/map.css?v=1.2" />
-  <link rel="stylesheet" href="/src/styles/menu.css?v=1.2" />
-  <link rel="stylesheet" href="/src/styles/animations.css?v=1.2" />
+  <link rel="stylesheet" href="/src/styles/index.css" />
+  <link rel="stylesheet" href="/src/styles/battle.css" />
+  <link rel="stylesheet" href="/src/styles/map.css" />
+  <link rel="stylesheet" href="/src/styles/menu.css" />
+  <link rel="stylesheet" href="/src/styles/animations.css" />
 </head>
 
 <body>
@@ -55,7 +55,7 @@
         <div class="char-grid">
           <!-- 解放済（ワードマスター） -->
           <div class="char-card active" data-char="wordmaster">
-            <div class="char-emoji">🧙‍♂️</div>
+            <div class="char-image"><img src="./characters/wordmaster.png" alt="ワードマスター"></div>
             <div class="char-name">ワードマスター</div>
             <div class="char-desc">えいごの まほうつかい。<br>バランスがよく あつかいやすい。</div>
           </div>
@@ -119,8 +119,10 @@
         <!-- プレイヤーエリア（左） -->
         <div class="player-area">
           <div class="player-status" id="player-status"></div>
-          <div class="player-character">
-            <span class="player-emoji">🧙‍♂️</span>
+          <div class="player-character" id="player-character">
+            <img class="player-image" id="player-image" src="./characters/wordmaster.png" alt="プレイヤー"
+              style="display:none;" />
+            <span class="player-emoji" id="player-emoji">🧙‍♂️</span>
             <span class="player-name">プレイヤー</span>
           </div>
           <div class="player-hp-container">
@@ -136,6 +138,7 @@
         <div class="enemy-area">
           <div class="enemy-intent" id="enemy-intent"></div>
           <div class="enemy-character" id="enemy-character">
+            <img class="enemy-image" id="enemy-image" src="" alt="敵" style="display:none;" />
             <span class="enemy-emoji" id="enemy-emoji">🟢</span>
             <span class="enemy-name" id="enemy-name">スライム</span>
           </div>
@@ -296,7 +299,7 @@
     </div>
   </div>
 
-  <script type="module" src="/src/main.js?v=1.2"></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>

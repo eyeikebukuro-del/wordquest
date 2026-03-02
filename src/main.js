@@ -262,11 +262,40 @@ function renderBattle() {
     showEnemyTurnEffects(result);
   });
 
+  // プレイヤー表示 (Forcing reload)
+  const playerEmojiEl = document.getElementById('player-emoji');
+  const playerImageEl = document.getElementById('player-image');
+  // ワードマスターの画像を設定
+  const playerHasImage = true;
+  const playerImageSrc = './characters/wordmaster.png';
+
+  if (playerHasImage) {
+    playerImageEl.src = playerImageSrc;
+    playerImageEl.style.display = 'block';
+    playerEmojiEl.style.display = 'none';
+  } else {
+    playerImageEl.style.display = 'none';
+    playerEmojiEl.style.display = 'block';
+  }
+
   // 敵表示
   const enemyEmojiEl = document.getElementById('enemy-emoji');
-  enemyEmojiEl.classList.remove('anim-death', 'anim-hit'); // 前のバトルのアニメーションをリセット
-  enemyEmojiEl.textContent = enemy.emoji;
-  enemyEmojiEl.style.fontSize = enemy.isBoss ? '5rem' : '4rem';
+  const enemyImageEl = document.getElementById('enemy-image');
+
+  enemyEmojiEl.classList.remove('anim-death', 'anim-hit');
+  enemyImageEl.classList.remove('anim-death', 'anim-hit');
+
+  if (enemy.image) {
+    enemyImageEl.src = enemy.image;
+    enemyImageEl.style.display = 'block';
+    enemyEmojiEl.style.display = 'none';
+  } else {
+    enemyImageEl.style.display = 'none';
+    enemyEmojiEl.style.display = 'block';
+    enemyEmojiEl.textContent = enemy.emoji;
+    enemyEmojiEl.style.fontSize = enemy.isBoss ? '5rem' : '4rem';
+  }
+
   document.getElementById('enemy-name').textContent = enemy.name + (enemy.isElite ? ' ⭐' : '');
 
   updateBattleUI();
@@ -555,9 +584,9 @@ function onQuizAnswer(answer, quiz) {
           setTimeout(() => {
             showDamageNumber(eff.actual !== undefined ? eff.actual : eff.value, 'damage', false);
             // 敵ヒットアニメ
-            const enemyEmoji = document.getElementById('enemy-emoji');
-            enemyEmoji.classList.add('anim-hit');
-            setTimeout(() => enemyEmoji.classList.remove('anim-hit'), 400);
+            const hitTarget = game.battle.enemy.image ? document.getElementById('enemy-image') : document.getElementById('enemy-emoji');
+            hitTarget.classList.add('anim-hit');
+            setTimeout(() => hitTarget.classList.remove('anim-hit'), 400);
           }, 300);
         } else if (eff.type === 'block') {
           showDamageNumber(eff.value, 'block', true);
@@ -570,8 +599,8 @@ function onQuizAnswer(answer, quiz) {
 
     // バトル終了チェック
     if (result.battleEnd === 'victory') {
-      const enemyEmoji = document.getElementById('enemy-emoji');
-      enemyEmoji.classList.add('anim-death');
+      const deathTarget = game.battle.enemy.image ? document.getElementById('enemy-image') : document.getElementById('enemy-emoji');
+      deathTarget.classList.add('anim-death');
       setTimeout(() => {
         game.onBattleEnd('victory');
       }, 700);
@@ -663,8 +692,8 @@ function onEndTurn() {
 
   // 毒などで敵が倒れた場合（勝利チェック）
   if (currentBattle.state === BATTLE_STATES.VICTORY) {
-    const enemyEmoji = document.getElementById('enemy-emoji');
-    enemyEmoji.classList.add('anim-death');
+    const deathTarget = game.battle.enemy.image ? document.getElementById('enemy-image') : document.getElementById('enemy-emoji');
+    deathTarget.classList.add('anim-death');
     setTimeout(() => {
       game.onBattleEnd('victory');
     }, 700);

@@ -94,6 +94,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'forest_guardian',
         name: '森のガーディアン',
         emoji: '🌳',
+        image: null,
         baseHp: 55,
         isBoss: true,
         patterns: [
@@ -160,6 +161,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'cave_dragon',
         name: '洞窟ドラゴン',
         emoji: '🐲',
+        image: null,
         baseHp: 80,
         isBoss: true,
         patterns: [
@@ -214,6 +216,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'word_king',
         name: '言葉の魔王',
         emoji: '👑',
+        image: null,
         baseHp: 120,
         isBoss: true,
         patterns: [
@@ -229,6 +232,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'evolving_archive',
         name: '進化する古文書',
         emoji: '📖',
+        image: null,
         baseHp: 150,
         isBoss: true,
         patterns: [
@@ -272,7 +276,8 @@ export function createEnemy(enemyId, scalingFactor = 1.0, isElite = false) {
         buffs: {},
         currentPatternIndex: 0,
         isElite,
-        scalingFactor
+        scalingFactor,
+        image: def.image || null
     };
 }
 

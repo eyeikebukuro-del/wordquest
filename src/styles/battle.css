@@ -98,6 +98,17 @@
     animation: playerIdle 3s ease-in-out infinite;
 }
 
+.player-image {
+    max-height: 250px;
+    /* 固定最大高さ */
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    animation: playerIdle 3s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+
 .player-name {
     font-size: var(--font-sm);
     font-weight: 700;
@@ -154,6 +165,17 @@
     line-height: 1;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
     animation: enemyIdle 3s ease-in-out infinite;
+}
+
+.enemy-image {
+    max-height: 350px;
+    /* 固定最大高さ */
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    animation: enemyIdle 3s ease-in-out infinite;
+    transform-origin: bottom center;
 }
 
 .enemy-name {
