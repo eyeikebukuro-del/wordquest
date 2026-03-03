@@ -54,8 +54,8 @@
     /* キャラクターを下揃えにするため追加 */
     justify-content: space-around;
     position: relative;
-    padding: 0 20px 5vh 20px;
-    /* さらに配置を下げた（10vh -> 5vh） */
+    padding: 0 20px 8vh 20px;
+    /* HPバー下のバフ/デバフが切れないよう余白確保 */
     gap: 20px;
     width: 100%;
     /* 背景画像をカバー表示するため */
@@ -77,6 +77,8 @@
     width: 45%;
     position: relative;
     /* ダメージ数字の基準位置にするため追加 */
+    padding-bottom: 40px;
+    /* HPバー下のブロック・バフアイコン用の余白 */
 }
 
 .player-character,

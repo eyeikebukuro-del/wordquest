@@ -60,7 +60,7 @@ function createCardHTML(card, isLarge = false, clickable = true) {
       <div class="card-emoji">${card.emoji}</div>
       <div class="card-name">${card.name}</div>
       <div class="card-desc">${getCardDescription(card)}</div>
-      <div class="card-rarity-badge">${card.rarity === 'rare' ? '✨ RARE' : (card.rarity === 'uncommon' ? '✴️ UNCOMMON' : '')}</div>
+      <div class="card-rarity-badge">${card.rarity === 'rare' ? 'R' : (card.rarity === 'uncommon' ? 'U' : 'N')}</div>
       ${card.level > 1 ? `<div class="card-level">Lv.${card.level}</div>` : ''}
     </div>
   `;
