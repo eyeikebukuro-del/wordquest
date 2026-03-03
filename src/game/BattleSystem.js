@@ -538,6 +538,36 @@ export class BattleSystem {
                         hasEffect = true;
                     }
 
+                    // ちくせきの力のコピー
+                    if (lastDef.accumulate) {
+                        this.damagePermanentBuff += lastDef.accumulate;
+                        result.effects.push({ type: 'accumulate', total: this.damagePermanentBuff });
+                        this.log.push(`ミラーコピー：ちくせきの力！ 永続ダメージバフ合計: +${this.damagePermanentBuff}`);
+                        hasEffect = true;
+                    }
+
+                    // 毒の触媒（もうどく2倍化）のコピー
+                    if (lastDef.catalyst) {
+                        if (this.enemyPoison > 0) {
+                            if (window.sm) window.sm.playPoison();
+                            const addedPoison = this.enemyPoison;
+                            this.enemyPoison *= 2;
+                            result.effects.push({ type: 'poison_catalyst', value: addedPoison });
+                            this.log.push(`ミラーコピー：毒の触媒！ 毒が${addedPoison}→${this.enemyPoison}に倍増！`);
+                        }
+                        hasEffect = true;
+                    }
+
+                    // バフのコピー（パワーアップ等）
+                    if (lastDef.buff) {
+                        this.scaling.buffs[lastDef.buff.type] = {
+                            value: lastDef.buff.value,
+                            turns: lastDef.buff.turns
+                        };
+                        result.effects.push({ type: 'buff', buffType: lastDef.buff.type });
+                        hasEffect = true;
+                    }
+
                     if (hasEffect) {
                         this.log.push(`ミラーコピー：「${lastDef.name}」を複製！`);
                     } else {

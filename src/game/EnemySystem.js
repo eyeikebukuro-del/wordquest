@@ -232,7 +232,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'evolving_archive',
         name: '進化する古文書',
         emoji: '📖',
-        image: null,
+        image: './characters/evolving_archive.png',
         baseHp: 150,
         isBoss: true,
         patterns: [
