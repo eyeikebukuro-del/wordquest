@@ -216,7 +216,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'word_king',
         name: '言葉の魔王',
         emoji: '👑',
-        image: null,
+        image: './characters/word_king.png',
         baseHp: 120,
         isBoss: true,
         patterns: [

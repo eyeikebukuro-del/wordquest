@@ -17,6 +17,22 @@ import { SoundManager } from './game/SoundManager.js';
 // ゲームエンジンのインスタンス
 const game = new GameEngine();
 
+// デバッグ用: ボス戦テスト関数
+// コンソールから testBoss('evolving_archive') や testBoss('word_king') で即座にボス戦を開始
+window.testBoss = async (bossId) => {
+  const { createEnemy } = await import('./game/EnemySystem.js');
+  const { BattleSystem } = await import('./game/BattleSystem.js');
+  game.startNewRun();
+  game.currentFloor = 2; // フロア3（塔）の背景を使用
+  const enemy = createEnemy(bossId, 1.0);
+  game.battle = new BattleSystem(
+    game.player, enemy, [...game.playerDeck],
+    game.scaling, game.wordDb, game.spacedRep
+  );
+  game.scaling.comboCount = 0;
+  game.changeScreen('battle');
+};
+
 // オーディオマネージャの設定
 window.sm = new SoundManager();
 
