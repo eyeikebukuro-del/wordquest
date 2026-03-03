@@ -409,7 +409,7 @@ export function createCard(definitionId) {
 
     // スキルカードは使用後に廃棄されることを明記
     if (card.type === CARD_TYPES.SKILL) {
-        card.description += ' 廃棄する。';
+        card.description += '（1回だけ）';
     }
 
     return card;
@@ -467,7 +467,7 @@ export function addCardXP(card) {
  */
 export function getCardDescription(card) {
     // カードIDごとに、現在の数値を反映した説明を生成
-    const suffix = card.type === CARD_TYPES.SKILL ? ' 廃棄する。' : '';
+    const suffix = card.type === CARD_TYPES.SKILL ? '（1回だけ）' : '';
     switch (card.id) {
         // === 攻撃カード ===
         case 'slash':
@@ -475,64 +475,64 @@ export function getCardDescription(card) {
         case 'fireball':
             return `🔥 ${card.baseDamage}ダメージ！燃えさかる火の玉！`;
         case 'double_strike':
-            return `⚡ ${card.baseDamage}ダメージを${card.hits}回！クイズを${card.hits}問いる！`;
+            return `⚡ ${card.baseDamage}ダメージを${card.hits}回！クイズを${card.hits}問とく！`;
         case 'thunder':
-            return `⛈️ ${card.baseDamage}ダメージ！コンボ中はさらに+${card.comboBonus}！`;
+            return `⛈️ ${card.baseDamage}ダメージ！コンボ中はさらに+${card.comboBonus}ダメージ！`;
         case 'ice_lance':
-            return `🧊 ${card.baseDamage}ダメージ＋敵の攻撃力を${card.debuff.value}さげる（${card.debuff.turns}ターン）`;
+            return `🧊 ${card.baseDamage}ダメージ！敵の攻撃力を${card.debuff.value}さげる（${card.debuff.turns}ターン）`;
         case 'meteor':
             return `☄️ ${card.baseDamage}ダメージ！空から岩をおとす大技！`;
         case 'quick_slash':
             return `💨 ${card.baseDamage}ダメージ！コスト0でつかえる！`;
         case 'poison_blade':
-            return `🗡️ ${card.baseDamage}ダメージ＋毒${card.poison}！毒は毎ターン敵にダメージ！`;
+            return `🗡️ ${card.baseDamage}ダメージ＋毒${card.poison}！毒は毎ターンダメージ！`;
         case 'combo_blade':
-            return `🔪 ${card.baseDamage}ダメージ＋コンボ数×${card.comboMultiplierBonus}の追加ダメージ！`;
+            return `🔪 ${card.baseDamage}ダメージ＋コンボ数×${card.comboMultiplierBonus}ダメージ！`;
         case 'longword_burst':
-            return `📚 英単語の文字数×${card.lengthSynergy}のダメージとブロック！`;
+            return `📚 文字数×${card.lengthSynergy}のダメージとブロック！`;
         case 'soul_blade':
-            return `💀 ${card.baseDamage}ダメージ＋このバトルの正解数×2のダメージ！じわじわ強くなる！`;
+            return `💀 ${card.baseDamage}ダメージ！さらに正解数×2ダメージ追加！`;
         case 'rage_flame':
-            return `😡 ${card.baseDamage}ダメージ＋失ったHP÷5のダメージ！ピンチほど燃えあがる！`;
+            return `😡 ${card.baseDamage}ダメージ！さらに、へったHP÷5ダメージ！`;
         case 'snowball':
-            return `⛄ ${card.baseDamage}ダメージ！使うたびに永久+${card.snowballBuff}！（現在${card.baseDamage}→次は${card.baseDamage + card.snowballBuff}）`;
+            return `⛄ ${card.baseDamage}ダメージ！使うたびにずっと+${card.snowballBuff}ダメージ！`;
         case 'vortex':
-            return `🌊 ${card.baseDamage}ダメージ＋手札の枚数×2のダメージ！カードを引いてから使おう！`;
+            return `🌊 ${card.baseDamage}ダメージ！さらに手札のまい数×2ダメージ！`;
 
         // === 防御カード ===
         case 'shield':
-            return `🛡️ ${card.baseBlock}ブロック！敵のこうげきをふせぐ！`;
+            return `🛡️ ${card.baseBlock}ブロック！敵の攻撃をふせぐ！`;
         case 'iron_wall':
-            return `🏰 ${card.baseBlock}ブロック！鉄の壁で守りをかためる！`;
+            return `🏰 ${card.baseBlock}ブロック！鉄の壁でかためる！`;
         case 'counter':
-            return `🔄 ${card.baseBlock}ブロック＋${card.baseDamage}ダメージ！守りながらやりかえす！`;
+            return `🔄 ${card.baseBlock}ブロック！さらに${card.baseDamage}ダメージ！`;
         case 'barrier':
-            return `✨ ${card.baseBlock}ブロック！つぎのターンも${card.persistBlock}ブロックのこる！`;
+            return `✨ ${card.baseBlock}ブロック！次のターンも${card.persistBlock}ブロック残る！`;
         case 'thorn_armor':
-            return `🦔 ${card.baseBlock}ブロック！このターン、敵が攻撃してくるたびに${card.thornArmor}ダメージ返す！`;
+            return `🦔 ${card.baseBlock}ブロック！攻撃されるたびに${card.thornArmor}ダメージ返す！`;
 
         // === スキルカード ===
         case 'heal':
             return `💚 HPを${card.healAmount}かいふく！` + suffix;
         case 'power_up': {
             const pct = Math.round((card.buff.value - 1) * 100);
-            return `💪 つぎの攻撃のダメージが+${pct}%！` + suffix;
+            return `💪 次の攻撃のダメージが+${pct}%！` + suffix;
         }
         case 'draw_card':
-            return `🃏 カードを${card.drawCount}まいひく！` + suffix;
+            return `🃏 カードを${card.drawCount}まい引く！` + suffix;
         case 'focus':
-            return `🔮 つぎのターン、エナジー+${card.buff.value}！コスト0！` + suffix;
+            return `🔮 次のターン、エナジー+${card.buff.value}！コスト0！` + suffix;
         case 'mega_heal':
-            return `💖 HPを${card.healAmount}かいふく！ピンチのときのたのもしい味方！` + suffix;
+            return `💖 HPを${card.healAmount}かいふく！ピンチの味方！` + suffix;
         case 'poison_catalyst':
-            return `🧪 毒${card.poison}を与えて、敵の毒を2倍に！` + suffix;
+            return `🧪 毒${card.poison}を与える！さらに敵の毒を2倍にする！` + suffix;
         case 'accumulate':
-            return `🌀 全攻撃ダメージが永久+${card.accumulate}！今すぐ重ねよう！` + suffix;
+            return `🌀 全攻撃ダメージがずっと+${card.accumulate}！` + suffix;
         case 'weak_point':
-            return `🎯 敵の毒が${card.weakPointThreshold}以上なら、つぎの攻撃が2倍！コスト0！` + suffix;
+            return `🎯 敵の毒が${card.weakPointThreshold}以上なら次の攻撃が2倍！` + suffix;
         case 'mirror_copy': {
             const ratioStr = card.mirrorRatio > 1 ? `（威力${card.mirrorRatio}倍！）` : '';
-            return `🪞 さっきつかったカードをもう1回${ratioStr}！` + suffix;
+            return `🪞 前のカードをもう1回使う${ratioStr}！` + suffix;
         }
 
         default:
