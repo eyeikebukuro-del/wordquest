@@ -93,14 +93,23 @@
     <!-- マップ画面 -->
     <div id="screen-map" class="screen">
       <div class="map-header">
-        <div class="player-status">
-          <span class="status-hp">❤️ <span id="map-hp">60</span>/<span id="map-max-hp">60</span></span>
-          <span class="status-gold">💰 <span id="map-gold">50</span></span>
+        <div class="header-top-row">
+          <div class="player-status">
+            <span class="status-hp">❤️ <span id="map-hp">60</span>/<span id="map-max-hp">60</span></span>
+            <span class="status-gold">💰 <span id="map-gold">50</span></span>
+          </div>
+          <div class="floor-title" id="floor-title">🌲 まよいの森</div>
         </div>
-        <div class="floor-title" id="floor-title">🌲 まよいの森</div>
-        <div class="player-items">
-          <span id="map-relics" class="relics-display"></span>
-          <span id="map-potions" class="potions-display"></span>
+        <div class="header-items-row">
+          <div class="items-section">
+            <span class="items-label">レリック</span>
+            <span id="map-relics" class="relics-display"></span>
+          </div>
+          <span class="items-divider">│</span>
+          <div class="items-section">
+            <span class="items-label">ポーション</span>
+            <span id="map-potions" class="potions-display"></span>
+          </div>
         </div>
       </div>
       <div class="map-container" id="map-container">

@@ -95,10 +95,33 @@ function renderMap() {
   document.getElementById('map-gold').textContent = game.player.gold;
   document.getElementById('deck-count').textContent = game.playerDeck.length;
 
-  // レリック表示
-  document.getElementById('map-relics').innerHTML = game.scaling.relics.map(r => r.emoji).join('');
-  // ポーション表示
-  document.getElementById('map-potions').innerHTML = game.scaling.potions.map(p => p.emoji).join('');
+  // レリック表示（タップ可能な個別要素）
+  const relicsContainer = document.getElementById('map-relics');
+  relicsContainer.innerHTML = '';
+  for (const relic of game.scaling.relics) {
+    const span = document.createElement('span');
+    span.className = 'relic-item';
+    span.textContent = relic.emoji;
+    span.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showItemTooltip(relic.emoji, relic.name, relic.description, e);
+    });
+    relicsContainer.appendChild(span);
+  }
+
+  // ポーション表示（タップ可能な個別要素）
+  const potionsContainer = document.getElementById('map-potions');
+  potionsContainer.innerHTML = '';
+  for (const potion of game.scaling.potions) {
+    const span = document.createElement('span');
+    span.className = 'potion-item';
+    span.textContent = potion.emoji;
+    span.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showItemTooltip(potion.emoji, potion.name, potion.description, e);
+    });
+    potionsContainer.appendChild(span);
+  }
 
   // ノード描画
   const nodesContainer = document.getElementById('map-nodes');
@@ -154,8 +177,62 @@ function renderMap() {
     nodesContainer.appendChild(layerDiv);
   }
 
-  // DOMへの追加完了後、少し待ってから線を引く（要素の位置が確定してから描画するため）
-  setTimeout(drawMapConnections, 50);
+  // DOMへの追加完了後、レイアウト確定を待ってから線を引く
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      drawMapConnections();
+    });
+  });
+}
+
+// === アイテム効果ポップアップ表示 ===
+function showItemTooltip(emoji, name, description, event) {
+  // 既存のツールチップを閉じる
+  closeItemTooltip();
+
+  // オーバーレイ（タップで閉じるための透明背景）
+  const overlay = document.createElement('div');
+  overlay.className = 'item-tooltip-overlay';
+  overlay.addEventListener('click', closeItemTooltip);
+
+  // ツールチップ本体
+  const tooltip = document.createElement('div');
+  tooltip.className = 'item-tooltip';
+  tooltip.id = 'active-item-tooltip';
+  tooltip.innerHTML = `
+    <div class="item-tooltip-name">${emoji} ${name}</div>
+    <div class="item-tooltip-desc">${description}</div>
+  `;
+
+  document.body.appendChild(overlay);
+  document.body.appendChild(tooltip);
+
+  // 位置を計算（タップ位置の下に表示、画面外に出ないよう調整）
+  const rect = tooltip.getBoundingClientRect();
+  let x = event.clientX - rect.width / 2;
+  let y = event.clientY + 12;
+
+  // 画面右端からはみ出さないよう調整
+  if (x + rect.width > window.innerWidth - 8) {
+    x = window.innerWidth - rect.width - 8;
+  }
+  if (x < 8) x = 8;
+
+  // 画面下端からはみ出す場合は上に表示
+  if (y + rect.height > window.innerHeight - 8) {
+    y = event.clientY - rect.height - 12;
+  }
+
+  tooltip.style.left = `${x}px`;
+  tooltip.style.top = `${y}px`;
+}
+
+// ツールチップを閉じる
+function closeItemTooltip() {
+  const tooltip = document.getElementById('active-item-tooltip');
+  if (tooltip) tooltip.remove();
+  const overlay = document.querySelector('.item-tooltip-overlay');
+  if (overlay) overlay.remove();
 }
 
 // === マップルート（線）描画 ===
@@ -164,16 +241,23 @@ function drawMapConnections() {
   if (!map) return;
 
   const canvas = document.getElementById('map-canvas');
-  const container = document.getElementById('map-nodes');
+  const mapContainer = document.getElementById('map-container');
+  const nodesContainer = document.getElementById('map-nodes');
   const ctx = canvas.getContext('2d');
 
-  // Canvasのサイズをコンテナに合わせる
-  canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Canvasのサイズをマップコンテナに合わせる（devicePixelRatio対応）
+  const dpr = window.devicePixelRatio || 1;
+  const containerWidth = mapContainer.clientWidth;
+  const containerHeight = mapContainer.clientHeight;
+  canvas.width = containerWidth * dpr;
+  canvas.height = containerHeight * dpr;
+  canvas.style.width = `${containerWidth}px`;
+  canvas.style.height = `${containerHeight}px`;
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, containerWidth, containerHeight);
 
-  // コンテナのスクロールやOffsetを考慮して線を引くための基準
-  const containerRect = container.getBoundingClientRect();
+  // コンテナの位置を基準にする
+  const containerRect = mapContainer.getBoundingClientRect();
 
   // 線の描画
   for (const conn of map.connections) {
@@ -181,26 +265,30 @@ function drawMapConnections() {
     const toNode = map.nodes.find(n => n.id === conn.to);
     if (!fromNode || !toNode) continue;
 
-    const fromEl = container.querySelector(`[data-node-id="${fromNode.id}"]`);
-    const toEl = container.querySelector(`[data-node-id="${toNode.id}"]`);
+    const fromEl = nodesContainer.querySelector(`[data-node-id="${fromNode.id}"]`);
+    const toEl = nodesContainer.querySelector(`[data-node-id="${toNode.id}"]`);
     if (!fromEl || !toEl) continue;
 
     const fromRect = fromEl.getBoundingClientRect();
     const toRect = toEl.getBoundingClientRect();
 
-    // コンテナ内での相対座標を計算 (要素の中心)
+    // マップコンテナ内での相対座標を計算（要素の中心）
     const x1 = fromRect.left - containerRect.left + (fromRect.width / 2);
     const y1 = fromRect.top - containerRect.top + (fromRect.height / 2);
     const x2 = toRect.left - containerRect.left + (toRect.width / 2);
     const y2 = toRect.top - containerRect.top + (toRect.height / 2);
 
-    // 要素の中心を基準に、DOM要素のサイズを使って円の半径を正確に計算する
-    // clientWidth / 2 より少し大きい値（例: +2px）を半径として引くことで確実に円形要素の外側から描画する
-    const fromRadius = (fromRect.width / 2) + 2;
-    const toRadius = (toRect.width / 2) + 2;
+    // 円の半径を正確に計算し、+4pxオフセットで確実に円の外側から描画
+    const fromRadius = (fromRect.width / 2) + 4;
+    const toRadius = (toRect.width / 2) + 4;
 
     const dx = x2 - x1;
     const dy = y2 - y1;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    // 距離がノードの半径の合計より短い場合は描画しない
+    if (dist <= fromRadius + toRadius) continue;
+
     const angle = Math.atan2(dy, dx);
     const startX = x1 + Math.cos(angle) * fromRadius;
     const startY = y1 + Math.sin(angle) * fromRadius;
@@ -212,7 +300,7 @@ function drawMapConnections() {
     ctx.lineTo(endX, endY);
 
     // スタイル決定
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
     if (fromNode.visited && toNode.visited) {
       // 踏破済みルート（白実線で強調）
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
