@@ -313,6 +313,23 @@
     font-weight: 700;
 }
 
+.shop-section-header {
+    width: 100%;
+    font-size: var(--font-md);
+    font-weight: 800;
+    color: var(--accent-cyan);
+    padding: 8px 0 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+}
+
+.shop-item-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.3;
+}
+
 /* === 休憩画面 === */
 .rest-title {
     font-size: var(--font-2xl);

@@ -564,6 +564,9 @@ function showQuiz(quiz) {
   const typingEl = document.getElementById('quiz-typing');
   const resultEl = document.getElementById('quiz-result');
   resultEl.style.display = 'none';
+  resultEl.className = 'quiz-result';
+  // 前のクイズのハイライトを完全にリセット
+  choicesEl.innerHTML = '';
 
   if (quiz.type === 'typing') {
     choicesEl.style.display = 'none';
@@ -967,59 +970,71 @@ function renderShop() {
   const itemsEl = document.getElementById('shop-items');
   itemsEl.innerHTML = '';
 
-  for (const item of game.currentShop.items) {
-    const el = document.createElement('div');
-    el.className = 'shop-item';
-    if (item.sold) el.classList.add('sold');
+  // セクション分け
+  const sections = [
+    { label: '🃏 カード', items: game.currentShop.items.filter(i => i.type === 'card') },
+    { label: '✨ レリック', items: game.currentShop.items.filter(i => i.type === 'relic') },
+    { label: '🧪 ポーション', items: game.currentShop.items.filter(i => i.type === 'potion') },
+    { label: '🛠️ サービス', items: game.currentShop.items.filter(i => i.type === 'remove_card') }
+  ];
 
-    // ポーションの場合は定義から名前・説明を取得
-    let displayName = item.name || '';
-    let displayDesc = item.description || '';
-    if (item.type === 'potion' && item.potionId && POTION_DEFINITIONS[item.potionId]) {
-      const potionDef = POTION_DEFINITIONS[item.potionId];
-      displayName = potionDef.name;
-      displayDesc = potionDef.description;
+  for (const section of sections) {
+    if (section.items.length === 0) continue;
+
+    // セクション見出し
+    const header = document.createElement('div');
+    header.className = 'shop-section-header';
+    header.textContent = section.label;
+    itemsEl.appendChild(header);
+
+    for (const item of section.items) {
+      const el = document.createElement('div');
+      el.className = 'shop-item';
+      if (item.sold) el.classList.add('sold');
+
+      const displayName = item.name || '';
+      const displayDesc = item.description || '';
+
+      el.innerHTML = `
+        <span class="shop-item-emoji">${item.emoji}</span>
+        <span class="shop-item-name">${displayName}</span>
+        ${displayDesc ? `<span class="shop-item-desc">${displayDesc}</span>` : ''}
+        <span class="shop-item-price">💰 ${item.price}</span>
+      `;
+
+      el.addEventListener('click', async () => {
+        if (item.sold || game.player.gold < item.price) return;
+
+        // 購入確認ポップアップ
+        const confirmed = await showConfirmDialog(`
+          <div style="text-align:center;">
+            <div style="font-size:2rem;">${item.emoji}</div>
+            <div style="font-weight:700; margin:8px 0;">${displayName}</div>
+            ${displayDesc ? `<div style="color:var(--text-secondary); font-size:0.85rem;">${displayDesc}</div>` : ''}
+            <div style="margin-top:12px; color:var(--accent-yellow); font-weight:600;">💰 ${item.price} ゴールド</div>
+            <div style="margin-top:8px; font-weight:600;">こうにゅうしますか？</div>
+          </div>
+        `);
+        if (!confirmed) return;
+
+        if (item.type === 'remove_card') {
+          if (game.buyItem(item)) {
+            showDeckForRemoval();
+            item.sold = true;
+            el.classList.add('sold');
+            document.getElementById('shop-gold').textContent = game.player.gold;
+          }
+        } else {
+          if (game.buyItem(item)) {
+            item.sold = true;
+            el.classList.add('sold');
+            document.getElementById('shop-gold').textContent = game.player.gold;
+          }
+        }
+      });
+
+      itemsEl.appendChild(el);
     }
-
-    el.innerHTML = `
-      <span class="shop-item-emoji">${item.emoji}</span>
-      <span class="shop-item-name">${displayName}</span>
-      ${displayDesc ? `<span style="font-size:0.65rem;color:var(--text-muted)">${displayDesc}</span>` : ''}
-      <span class="shop-item-price">💰 ${item.price}</span>
-    `;
-
-    el.addEventListener('click', async () => {
-      if (item.sold || game.player.gold < item.price) return;
-
-      // 購入確認ポップアップ
-      const confirmed = await showConfirmDialog(`
-        <div style="text-align:center;">
-          <div style="font-size:2rem;">${item.emoji}</div>
-          <div style="font-weight:700; margin:8px 0;">${displayName}</div>
-          ${displayDesc ? `<div style="color:var(--text-secondary); font-size:0.85rem;">${displayDesc}</div>` : ''}
-          <div style="margin-top:12px; color:var(--accent-yellow); font-weight:600;">💰 ${item.price} ゴールド</div>
-          <div style="margin-top:8px; font-weight:600;">こうにゅうしますか？</div>
-        </div>
-      `);
-      if (!confirmed) return;
-
-      if (item.type === 'remove_card') {
-        if (game.buyItem(item)) {
-          showDeckForRemoval();
-          item.sold = true;
-          el.classList.add('sold');
-          document.getElementById('shop-gold').textContent = game.player.gold;
-        }
-      } else {
-        if (game.buyItem(item)) {
-          item.sold = true;
-          el.classList.add('sold');
-          document.getElementById('shop-gold').textContent = game.player.gold;
-        }
-      }
-    });
-
-    itemsEl.appendChild(el);
   }
 }
 

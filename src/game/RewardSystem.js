@@ -2,6 +2,7 @@
 // バトル後の報酬（カード選択、ゴールド、レリック）を管理する
 
 import { createCard, getRandomCards } from './CardSystem.js';
+import { RELIC_DEFINITIONS, POTION_DEFINITIONS } from './ScalingSystem.js';
 
 /**
  * 報酬タイプ
@@ -100,12 +101,30 @@ export function generateShopItems(scaling) {
         });
     }
 
+    // レリック販売（1個）
+    const relicIds = scaling.getRandomRelics(1);
+    if (relicIds.length > 0) {
+        const relicDef = RELIC_DEFINITIONS[relicIds[0]];
+        if (relicDef) {
+            items.push({
+                type: 'relic',
+                relicId: relicIds[0],
+                price: 150,
+                emoji: relicDef.emoji,
+                name: relicDef.name,
+                description: relicDef.description
+            });
+        }
+    }
+
     // ポーション販売（2個）
     const potionId1 = scaling.getRandomPotion();
     const potionId2 = scaling.getRandomPotion();
+    const p1def = POTION_DEFINITIONS[potionId1];
+    const p2def = POTION_DEFINITIONS[potionId2];
     items.push(
-        { type: 'potion', potionId: potionId1, price: 35, emoji: '🧪', name: 'ポーション' },
-        { type: 'potion', potionId: potionId2, price: 35, emoji: '🧪', name: 'ポーション' }
+        { type: 'potion', potionId: potionId1, price: 35, emoji: p1def.emoji, name: p1def.name, description: p1def.description },
+        { type: 'potion', potionId: potionId2, price: 35, emoji: p2def.emoji, name: p2def.name, description: p2def.description }
     );
 
     // カード除去サービス

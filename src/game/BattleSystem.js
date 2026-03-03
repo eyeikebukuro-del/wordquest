@@ -393,7 +393,7 @@ export class BattleSystem {
                 result.effects.push({ type: 'snowball_grow', newDamage: card.baseDamage });
             }
 
-            // ミラーコピー使用後のlastCardId更新（攻撃カードのみ記録）
+            // ミラーコピー用：全カードのlastCardId更新
             if (!card.mirrorCopy) this.lastCardId = card.id;
         }
 
@@ -481,22 +481,23 @@ export class BattleSystem {
             }
         }
 
-        // ミラーコピー：最後に使ったカードを再実行
+        // ミラーコピー：最後に使ったカードを再実行（全カード対応）
         if (card.mirrorCopy) {
             if (this.lastCardId) {
-                // 静的インポート済みのCARD_DEFINITIONSを参照（awaitなし）
                 const lastDef = CARD_DEFINITIONS[this.lastCardId];
                 if (lastDef) {
-                    // 攻撃カードのダメージのみコピー（副作用系は除く）
-                    let copyDamage = (lastDef.baseDamage || 0) + this.damagePermanentBuff;
-                    if (card.mirrorRatio && card.mirrorRatio !== 1) {
-                        copyDamage = Math.floor(copyDamage * card.mirrorRatio);
-                    }
-                    if (this.nextAttackDoubled) {
-                        copyDamage *= 2;
-                        this.nextAttackDoubled = false;
-                    }
-                    if (copyDamage > 0) {
+                    let hasEffect = false;
+
+                    // 攻撃ダメージのコピー
+                    if (lastDef.baseDamage) {
+                        let copyDamage = (lastDef.baseDamage || 0) + this.damagePermanentBuff;
+                        if (card.mirrorRatio && card.mirrorRatio !== 1) {
+                            copyDamage = Math.floor(copyDamage * card.mirrorRatio);
+                        }
+                        if (this.nextAttackDoubled) {
+                            copyDamage *= 2;
+                            this.nextAttackDoubled = false;
+                        }
                         const actual = Math.max(0, copyDamage - this.enemy.block);
                         this.enemy.block = Math.max(0, this.enemy.block - copyDamage);
                         this.enemy.hp = Math.max(0, this.enemy.hp - actual);
@@ -504,11 +505,41 @@ export class BattleSystem {
                         this.maxDamageThisBattle = Math.max(this.maxDamageThisBattle, copyDamage);
                         if (window.sm) window.sm.playHeavyAttack();
                         result.effects.push({ type: 'mirror_damage', value: copyDamage, actual, copied: this.lastCardId });
-                        this.log.push(`ミラーコピー：「${lastDef.name}」を複製！ ${copyDamage}ダメージ！`);
-                    } else if (lastDef.poison) {
+                        hasEffect = true;
+                    }
+
+                    // ブロックのコピー
+                    if (lastDef.baseBlock) {
+                        let copyBlock = this.scaling.calculateBlock(lastDef);
+                        this.playerBlock += copyBlock;
+                        result.effects.push({ type: 'block', value: copyBlock });
+                        hasEffect = true;
+                    }
+
+                    // 毒のコピー
+                    if (lastDef.poison) {
                         this.enemyPoison += lastDef.poison;
                         result.effects.push({ type: 'mirror_poison', value: lastDef.poison });
-                        this.log.push(`ミラーコピー：毒${lastDef.poison}を複製！`);
+                        hasEffect = true;
+                    }
+
+                    // 回復のコピー
+                    if (lastDef.healAmount) {
+                        const heal = Math.min(lastDef.healAmount, this.player.maxHp - this.player.hp);
+                        this.player.hp += heal;
+                        result.effects.push({ type: 'heal', value: heal });
+                        hasEffect = true;
+                    }
+
+                    // ドローのコピー
+                    if (lastDef.drawCount) {
+                        const drawn = this.deck.draw(lastDef.drawCount);
+                        result.effects.push({ type: 'draw', value: drawn.length });
+                        hasEffect = true;
+                    }
+
+                    if (hasEffect) {
+                        this.log.push(`ミラーコピー：「${lastDef.name}」を複製！`);
                     } else {
                         result.effects.push({ type: 'mirror_no_effect' });
                     }
@@ -532,8 +563,8 @@ export class BattleSystem {
             this.persistentBlock += card.persistBlock;
         }
 
-        // スキルカード以外のlastCardId更新
-        if (card.type !== 'skill' && !card.mirrorCopy) {
+        // ミラーコピー以外の全カードでlastCardIdを更新
+        if (!card.mirrorCopy) {
             this.lastCardId = card.id;
         }
 
