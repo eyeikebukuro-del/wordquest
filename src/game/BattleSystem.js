@@ -583,6 +583,11 @@ export class BattleSystem {
         // 敵のターン処理
         const enemyResult = this.processEnemyTurn();
 
+        // プレイヤーのHP確認 (processEnemyTurn内で既に勝利している場合はスキップ)
+        if (this.state === BATTLE_STATES.VICTORY || this.state === BATTLE_STATES.DEFEAT) {
+            return;
+        }
+
         // プレイヤーのHP確認
         if (this.player.hp <= 0) {
             this.state = BATTLE_STATES.DEFEAT;
@@ -653,6 +658,14 @@ export class BattleSystem {
                     this.enemy.hp = Math.max(0, this.enemy.hp - thornActual);
                     result.effects.push({ type: 'thorn_counter', value: this.thornArmorDamage, actual: thornActual });
                     this.log.push(`とげのよろい！ 反撃 ${this.thornArmorDamage}ダメージ！`);
+
+                    if (this.enemy.hp <= 0) {
+                        if (window.sm) window.sm.playDefeat();
+                        this.state = BATTLE_STATES.VICTORY;
+                        this.emit('battle_end', { result: 'victory' });
+                        this.emit('state_change', { state: this.state });
+                        return result;
+                    }
                 }
                 break;
             }
@@ -682,6 +695,18 @@ export class BattleSystem {
                         this.enemy.block = Math.max(0, this.enemy.block - this.thornArmorDamage);
                         this.enemy.hp = Math.max(0, this.enemy.hp - thornActual);
                         thornTotalCounter += thornActual;
+
+                        if (this.enemy.hp <= 0) {
+                            // 途中で倒れた場合はそこで終了
+                            result.effects.push({ type: 'multi_damage', hits: i + 1, perHit: intent.damage, total: totalActual });
+                            result.effects.push({ type: 'thorn_counter_multi', hits: i + 1, perHit: this.thornArmorDamage, total: thornTotalCounter });
+                            this.log.push(`とげのよろい！ 反撃で敵を倒した！`);
+                            if (window.sm) window.sm.playDefeat();
+                            this.state = BATTLE_STATES.VICTORY;
+                            this.emit('battle_end', { result: 'victory' });
+                            this.emit('state_change', { state: this.state });
+                            return result;
+                        }
                     }
                 }
                 result.effects.push({ type: 'multi_damage', hits: intent.hits, perHit: intent.damage, total: totalActual });

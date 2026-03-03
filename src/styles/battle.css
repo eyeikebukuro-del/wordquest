@@ -528,10 +528,10 @@
     font-size: var(--font-xl);
 }
 
-/* とげ反撃ダメージ（緑フロート） */
+/* とげ反撃ダメージ（オレンジフロート） */
 .damage-number.thorn {
-    color: hsl(150, 70%, 55%);
-    text-shadow: 0 0 8px hsla(150, 70%, 55%, 0.5), 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: hsl(30, 90%, 55%);
+    text-shadow: 0 0 8px hsla(30, 90%, 55%, 0.5), 0 2px 4px rgba(0, 0, 0, 0.5);
     font-size: var(--font-xl);
 }
 
@@ -591,8 +591,8 @@
 }
 
 .status-thorn {
-    border: 1px solid hsla(150, 70%, 55%, 0.5);
-    color: hsl(150, 70%, 55%);
+    border: 1px solid hsla(30, 90%, 55%, 0.5);
+    color: hsl(30, 90%, 55%);
 }
 
 /* ポーションスロット */
