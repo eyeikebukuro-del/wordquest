@@ -568,6 +568,43 @@ export class BattleSystem {
                         hasEffect = true;
                     }
 
+                    // デバフのコピー（アイスランス等）
+                    if (lastDef.debuff) {
+                        this.enemyDebuffs[lastDef.debuff.type] = {
+                            value: lastDef.debuff.value,
+                            turns: lastDef.debuff.turns
+                        };
+                        result.effects.push({ type: 'debuff', debuffType: lastDef.debuff.type });
+                        hasEffect = true;
+                    }
+
+                    // とげのよろいのコピー
+                    if (lastDef.thornArmor) {
+                        this.thornArmorDamage = lastDef.thornArmor;
+                        result.effects.push({ type: 'thorn_armor', value: lastDef.thornArmor });
+                        hasEffect = true;
+                    }
+
+                    // ウィークポイントのコピー
+                    if (lastDef.weakPoint) {
+                        const threshold = lastDef.weakPointThreshold || 3;
+                        if (this.enemyPoison >= threshold) {
+                            this.nextAttackDoubled = true;
+                            result.effects.push({ type: 'weak_point_set' });
+                            this.log.push('ミラーコピー：ウィークポイント！ 次の攻撃ダメージが2倍になる！');
+                        } else {
+                            result.effects.push({ type: 'weak_point_fail', poison: this.enemyPoison });
+                        }
+                        hasEffect = true;
+                    }
+
+                    // 持続ブロックのコピー（バリア）
+                    if (lastDef.persistent && lastDef.persistBlock) {
+                        this.persistentBlock += lastDef.persistBlock;
+                        result.effects.push({ type: 'persist_block', value: lastDef.persistBlock });
+                        hasEffect = true;
+                    }
+
                     if (hasEffect) {
                         this.log.push(`ミラーコピー：「${lastDef.name}」を複製！`);
                     } else {
