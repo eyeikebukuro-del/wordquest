@@ -458,22 +458,60 @@ function renderHand() {
   document.getElementById('btn-end-turn').disabled = b.state !== BATTLE_STATES.PLAYER_TURN;
 }
 
+// === 確認ダイアログ ===
+function showConfirmDialog(contentHTML) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('modal-confirm');
+    document.getElementById('confirm-content').innerHTML = contentHTML;
+    modal.style.display = 'block';
+
+    const yesBtn = document.getElementById('btn-confirm-yes');
+    const noBtn = document.getElementById('btn-confirm-no');
+
+    const cleanup = () => {
+      modal.style.display = 'none';
+      yesBtn.replaceWith(yesBtn.cloneNode(true));
+      noBtn.replaceWith(noBtn.cloneNode(true));
+    };
+
+    document.getElementById('btn-confirm-yes').addEventListener('click', () => {
+      cleanup();
+      resolve(true);
+    });
+    document.getElementById('btn-confirm-no').addEventListener('click', () => {
+      cleanup();
+      resolve(false);
+    });
+  });
+}
+
 function renderPotions() {
   const potionSlots = document.getElementById('potion-slots');
   potionSlots.innerHTML = '';
+  const maxSlots = 3;
+
+  // 実際のポーションスロット
   for (const potion of game.scaling.potions) {
     const slot = document.createElement('div');
-    slot.className = 'potion-slot';
-    slot.textContent = potion.emoji;
+    slot.className = 'potion-slot filled';
+    slot.innerHTML = `<span class="potion-emoji">${potion.emoji}</span>`;
     slot.title = `${potion.name}: ${potion.description}`;
-    slot.addEventListener('click', () => {
+    slot.addEventListener('click', async () => {
       if (currentBattle && (currentBattle.state === BATTLE_STATES.PLAYER_TURN || currentBattle.state === BATTLE_STATES.QUIZ_ACTIVE)) {
+        const confirmed = await showConfirmDialog(`
+          <div style="text-align:center;">
+            <div style="font-size:2rem;">${potion.emoji}</div>
+            <div style="font-weight:700; margin:8px 0;">${potion.name}</div>
+            <div style="color:var(--text-secondary); font-size:0.85rem;">${potion.description}</div>
+            <div style="margin-top:12px; font-weight:600;">つかいますか？</div>
+          </div>
+        `);
+        if (!confirmed) return;
         const result = currentBattle.usePotion(potion.instanceId);
         if (result) {
           updateBattleUI();
           renderHand();
           renderPotions();
-
           if (currentBattle.state === BATTLE_STATES.QUIZ_ACTIVE && result.effects.some(e => e.type === 'eliminate')) {
             showQuiz(currentBattle.currentQuiz);
           }
@@ -481,6 +519,15 @@ function renderPotions() {
       }
     });
     potionSlots.appendChild(slot);
+  }
+
+  // 空スロットを埋める
+  const emptyCount = maxSlots - game.scaling.potions.length;
+  for (let i = 0; i < emptyCount; i++) {
+    const emptySlot = document.createElement('div');
+    emptySlot.className = 'potion-slot empty';
+    emptySlot.innerHTML = '<span class="potion-empty-icon">─</span>';
+    potionSlots.appendChild(emptySlot);
   }
 }
 
@@ -925,15 +972,36 @@ function renderShop() {
     el.className = 'shop-item';
     if (item.sold) el.classList.add('sold');
 
+    // ポーションの場合は定義から名前・説明を取得
+    let displayName = item.name || '';
+    let displayDesc = item.description || '';
+    if (item.type === 'potion' && item.potionId && POTION_DEFINITIONS[item.potionId]) {
+      const potionDef = POTION_DEFINITIONS[item.potionId];
+      displayName = potionDef.name;
+      displayDesc = potionDef.description;
+    }
+
     el.innerHTML = `
       <span class="shop-item-emoji">${item.emoji}</span>
-      <span class="shop-item-name">${item.name || ''}</span>
-      ${item.description ? `<span style="font-size:0.65rem;color:var(--text-muted)">${item.description}</span>` : ''}
+      <span class="shop-item-name">${displayName}</span>
+      ${displayDesc ? `<span style="font-size:0.65rem;color:var(--text-muted)">${displayDesc}</span>` : ''}
       <span class="shop-item-price">💰 ${item.price}</span>
     `;
 
-    el.addEventListener('click', () => {
+    el.addEventListener('click', async () => {
       if (item.sold || game.player.gold < item.price) return;
+
+      // 購入確認ポップアップ
+      const confirmed = await showConfirmDialog(`
+        <div style="text-align:center;">
+          <div style="font-size:2rem;">${item.emoji}</div>
+          <div style="font-weight:700; margin:8px 0;">${displayName}</div>
+          ${displayDesc ? `<div style="color:var(--text-secondary); font-size:0.85rem;">${displayDesc}</div>` : ''}
+          <div style="margin-top:12px; color:var(--accent-yellow); font-weight:600;">💰 ${item.price} ゴールド</div>
+          <div style="margin-top:8px; font-weight:600;">こうにゅうしますか？</div>
+        </div>
+      `);
+      if (!confirmed) return;
 
       if (item.type === 'remove_card') {
         if (game.buyItem(item)) {

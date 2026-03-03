@@ -595,6 +595,67 @@
     color: hsl(150, 70%, 55%);
 }
 
+/* ポーションスロット */
+.potion-slots {
+    display: flex;
+    gap: 6px;
+}
+
+.potion-slot {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.potion-slot.filled {
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.potion-slot.filled:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--accent-purple);
+    transform: scale(1.1);
+}
+
+.potion-slot.empty {
+    background: transparent;
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    cursor: default;
+}
+
+.potion-empty-icon {
+    color: rgba(255, 255, 255, 0.15);
+    font-size: 0.8rem;
+}
+
+/* 確認ダイアログ */
+.confirm-panel {
+    max-width: 280px;
+    padding: 24px 20px 16px;
+    text-align: center;
+}
+
+.confirm-content {
+    margin-bottom: 16px;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.confirm-actions .btn {
+    min-width: 80px;
+}
+
 /* レスポンシブ（短い画面） */
 @media (max-height: 600px) {
     .enemy-emoji {
