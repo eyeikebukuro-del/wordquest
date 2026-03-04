@@ -345,11 +345,12 @@ function drawMapConnections() {
 // === バトルレンダリング ===
 let currentBattle = null;
 let drawnCards = new Set(); // 描画済みカードを記憶し、再描画時のアニメーション重複（チラツキ）を防ぐ
+let isAnimating = false; // エフェクト中のカード連打防止フラグ
 
 function renderBattle() {
   if (!game.battle) return;
   currentBattle = game.battle;
-
+  isAnimating = false; // バトル開始時にリセット
   const b = currentBattle;
   const enemy = b.enemy;
   const player = b.player;
@@ -531,7 +532,7 @@ function renderHand() {
   handCards.innerHTML = '';
 
   for (const card of b.deck.hand) {
-    const canPlay = card.cost <= b.energy && b.state === BATTLE_STATES.PLAYER_TURN;
+    const canPlay = card.cost <= b.energy && b.state === BATTLE_STATES.PLAYER_TURN && !isAnimating;
     const cardEl = document.createElement('div');
     cardEl.innerHTML = createCardHTML(card, false, canPlay);
     const cardNode = cardEl.firstElementChild;
@@ -551,6 +552,7 @@ function renderHand() {
     }
 
     cardNode.addEventListener('click', () => {
+      if (isAnimating) return; // エフェクト中はカード選択をブロック
       if (b.state !== BATTLE_STATES.PLAYER_TURN || card.cost > b.energy) return;
       onCardSelect(card.instanceId);
     });
@@ -559,7 +561,7 @@ function renderHand() {
   }
 
   // ターン終了ボタンの状態
-  document.getElementById('btn-end-turn').disabled = b.state !== BATTLE_STATES.PLAYER_TURN;
+  document.getElementById('btn-end-turn').disabled = b.state !== BATTLE_STATES.PLAYER_TURN || isAnimating;
 }
 
 // === 確認ダイアログ ===
@@ -637,6 +639,7 @@ function renderPotions() {
 
 // === クイズ表示 ===
 function onCardSelect(instanceId) {
+  if (isAnimating) return; // エフェクト中はカード選択をブロック
   if (window.sm) window.sm.playCardSelect();
   const quiz = currentBattle.selectCard(instanceId);
   if (!quiz) return;
@@ -728,6 +731,9 @@ function onQuizAnswer(answer, quiz) {
   const result = currentBattle.answerQuiz(answer);
   if (!result) return;
 
+  // エフェクト中フラグを立てる（カード連打防止）
+  isAnimating = true;
+
   const resultEl = document.getElementById('quiz-result');
   const choicesEl = document.getElementById('quiz-choices');
 
@@ -748,7 +754,6 @@ function onQuizAnswer(answer, quiz) {
     if (result.leveledUp) txt += ' ⬆️ カードレベルアップ！';
     resultEl.className = 'quiz-result correct';
     resultEl.textContent = txt;
-    // (ここではテキスト更新のみ行い、アニメーションはウィンドウを閉じた後に実行する)
   } else {
     const correctAnswer = quiz.type === 'typing' ? quiz.answer : quiz.choices[quiz.correctIndex];
     resultEl.className = 'quiz-result incorrect';
@@ -758,49 +763,68 @@ function onQuizAnswer(answer, quiz) {
   // 次のクイズ(ダブルストライク)またはクイズ終了
   if (result.nextQuiz) {
     setTimeout(() => {
+      isAnimating = false; // ダブルストライク2問目に進む前にリセット
       showQuiz(result.nextQuiz);
     }, 1200);
     return;
   }
 
-  // クイズ閉じる
+  // クイズ閉じる → エフェクトの順に演出する
   setTimeout(() => {
     document.getElementById('quiz-area').style.display = 'none';
     updateBattleUI();
-    renderHand();
 
-    // ↓ ウィンドウが閉じた直後にアニメーションとエフェクトを再生する ↓
+    // ↓ エフェクトと音のタイミング制御 ↓
     if (result.correct && result.cardEffect && result.cardEffect.effects) {
       const isMeteor = result.cardEffect.type === 'attack' && result.cardEffect.cost >= 3;
+      const isVictory = result.battleEnd === 'victory';
 
       for (const eff of result.cardEffect.effects) {
         if (eff.type === 'damage') {
-          playAttackEffect(false, isMeteor); // 敵への攻撃 (isMeteorでエフェクト分岐)
-          // 少し遅れてダメージ数字を表示する
+          // 正解音から300ms遅延してスラッシュエフェクト＋音を再生
+          setTimeout(() => {
+            playAttackEffect(false, isMeteor);
+            if (window.sm) {
+              if (eff.value >= 10) window.sm.playHeavyAttack();
+              else window.sm.playAttack();
+            }
+          }, 300);
+
+          // スラッシュから300ms後にダメージ数字＋ヒットアニメ
           setTimeout(() => {
             showDamageNumber(eff.actual !== undefined ? eff.actual : eff.value, 'damage', false);
-            // 敵ヒットアニメ
             const hitTarget = game.battle.enemy.image ? document.getElementById('enemy-image') : document.getElementById('enemy-emoji');
             hitTarget.classList.add('anim-hit');
             setTimeout(() => hitTarget.classList.remove('anim-hit'), 400);
-          }, 300);
+          }, 600);
         } else if (eff.type === 'block') {
           showDamageNumber(eff.value, 'block', true);
         } else if (eff.type === 'heal') {
           showDamageNumber(eff.value, 'heal', true);
         }
       }
-    }
-    // ↑ アニメーション追加ここまで ↑
 
-    // バトル終了チェック
-    if (result.battleEnd === 'victory') {
-      const deathTarget = game.battle.enemy.image ? document.getElementById('enemy-image') : document.getElementById('enemy-emoji');
-      deathTarget.classList.add('anim-death');
-      setTimeout(() => {
-        game.onBattleEnd('victory');
-      }, 700);
+      // 撃破時の音と演出タイミング: スラッシュ完了後に余裕をもって撃破音
+      if (isVictory) {
+        setTimeout(() => {
+          if (window.sm) window.sm.playDefeat();
+          const deathTarget = game.battle.enemy.image ? document.getElementById('enemy-image') : document.getElementById('enemy-emoji');
+          deathTarget.classList.add('anim-death');
+          setTimeout(() => {
+            isAnimating = false;
+            game.onBattleEnd('victory');
+          }, 700);
+        }, 1200); // スラッシュ(300ms) + ダメージ表示(600ms) + 余韻(300ms)
+        return; // 勝利時はここで終了（renderHandしない）
+      }
     }
+    // ↑ エフェクトここまで ↑
+
+    // エフェクト完了後にアニメ中フラグを解除して手札再表示
+    setTimeout(() => {
+      isAnimating = false;
+      renderHand();
+    }, 800); // エフェクト演出分の待機
   }, 1500);
 }
 

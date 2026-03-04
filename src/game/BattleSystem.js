@@ -379,10 +379,7 @@ export class BattleSystem {
             if (!this.maxDamageThisBattle) this.maxDamageThisBattle = 0;
             this.maxDamageThisBattle = Math.max(this.maxDamageThisBattle, damage);
 
-            if (window.sm) {
-                if (damage >= 10) window.sm.playHeavyAttack();
-                else window.sm.playAttack();
-            }
+            // 攻撃音はmain.js側でエフェクトタイミングに合わせて再生するためここでは鳴らさない
 
             result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
 
