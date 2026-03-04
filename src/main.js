@@ -949,7 +949,7 @@ function onEndTurn() {
   if (enemyResult && enemyResult.poisonKill) {
     // まずUI更新して毒ダメージフロート＆HPバー減少を見せる
     updateBattleUI();
-    renderEnemyTurnEffects(enemyResult);
+    showEnemyTurnEffects(enemyResult);
 
     // 毒エフェクト表示後、1秒待ってから死亡アニメと勝利処理
     setTimeout(() => {
