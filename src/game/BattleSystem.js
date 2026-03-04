@@ -283,9 +283,8 @@ export class BattleSystem {
         this.selectedCard = null;
         this.currentQuiz = null;
 
-        // 敵のHP確認
+        // 敵のHP確認（撃破音はmain.js側でエフェクト完了後に再生するため、ここでは鳴らさない）
         if (this.enemy.hp <= 0) {
-            if (window.sm) window.sm.playDefeat();
             this.state = BATTLE_STATES.VICTORY;
             result.battleEnd = 'victory';
         } else {

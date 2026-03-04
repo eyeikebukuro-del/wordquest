@@ -781,13 +781,9 @@ function onQuizAnswer(answer, quiz) {
 
       for (const eff of result.cardEffect.effects) {
         if (eff.type === 'damage') {
-          // 正解音から300ms遅延してスラッシュエフェクト＋音を再生
+          // 正解音から300ms遅延してスラッシュエフェクト＋音を同時再生
           setTimeout(() => {
-            playAttackEffect(false, isMeteor);
-            if (window.sm) {
-              if (eff.value >= 10) window.sm.playHeavyAttack();
-              else window.sm.playAttack();
-            }
+            playAttackEffect(false, isMeteor, eff.value);
           }, 300);
 
           // スラッシュから300ms後にダメージ数字＋ヒットアニメ
@@ -828,7 +824,7 @@ function onQuizAnswer(answer, quiz) {
   }, 1500);
 }
 
-function playAttackEffect(isPlayer = false, isMeteor = false) {
+function playAttackEffect(isPlayer = false, isMeteor = false, damage = 0) {
   const container = isPlayer ? document.querySelector('.player-area') : document.querySelector('.enemy-area');
   if (!container) return;
 
@@ -837,6 +833,12 @@ function playAttackEffect(isPlayer = false, isMeteor = false) {
   effectEl.style.top = isMeteor ? '-20px' : '20%';
   effectEl.style.left = isMeteor ? '20%' : '20%';
   container.appendChild(effectEl);
+
+  // エフェクト表示と同時に攻撃音を再生（完全同期）
+  if (window.sm) {
+    if (damage >= 10) window.sm.playHeavyAttack();
+    else window.sm.playAttack();
+  }
 
   setTimeout(() => effectEl.remove(), isMeteor ? 700 : 500);
 }
