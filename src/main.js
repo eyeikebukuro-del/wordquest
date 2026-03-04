@@ -1292,9 +1292,10 @@ function renderEvent() {
             return;
           }
           showCardSelect(upgradable, (card) => {
-            addCardXP(card);
-            addCardXP(card);
-            addCardXP(card);
+            const targetLevel = card.level + 1;
+            while (card.level < targetLevel && card.level < 3) {
+              addCardXP(card);
+            }
             game.changeScreen(SCREENS.MAP);
           });
         }, 1000);
@@ -1590,9 +1591,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const upgradable = game.playerDeck.filter(c => c.level < 3);
     if (upgradable.length === 0) return; // 全カードがレベル3
     showCardSelect(upgradable, (card) => {
-      addCardXP(card);
-      addCardXP(card);
-      addCardXP(card);
+      const targetLevel = card.level + 1;
+      // ターゲットレベルに達するまでXPを追加し続ける
+      while (card.level < targetLevel && card.level < 3) {
+        addCardXP(card);
+      }
       game.changeScreen(SCREENS.MAP);
     });
   });

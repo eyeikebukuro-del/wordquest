@@ -421,8 +421,8 @@ export function createCard(definitionId) {
  * @returns {boolean} レベルアップしたかどうか
  */
 export function addCardXP(card) {
-    // レベル5のカードはこれ以上強化できない
-    if (card.level >= 5) return false;
+    // レベル3のカードはこれ以上強化できない
+    if (card.level >= 3) return false;
 
     card.xp++;
     if (card.xp >= card.xpToNext) {
