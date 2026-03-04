@@ -180,6 +180,11 @@
     transform-origin: bottom center;
 }
 
+/* ボス画像は少し大きくして迫力を出す */
+.enemy-image.boss {
+    max-height: 160px;
+}
+
 .enemy-name {
     font-size: var(--font-sm);
     font-weight: 700;

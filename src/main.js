@@ -398,6 +398,11 @@ function renderBattle() {
     enemyImageEl.src = enemy.image;
     enemyImageEl.style.display = 'block';
     enemyEmojiEl.style.display = 'none';
+    if (enemy.isBoss) {
+      enemyImageEl.classList.add('boss');
+    } else {
+      enemyImageEl.classList.remove('boss');
+    }
   } else {
     enemyImageEl.style.display = 'none';
     enemyEmojiEl.style.display = 'block';
