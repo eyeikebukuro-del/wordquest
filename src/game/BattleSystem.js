@@ -74,8 +74,8 @@ export class BattleSystem {
         this.damagePermanentBuff = 0;
         /** とげのよろい：今ターンの反撃ダメージ（1ヒットごとに発動） */
         this.thornArmorDamage = 0;
-        /** ウィークポイント：次の攻撃を2倍にするフラグ */
-        this.nextAttackDoubled = false;
+        /** ウィークポイント：次の攻撃の倍率（1=通常、2=2倍、3=3倍...） */
+        this.nextAttackMultiplier = 1;
         /** ミラーコピー用：最後に使ったカードの定義ID */
         this.lastCardId = null;
 
@@ -363,11 +363,11 @@ export class BattleSystem {
                 result.effects.push({ type: 'vortex_bonus', value: bonus, hand: handCount });
             }
 
-            // ウィークポイント：次の攻撃2倍フラグ適用
-            if (this.nextAttackDoubled) {
-                damage *= 2;
-                this.nextAttackDoubled = false;
-                result.effects.push({ type: 'weak_point_triggered' });
+            // ウィークポイント：次の攻撃倍率適用
+            if (this.nextAttackMultiplier > 1) {
+                damage *= this.nextAttackMultiplier;
+                result.effects.push({ type: 'weak_point_triggered', multiplier: this.nextAttackMultiplier });
+                this.nextAttackMultiplier = 1;
             }
 
             // 敵のブロックを計算してダメージ適用
@@ -405,10 +405,10 @@ export class BattleSystem {
             result.effects.push({ type: 'block', value: block });
         }
 
-        // とげのよろい：このターン中の敵ヒット1回ごとに反撃ダメージを設定
+        // とげのよろい：このターン中の敵ヒット1回ごとに反撃ダメージを加算
         if (card.thornArmor) {
-            this.thornArmorDamage = card.thornArmor;
-            result.effects.push({ type: 'thorn_armor', value: card.thornArmor });
+            this.thornArmorDamage += card.thornArmor;
+            result.effects.push({ type: 'thorn_armor', value: this.thornArmorDamage });
         }
 
         // 回復
@@ -425,21 +425,33 @@ export class BattleSystem {
             result.effects.push({ type: 'draw', value: drawn.length });
         }
 
-        // バフ
+        // バフ（重ねがけ対応：加算）
         if (card.buff) {
-            this.scaling.buffs[card.buff.type] = {
-                value: card.buff.value,
-                turns: card.buff.turns
-            };
+            const existing = this.scaling.buffs[card.buff.type];
+            if (existing) {
+                existing.value += (card.buff.value - 1); // strength: 1.5→+0.5加算で2.0
+                existing.turns = Math.max(existing.turns, card.buff.turns);
+            } else {
+                this.scaling.buffs[card.buff.type] = {
+                    value: card.buff.value,
+                    turns: card.buff.turns
+                };
+            }
             result.effects.push({ type: 'buff', buffType: card.buff.type });
         }
 
-        // デバフ（敵への弱体化）
+        // デバフ（敵への弱体化・重ねがけ対応：加算）
         if (card.debuff) {
-            this.enemyDebuffs[card.debuff.type] = {
-                value: card.debuff.value,
-                turns: card.debuff.turns
-            };
+            const existing = this.enemyDebuffs[card.debuff.type];
+            if (existing) {
+                existing.value += card.debuff.value;
+                existing.turns = Math.max(existing.turns, card.debuff.turns);
+            } else {
+                this.enemyDebuffs[card.debuff.type] = {
+                    value: card.debuff.value,
+                    turns: card.debuff.turns
+                };
+            }
             result.effects.push({ type: 'debuff', debuffType: card.debuff.type });
         }
 
@@ -468,13 +480,13 @@ export class BattleSystem {
             this.log.push(`ちくせきの力！ 永続ダメージバフ合計: +${this.damagePermanentBuff}`);
         }
 
-        // ウィークポイント：敵の毒が規定値以上なら次の攻撃2倍フラグをセット
+        // ウィークポイント：敵の毒が規定値以上なら次の攻撃倍率+1（累積加算）
         if (card.weakPoint) {
             const threshold = card.weakPointThreshold || 3;
             if (this.enemyPoison >= threshold) {
-                this.nextAttackDoubled = true;
-                result.effects.push({ type: 'weak_point_set' });
-                this.log.push('ウィークポイント！ 次の攻撃ダメージが2倍になる！');
+                this.nextAttackMultiplier += 1;
+                result.effects.push({ type: 'weak_point_set', multiplier: this.nextAttackMultiplier });
+                this.log.push(`ウィークポイント！ 次の攻撃ダメージが${this.nextAttackMultiplier}倍になる！`);
             } else {
                 result.effects.push({ type: 'weak_point_fail', poison: this.enemyPoison });
                 this.log.push(`ウィークポイント不発（毒が${this.enemyPoison}、${threshold}以上必要）`);
@@ -494,9 +506,9 @@ export class BattleSystem {
                         if (card.mirrorRatio && card.mirrorRatio !== 1) {
                             copyDamage = Math.floor(copyDamage * card.mirrorRatio);
                         }
-                        if (this.nextAttackDoubled) {
-                            copyDamage *= 2;
-                            this.nextAttackDoubled = false;
+                        if (this.nextAttackMultiplier > 1) {
+                            copyDamage *= this.nextAttackMultiplier;
+                            this.nextAttackMultiplier = 1;
                         }
                         const actual = Math.max(0, copyDamage - this.enemy.block);
                         this.enemy.block = Math.max(0, this.enemy.block - copyDamage);
@@ -558,40 +570,52 @@ export class BattleSystem {
                         hasEffect = true;
                     }
 
-                    // バフのコピー（パワーアップ等）
+                    // バフのコピー（パワーアップ等・重ねがけ対応）
                     if (lastDef.buff) {
-                        this.scaling.buffs[lastDef.buff.type] = {
-                            value: lastDef.buff.value,
-                            turns: lastDef.buff.turns
-                        };
+                        const existingBuff = this.scaling.buffs[lastDef.buff.type];
+                        if (existingBuff) {
+                            existingBuff.value += (lastDef.buff.value - 1);
+                            existingBuff.turns = Math.max(existingBuff.turns, lastDef.buff.turns);
+                        } else {
+                            this.scaling.buffs[lastDef.buff.type] = {
+                                value: lastDef.buff.value,
+                                turns: lastDef.buff.turns
+                            };
+                        }
                         result.effects.push({ type: 'buff', buffType: lastDef.buff.type });
                         hasEffect = true;
                     }
 
-                    // デバフのコピー（アイスランス等）
+                    // デバフのコピー（アイスランス等・重ねがけ対応）
                     if (lastDef.debuff) {
-                        this.enemyDebuffs[lastDef.debuff.type] = {
-                            value: lastDef.debuff.value,
-                            turns: lastDef.debuff.turns
-                        };
+                        const existingDebuff = this.enemyDebuffs[lastDef.debuff.type];
+                        if (existingDebuff) {
+                            existingDebuff.value += lastDef.debuff.value;
+                            existingDebuff.turns = Math.max(existingDebuff.turns, lastDef.debuff.turns);
+                        } else {
+                            this.enemyDebuffs[lastDef.debuff.type] = {
+                                value: lastDef.debuff.value,
+                                turns: lastDef.debuff.turns
+                            };
+                        }
                         result.effects.push({ type: 'debuff', debuffType: lastDef.debuff.type });
                         hasEffect = true;
                     }
 
-                    // とげのよろいのコピー
+                    // とげのよろいのコピー（加算）
                     if (lastDef.thornArmor) {
-                        this.thornArmorDamage = lastDef.thornArmor;
-                        result.effects.push({ type: 'thorn_armor', value: lastDef.thornArmor });
+                        this.thornArmorDamage += lastDef.thornArmor;
+                        result.effects.push({ type: 'thorn_armor', value: this.thornArmorDamage });
                         hasEffect = true;
                     }
 
-                    // ウィークポイントのコピー
+                    // ウィークポイントのコピー（累積加算）
                     if (lastDef.weakPoint) {
                         const threshold = lastDef.weakPointThreshold || 3;
                         if (this.enemyPoison >= threshold) {
-                            this.nextAttackDoubled = true;
-                            result.effects.push({ type: 'weak_point_set' });
-                            this.log.push('ミラーコピー：ウィークポイント！ 次の攻撃ダメージが2倍になる！');
+                            this.nextAttackMultiplier += 1;
+                            result.effects.push({ type: 'weak_point_set', multiplier: this.nextAttackMultiplier });
+                            this.log.push(`ミラーコピー：ウィークポイント！ 次の攻撃ダメージが${this.nextAttackMultiplier}倍になる！`);
                         } else {
                             result.effects.push({ type: 'weak_point_fail', poison: this.enemyPoison });
                         }
@@ -650,6 +674,12 @@ export class BattleSystem {
         // 敵のターン処理
         const enemyResult = this.processEnemyTurn();
 
+        // 毒で敵が倒れた場合：UI側で演出表示後にVICTORYへ遷移するためフラグを返す
+        if (enemyResult && enemyResult.poisonKill) {
+            // 状態遷移はUI側で遅延実行する
+            return enemyResult;
+        }
+
         // プレイヤーのHP確認 (processEnemyTurn内で既に勝利している場合はスキップ)
         if (this.state === BATTLE_STATES.VICTORY || this.state === BATTLE_STATES.DEFEAT) {
             return;
@@ -683,10 +713,8 @@ export class BattleSystem {
             this.enemyPoison = Math.max(0, this.enemyPoison - 1);
 
             if (this.enemy.hp <= 0) {
-                if (window.sm) window.sm.playDefeat();
-                this.state = BATTLE_STATES.VICTORY;
-                this.emit('battle_end', { result: 'victory' });
-                this.emit('state_change', { state: this.state });
+                // 毒で敵が倒れた場合、UI側で演出を表示するためフラグだけ立てて返す
+                result.poisonKill = true;
                 return result;
             }
         }

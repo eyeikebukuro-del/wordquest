@@ -505,8 +505,8 @@ function updateBattleUI() {
   if (b.thornArmorDamage > 0) {
     playerStatusHTML += `<span class="status-badge status-thorn">🦔${b.thornArmorDamage}</span>`;
   }
-  if (b.nextAttackDoubled) {
-    playerStatusHTML += `<span class="status-badge status-buff">🎯x2</span>`;
+  if (b.nextAttackMultiplier > 1) {
+    playerStatusHTML += `<span class="status-badge status-buff">🎯×${b.nextAttackMultiplier}</span>`;
   }
   if (b.playerBlock > 0) {
     playerStatusHTML += `<span class="status-badge">🛡️${b.playerBlock}</span>`;
@@ -892,8 +892,33 @@ function showEnemyTurnEffects(result) {
 function onEndTurn() {
   if (!currentBattle || currentBattle.state !== BATTLE_STATES.PLAYER_TURN) return;
 
-  // 敵ターン実行
-  currentBattle.endTurn();
+  // 敵ターン実行（戻り値でpoisonKillを判定）
+  const enemyResult = currentBattle.endTurn();
+
+  // 毒で敵が倒れた場合：ダメージフロート→HPバー更新→死亡アニメの順に演出
+  if (enemyResult && enemyResult.poisonKill) {
+    // まずUI更新して毒ダメージフロート＆HPバー減少を見せる
+    updateBattleUI();
+    renderEnemyTurnEffects(enemyResult);
+
+    // 毒エフェクト表示後、1秒待ってから死亡アニメと勝利処理
+    setTimeout(() => {
+      if (window.sm) window.sm.playDefeat();
+      currentBattle.state = BATTLE_STATES.VICTORY;
+
+      const deathTarget = currentBattle.enemy.image
+        ? document.getElementById('enemy-image')
+        : document.getElementById('enemy-emoji');
+      deathTarget.classList.add('anim-death');
+
+      setTimeout(() => {
+        currentBattle.emit('battle_end', { result: 'victory' });
+        currentBattle.emit('state_change', { state: currentBattle.state });
+        game.onBattleEnd('victory');
+      }, 700);
+    }, 1000);
+    return;
+  }
 
   // 敗北チェック
   if (currentBattle.state === BATTLE_STATES.DEFEAT) {

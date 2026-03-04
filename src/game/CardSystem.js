@@ -370,7 +370,7 @@ export const CARD_DEFINITIONS = {
         emoji: '🎯',
         description: '🎯 敵の毒が3以上なら次の攻撃が2倍！コスト0！',
         quizMode: QUIZ_MODES.CHOICE,
-        weakPoint: true, // BattleSystem側でnextAttackDoubled フラグ
+        weakPoint: true, // BattleSystem側でnextAttackMultiplier 加算
         weakPointThreshold: 3, // 初期は毒3必要
         rarity: 'uncommon',
         color: '#00b894'
@@ -443,6 +443,7 @@ export function addCardXP(card) {
         if (card.thornArmor) card.thornArmor = Math.ceil(card.thornArmor * 1.3);
         if (card.accumulate) card.accumulate += 1;
         if (card.snowballBuff) card.snowballBuff += 1; // 3->4->5
+        if (card.lengthSynergy) card.lengthSynergy += 1; // 3->4->5
         if (card.weakPointThreshold && card.weakPointThreshold > 1) card.weakPointThreshold -= 1; // 3->2->1
         if (card.mirrorRatio) card.mirrorRatio += 0.5; // 1->1.5->2.0
         if (card.buff) {
