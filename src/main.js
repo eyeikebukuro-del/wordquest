@@ -862,6 +862,30 @@ function showDamageNumber(value, type, isPlayer = false) {
   setTimeout(() => el.remove(), 1000);
 }
 
+// === フロートメッセージ（ショップ・報酬用） ===
+function showFloatMessage(message, targetEl) {
+  const msg = document.createElement('div');
+  msg.textContent = message;
+  msg.style.cssText = `
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #ff6b6b;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    z-index: 9999;
+    pointer-events: none;
+    animation: floatUp 1.5s ease-out forwards;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+  `;
+  document.body.appendChild(msg);
+  setTimeout(() => msg.remove(), 1500);
+}
+
 function showEnemyTurnEffects(result) {
   let totalDamage = 0;
   let blockedAll = false;
@@ -1044,6 +1068,10 @@ function renderRewards() {
         item.innerHTML = `<span class="reward-emoji">${potion.emoji}</span><span class="reward-desc">${potion.name}: ${potion.description}</span>`;
         item.addEventListener('click', () => {
           if (!item.classList.contains('claimed')) {
+            if (game.scaling.potions.length >= 3) {
+              showFloatMessage('ポーションがいっぱいです！', item);
+              return;
+            }
             const added = game.scaling.addPotion(reward.potionId);
             if (added) {
               item.classList.add('claimed');
@@ -1158,7 +1186,19 @@ function renderShop() {
       `;
 
       el.addEventListener('click', async () => {
-        if (item.sold || game.player.gold < item.price) return;
+        if (item.sold) return;
+
+        // 所持金チェック
+        if (game.player.gold < item.price) {
+          showFloatMessage('お金が足りない！', el);
+          return;
+        }
+
+        // ポーション上限チェック
+        if (item.type === 'potion' && game.scaling.potions.length >= 3) {
+          showFloatMessage('ポーションがいっぱいです！', el);
+          return;
+        }
 
         // 購入確認ポップアップ
         const confirmed = await showConfirmDialog(`
