@@ -178,6 +178,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'phantom',
         name: 'ファントム',
         emoji: '👻',
+        image: './characters/phantom.png',
         baseHp: 38,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 10, emoji: '⚔️' },
@@ -190,6 +191,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'demon',
         name: 'デーモン',
         emoji: '😈',
+        image: './characters/demon.png',
         baseHp: 45,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 14, emoji: '⚔️' },
@@ -202,6 +204,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'dark_knight',
         name: 'ダークナイト',
         emoji: '🖤',
+        image: './characters/dark_knight.png',
         baseHp: 50,
         patterns: [
             { intent: ENEMY_INTENTS.DEFEND, block: 8, emoji: '🛡️' },
