@@ -1372,21 +1372,23 @@ function renderVictory() {
   const statsEl = document.getElementById('victory-stats');
 
   // スコア計算
-  const enemiesScore = (game.stats.enemiesDefeated || 0) * 50;
-  const comboScore = (game.stats.maxCombo || 0) * 100;
-  const wisdomBonus = game.stats.totalWisdomScore || 0;
+  const enemiesScore = (game.stats.enemiesDefeated || 0) * 200;
+  const comboScore = (game.stats.maxCombo || 0) * 400;
+  const wisdomBonus = Math.floor((game.stats.totalWisdomScore || 0) * 0.6);
 
-  // ダメージスコア（平方根による減衰）
+  // ダメージスコア
   const maxDamage = game.stats.maxDamage || 0;
-  const damageScore = Math.floor(Math.sqrt(maxDamage) * 400);
+  const damageScore = Math.floor(maxDamage * 50);
 
   // ボス撃破ボーナス
   let bossBonus = 0;
-  if (game.stats.lastBossId === 'word_king') bossBonus = 3000;
-  else if (game.stats.lastBossId === 'evolving_archive') bossBonus = 1000;
+  if (game.stats.lastBossId === 'word_king') bossBonus = 5000;
+  else if (game.stats.lastBossId === 'evolving_archive') bossBonus = 10000;
+  else if (game.stats.lastBossId === 'cave_dragon') bossBonus = 3000;
+  else if (game.stats.lastBossId === 'forest_guardian') bossBonus = 2000;
 
-  const goldScore = (game.player.gold || 0) * 1;
-  const baseScore = 1000;
+  const goldScore = (game.player.gold || 0) * 10;
+  const baseScore = 5000;
   const totalScore = baseScore + enemiesScore + comboScore + damageScore + wisdomBonus + bossBonus + goldScore;
 
   statsEl.innerHTML = `
