@@ -111,6 +111,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'skeleton',
         name: 'スケルトン',
         emoji: '💀',
+        image: './characters/skeleton.png',
         baseHp: 30,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 8, emoji: '⚔️' },
@@ -123,6 +124,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'golem',
         name: 'ゴーレム',
         emoji: '🗿',
+        image: './characters/golem.png',
         baseHp: 40,
         patterns: [
             { intent: ENEMY_INTENTS.DEFEND, block: 10, emoji: '🛡️' },
@@ -135,6 +137,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'dark_mage',
         name: 'ダークメイジ',
         emoji: '🧙',
+        image: './characters/dark_mage.png',
         baseHp: 28,
         patterns: [
             { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 3 }, emoji: '💪' },
@@ -147,6 +150,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'spider',
         name: 'ジャイアントスパイダー',
         emoji: '🕷️',
+        image: './characters/spider.png',
         baseHp: 32,
         patterns: [
             { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 4, hits: 3, emoji: '⚡' },
