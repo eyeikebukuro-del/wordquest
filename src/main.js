@@ -780,7 +780,7 @@ function onQuizAnswer(answer, quiz) {
       const isVictory = result.battleEnd === 'victory';
 
       for (const eff of result.cardEffect.effects) {
-        if (eff.type === 'damage') {
+        if (eff.type === 'damage' || eff.type === 'mirror_damage') {
           // 正解音から300ms遅延してスラッシュエフェクト＋音を同時再生
           setTimeout(() => {
             playAttackEffect(false, isMeteor, eff.value);
