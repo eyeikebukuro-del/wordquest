@@ -36,6 +36,17 @@ window.testBoss = async (bossId) => {
 // オーディオマネージャの設定
 window.sm = new SoundManager();
 
+// モバイル(PWA/Web App)環境でのオーディオコンテキストロック解除
+const unlockAudio = () => {
+  window.sm.unlock();
+  document.removeEventListener('touchstart', unlockAudio);
+  document.removeEventListener('touchend', unlockAudio);
+  document.removeEventListener('click', unlockAudio);
+};
+document.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+document.addEventListener('touchend', unlockAudio, { once: true, passive: true });
+document.addEventListener('click', unlockAudio, { once: true, passive: true });
+
 // グローバルなUI音（ホバー・クリック）のイベントデリゲーション
 document.body.addEventListener('mouseover', (e) => {
   if (e.target.closest('button') || e.target.closest('.card') || e.target.closest('.char-card')) {
@@ -43,6 +54,7 @@ document.body.addEventListener('mouseover', (e) => {
     window.sm.playUIHover();
   }
 });
+// PCでは mousedown、モバイルでは mousedown(合成イベント) またはタッチ操作によるUIクリック音
 document.body.addEventListener('mousedown', (e) => {
   window.sm.resume(); // オーディオコンテキストの再開
   if (e.target.closest('button')) {

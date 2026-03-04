@@ -73,6 +73,22 @@ export class SoundManager {
         }
     }
 
+    // iOS/SafariなどのPWA起動時にオーディオコンテキストを強制アクティブにするためのハック
+    unlock() {
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+        // 無音を再生してコンテキストを強制アクティブにする
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        gain.gain.value = 0;
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(0);
+        osc.stop(this.ctx.currentTime + 0.001);
+    }
+
     // ==========================================
     // 1. UI・画面遷移・操作音
     // ==========================================
