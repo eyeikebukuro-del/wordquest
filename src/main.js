@@ -1539,7 +1539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clothes: '👕 ふく', home: '🏠 おうち', action: '🏃 うごき',
     feeling: '😊 きもち', place: '🏞️ ばしょ', time: '⏰ じかん',
     shape: '🔺 かたち', transport: '🚗 のりもの', toy: '🎮 おもちゃ',
-    pronoun: '🙋 だいめいし', other: '✨ その他'
+    pronoun: '🙋 だいめいし', person: '🧑 ひと', object: '📦 もの', other: '✨ その他'
   };
 
   function showWordList(filterCat = 'all') {

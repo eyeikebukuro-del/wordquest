@@ -2784,7 +2784,7 @@
     },
     {
       "english": "van",
-      "japanese": "ワゴンしゃ",
+      "japanese": "おおがたのくるま",
       "category": "transport",
       "difficulty": 1,
       "emoji": "🚐",
@@ -2969,7 +2969,7 @@
     {
       "id": 1904,
       "english": "wig",
-      "japanese": "かつら",
+      "japanese": "ウィッグ",
       "category": "object",
       "difficulty": 1,
       "emoji": "💇"
@@ -3010,7 +3010,7 @@
       "id": 1909,
       "english": "jet",
       "japanese": "ジェットき",
-      "category": "vehicle",
+      "category": "transport",
       "difficulty": 1,
       "emoji": "✈️"
     },
