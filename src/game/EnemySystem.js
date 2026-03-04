@@ -20,6 +20,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'slime',
         name: 'スライム',
         emoji: '🟢',
+        image: './characters/slime.png',
         baseHp: 20,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 5, emoji: '⚔️' },
@@ -32,6 +33,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'goblin',
         name: 'ゴブリン',
         emoji: '👺',
+        image: './characters/goblin.png',
         baseHp: 25,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 6, emoji: '⚔️' },
@@ -44,6 +46,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'mushroom',
         name: 'マッシュルーム',
         emoji: '🍄',
+        image: './characters/mushroom.png',
         baseHp: 18,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 4, emoji: '⚔️' },
@@ -56,6 +59,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'bat',
         name: 'コウモリ',
         emoji: '🦇',
+        image: './characters/bat.png',
         baseHp: 15,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 4, emoji: '⚔️' },
@@ -68,6 +72,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'metal_slime',
         name: 'メタルスライム',
         emoji: '🛡️',
+        image: './characters/metal_slime.png',
         baseHp: 15,
         patterns: [
             { intent: ENEMY_INTENTS.DEFEND, block: 15, emoji: '🛡️' },
@@ -80,6 +85,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'poison_toad',
         name: 'ポイズントード',
         emoji: '🐸',
+        image: './characters/poison_toad.png',
         baseHp: 28,
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 3, emoji: '⚔️' }, // 実際は毒攻撃にしたいが今のシステムで再現するならバフ等が必要

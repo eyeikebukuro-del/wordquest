@@ -28,10 +28,12 @@ if __name__ == "__main__":
     os.makedirs(public_dir, exist_ok=True)
     
     files = {
-        "skeleton_1772611021138.png": "skeleton.png",
-        "golem_1772611038451.png": "golem.png",
-        "dark_mage_1772611054522.png": "dark_mage.png",
-        "spider_1772611070120.png": "spider.png"
+        "slime_1772611862588.png": "slime.png",
+        "goblin_1772611876348.png": "goblin.png",
+        "mushroom_1772611892311.png": "mushroom.png",
+        "bat_1772611942705.png": "bat.png",
+        "metal_slime_1772611958214.png": "metal_slime.png",
+        "poison_toad_1772611970406.png": "poison_toad.png"
     }
     
     for in_name, out_name in files.items():
