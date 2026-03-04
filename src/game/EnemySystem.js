@@ -94,7 +94,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'forest_guardian',
         name: '森のガーディアン',
         emoji: '🌳',
-        image: null,
+        image: './characters/forest_guardian.png',
         baseHp: 55,
         isBoss: true,
         patterns: [
@@ -161,7 +161,7 @@ export const ENEMY_DEFINITIONS = {
         id: 'cave_dragon',
         name: '洞窟ドラゴン',
         emoji: '🐲',
-        image: null,
+        image: './characters/cave_dragon.png',
         baseHp: 80,
         isBoss: true,
         patterns: [
