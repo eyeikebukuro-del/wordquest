@@ -16,7 +16,8 @@ export const CARD_TYPES = {
 export const QUIZ_MODES = {
     CHOICE: 'choice',       // 4択
     TYPING: 'typing',       // タイピング
-    CHOICE_DOUBLE: 'choice_double' // 4択×2問
+    CHOICE_DOUBLE: 'choice_double', // 4択×2問
+    CHOICE_TRIPLE: 'choice_triple' // 4択×3問
 };
 
 /**
@@ -150,6 +151,19 @@ export const CARD_DEFINITIONS = {
         rarity: 'rare',
         color: '#5f27cd'
     },
+    triple_slash: {
+        id: 'triple_slash',
+        name: 'トリプルスラッシュ',
+        type: CARD_TYPES.ATTACK,
+        cost: 4,
+        baseDamage: 12,
+        hits: 3,
+        emoji: '⚡',
+        description: '⚡ 12ダメージを3回！クイズを3問とく！',
+        quizMode: QUIZ_MODES.CHOICE_TRIPLE,
+        rarity: 'rare',
+        color: '#ff3f3f'
+    },
 
     // ── 新・攻撃カード ──
 
@@ -272,6 +286,19 @@ export const CARD_DEFINITIONS = {
         rarity: 'uncommon',
         color: '#55efc4'
     },
+    holy_shield: {
+        id: 'holy_shield',
+        name: 'ホーリーシールド',
+        type: CARD_TYPES.DEFENSE,
+        cost: 3,
+        baseBlock: 15,
+        healAmount: 10,
+        emoji: '✨',
+        description: '✨ 15ブロック！さらにHPを10かいふく！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#feca57'
+    },
 
     // === スキルカード ===
     heal: {
@@ -368,10 +395,9 @@ export const CARD_DEFINITIONS = {
         type: CARD_TYPES.SKILL,
         cost: 0,
         emoji: '🎯',
-        description: '🎯 敵の毒が3以上なら次の攻撃が2倍！コスト0！',
+        description: '🎯 次の攻撃のダメージが2倍！コスト0！',
         quizMode: QUIZ_MODES.CHOICE,
         weakPoint: true, // BattleSystem側でnextAttackMultiplier 加算
-        weakPointThreshold: 3, // 初期は毒3必要
         rarity: 'uncommon',
         color: '#00b894'
     },
@@ -444,7 +470,6 @@ export function addCardXP(card) {
         if (card.accumulate) card.accumulate += 1;
         if (card.snowballBuff) card.snowballBuff += 1; // 3->4->5
         if (card.lengthSynergy) card.lengthSynergy += 1; // 3->4->5
-        if (card.weakPointThreshold && card.weakPointThreshold > 1) card.weakPointThreshold -= 1; // 3->2->1
         if (card.mirrorRatio) card.mirrorRatio += 0.5; // 1->1.5->2.0
         if (card.buff) {
             if (card.buff.type === 'strength') {
@@ -476,6 +501,8 @@ export function getCardDescription(card) {
         case 'fireball':
             return `🔥 ${card.baseDamage}ダメージ！燃えさかる火の玉！`;
         case 'double_strike':
+            return `⚡ ${card.baseDamage}ダメージを${card.hits}回！クイズを${card.hits}問とく！`;
+        case 'triple_slash':
             return `⚡ ${card.baseDamage}ダメージを${card.hits}回！クイズを${card.hits}問とく！`;
         case 'thunder':
             return `⛈️ ${card.baseDamage}ダメージ！コンボ中はさらに+${card.comboBonus}ダメージ！`;
@@ -511,6 +538,8 @@ export function getCardDescription(card) {
             return `✨ ${card.baseBlock}ブロック！次のターンも${card.persistBlock}ブロック残る！`;
         case 'thorn_armor':
             return `🦔 ${card.baseBlock}ブロック！攻撃されるたびに${card.thornArmor}ダメージ返す！`;
+        case 'holy_shield':
+            return `✨ ${card.baseBlock}ブロック！さらにHPを${card.healAmount}かいふく！`;
 
         // === スキルカード ===
         case 'heal':
@@ -530,7 +559,7 @@ export function getCardDescription(card) {
         case 'accumulate':
             return `🌀 全攻撃ダメージがずっと+${card.accumulate}！` + suffix;
         case 'weak_point':
-            return `🎯 敵の毒が${card.weakPointThreshold}以上なら次の攻撃が2倍！` + suffix;
+            return `🎯 次の攻撃のダメージが2倍！` + suffix;
         case 'mirror_copy': {
             const ratioStr = card.mirrorRatio > 1 ? `（威力${card.mirrorRatio}倍！）` : '';
             return `🪞 前のカードをもう1回使う${ratioStr}！` + suffix;

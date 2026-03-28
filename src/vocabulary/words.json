@@ -835,7 +835,7 @@
     {
       "id": 407,
       "english": "foot",
-      "japanese": "あし",
+      "japanese": "あし（あしくびからした）",
       "category": "body",
       "difficulty": 1,
       "emoji": "🦶"
@@ -930,7 +930,7 @@
     },
     {
       "english": "leg",
-      "japanese": "あし",
+      "japanese": "あし（あしぜんたい）",
       "category": "body",
       "difficulty": 1,
       "emoji": "🦵",

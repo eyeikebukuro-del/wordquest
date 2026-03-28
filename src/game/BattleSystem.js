@@ -241,8 +241,8 @@ export class BattleSystem {
             const cardResult = this.applyCardEffect(this.selectedCard);
             result.cardEffect = cardResult;
 
-            // ダブルストライクの2問目チェック
-            if (this.selectedCard.quizMode === QUIZ_MODES.CHOICE_DOUBLE &&
+            // ダブルストライク等の連撃問題チェック
+            if ((this.selectedCard.quizMode === QUIZ_MODES.CHOICE_DOUBLE || this.selectedCard.quizMode === QUIZ_MODES.CHOICE_TRIPLE) &&
                 this.currentHitIndex < (this.selectedCard.hits || 1)) {
                 // もう1問出題
                 const weights = this.spacedRep.getWeights();
@@ -476,17 +476,11 @@ export class BattleSystem {
             this.log.push(`ちくせきの力！ 永続ダメージバフ合計: +${this.damagePermanentBuff}`);
         }
 
-        // ウィークポイント：敵の毒が規定値以上なら次の攻撃倍率+1（累積加算）
+        // ウィークポイント：次の攻撃倍率+1（累積加算）
         if (card.weakPoint) {
-            const threshold = card.weakPointThreshold || 3;
-            if (this.enemyPoison >= threshold) {
-                this.nextAttackMultiplier += 1;
-                result.effects.push({ type: 'weak_point_set', multiplier: this.nextAttackMultiplier });
-                this.log.push(`ウィークポイント！ 次の攻撃ダメージが${this.nextAttackMultiplier}倍になる！`);
-            } else {
-                result.effects.push({ type: 'weak_point_fail', poison: this.enemyPoison });
-                this.log.push(`ウィークポイント不発（毒が${this.enemyPoison}、${threshold}以上必要）`);
-            }
+            this.nextAttackMultiplier += 1;
+            result.effects.push({ type: 'weak_point_set', multiplier: this.nextAttackMultiplier });
+            this.log.push(`ウィークポイント！ 次の攻撃ダメージが${this.nextAttackMultiplier}倍になる！`);
         }
 
         // ミラーコピー：最後に使ったカードを再実行（全カード対応）
@@ -607,14 +601,9 @@ export class BattleSystem {
 
                     // ウィークポイントのコピー（累積加算）
                     if (lastDef.weakPoint) {
-                        const threshold = lastDef.weakPointThreshold || 3;
-                        if (this.enemyPoison >= threshold) {
-                            this.nextAttackMultiplier += 1;
-                            result.effects.push({ type: 'weak_point_set', multiplier: this.nextAttackMultiplier });
-                            this.log.push(`ミラーコピー：ウィークポイント！ 次の攻撃ダメージが${this.nextAttackMultiplier}倍になる！`);
-                        } else {
-                            result.effects.push({ type: 'weak_point_fail', poison: this.enemyPoison });
-                        }
+                        this.nextAttackMultiplier += 1;
+                        result.effects.push({ type: 'weak_point_set', multiplier: this.nextAttackMultiplier });
+                        this.log.push(`ミラーコピー：ウィークポイント！ 次の攻撃ダメージが${this.nextAttackMultiplier}倍になる！`);
                         hasEffect = true;
                     }
 
