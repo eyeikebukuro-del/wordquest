@@ -157,15 +157,16 @@ export class BattleSystem {
             this.currentQuiz = this.wordDb.generateQuestion(word, type);
         }
 
-        // レリック「ちえの宝石」やヒントポーションでヒント表示
-        if (this.scaling.hasRelic('hint') && this.currentQuiz.choices) {
-            this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + 1;
+        // ポーション効果をこのカードの連撃全体に適用するため保持
+        if (this.nextQuizHints > 0) {
+            this.selectedCard.potionHints = (this.selectedCard.potionHints || 0) + this.nextQuizHints;
+            this.nextQuizHints = 0; // 消費
         }
 
-        // ポーションによるヒント適用
-        if (this.nextQuizHints > 0 && this.currentQuiz.choices) {
-            this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + this.nextQuizHints;
-            this.nextQuizHints = 0; // 消費
+        // レリック「ちえの宝石」とヒントポーションのヒント適用
+        const totalHints = (this.scaling.hasRelic('hint') ? 1 : 0) + (this.selectedCard.potionHints || 0);
+        if (totalHints > 0 && this.currentQuiz.choices) {
+            this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + totalHints;
         }
 
         this.emit('quiz_start', {
@@ -229,7 +230,7 @@ export class BattleSystem {
 
             // 進化する古文書：マルチプライヤー上昇
             if (this.enemy.id === 'evolving_archive') {
-                this.awakeningMultiplier *= 1.15;
+                this.awakeningMultiplier *= 1.1;
                 this.log.push(`覚醒する知性！ ダメージ倍率: ${this.awakeningMultiplier.toFixed(2)}倍`);
             }
 
@@ -250,9 +251,10 @@ export class BattleSystem {
                 const type = Math.random() > 0.5 ? 'en_to_jp' : 'jp_to_en';
                 this.currentQuiz = this.wordDb.generateQuestion(nextWord, type);
 
-                // レリック「ちえの宝石」のヒント適用
-                if (this.scaling.hasRelic('hint') && this.currentQuiz.choices) {
-                    this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + 1;
+                // レリック「ちえの宝石」とヒントポーションのヒント適用
+                const totalHints = (this.scaling.hasRelic('hint') ? 1 : 0) + (this.selectedCard.potionHints || 0);
+                if (totalHints > 0 && this.currentQuiz.choices) {
+                    this.currentQuiz.hintEliminated = (this.currentQuiz.hintEliminated || 0) + totalHints;
                 }
 
                 result.nextQuiz = this.currentQuiz;
