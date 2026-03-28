@@ -30,22 +30,38 @@ export class WordDatabase {
   }
 
   /**
-   * ランダムに単語を1つ取得（重み付き）
-   * @param {number} maxDifficulty - 最大難易度
-   * @param {Object} weights - 単語IDをキー、重みを値とするオブジェクト
+   * フロアに応じた難易度重み設定
+   * @param {number} floor - 現在のフロア番号（1-3）
+   * @returns {{ maxDiff: number, diffWeights: Object }}
+   */
+  getFloorDifficultyConfig(floor) {
+    // フロアごとに各難易度の出現倍率（重み）を設定
+    const configs = {
+      1: { maxDiff: 2, diffWeights: { 1: 3, 2: 1 } },        // フロア1：難易度1多め、難易度2少し
+      2: { maxDiff: 3, diffWeights: { 1: 1, 2: 3, 3: 1 } },   // フロア2：難易度2多め
+      3: { maxDiff: 3, diffWeights: { 1: 1, 2: 1, 3: 1 } }    // フロア3：均等
+    };
+    return configs[floor] || configs[3];
+  }
+
+  /**
+   * ランダムに単語を1つ取得（フロア難易度重み付き）
+   * @param {number} floor - 現在のフロア番号（1-3）
+   * @param {Object} weights - 単語IDをキー、スペースドレップ重みを値とするオブジェクト
    * @param {Array} excludeIds - 除外する単語ID
    * @returns {Object} 選択された単語
    */
-  getWeightedRandomWord(maxDifficulty, weights = {}, excludeIds = []) {
-    const candidates = this.getWordsByDifficulty(maxDifficulty)
+  getWeightedRandomWord(floor, weights = {}, excludeIds = []) {
+    const { maxDiff, diffWeights } = this.getFloorDifficultyConfig(floor);
+    const candidates = this.getWordsByDifficulty(maxDiff)
       .filter(w => !excludeIds.includes(w.id));
 
     if (candidates.length === 0) return null;
 
-    // 重み付きランダム選択
+    // スペースドレップ重み × フロア難易度重みで最終重みを計算
     const weightedList = candidates.map(w => ({
       word: w,
-      weight: weights[w.id] || 1
+      weight: (weights[w.id] || 1) * (diffWeights[w.difficulty] || 1)
     }));
 
     const totalWeight = weightedList.reduce((sum, item) => sum + item.weight, 0);

@@ -27,14 +27,17 @@ export class BattleSystem {
      * @param {Object} scaling - スケーリングシステム
      * @param {Object} wordDb - 英単語データベース
      * @param {Object} spacedRep - 間隔反復システム
+     * @param {number} currentFloor - 現在のフロア番号
      */
-    constructor(player, enemy, deck, scaling, wordDb, spacedRep) {
+    constructor(player, enemy, deck, scaling, wordDb, spacedRep, currentFloor = 1) {
         this.player = player;
         this.enemy = enemy;
         this.deck = new DeckManager(deck);
         this.scaling = scaling;
         this.wordDb = wordDb;
         this.spacedRep = spacedRep;
+        /** 現在のフロア（クイズ難易度制御用） */
+        this.currentFloor = currentFloor;
 
         /** バトル状態 */
         this.state = BATTLE_STATES.PLAYER_TURN;
@@ -143,10 +146,10 @@ export class BattleSystem {
         this.currentHitIndex = 0;
         this.state = BATTLE_STATES.QUIZ_ACTIVE;
 
-        // 難易度に応じた単語を選択
-        const maxDifficulty = this.enemy.isBoss ? 3 : Math.min(3, Math.ceil(this.scaling.getEnemyScaling(1, 0)));
+        // フロアに応じた難易度重み付きで単語を選択
+        const quizFloor = this.enemy.isBoss ? 3 : (this.currentFloor || 1);
         const weights = this.spacedRep.getWeights();
-        const word = this.wordDb.getWeightedRandomWord(maxDifficulty, weights);
+        const word = this.wordDb.getWeightedRandomWord(quizFloor, weights);
 
         // 出題形式の決定
         if (card.quizMode === QUIZ_MODES.TYPING) {
@@ -230,7 +233,7 @@ export class BattleSystem {
 
             // 進化する古文書：マルチプライヤー上昇
             if (this.enemy.id === 'evolving_archive') {
-                this.awakeningMultiplier *= 1.1;
+                this.awakeningMultiplier *= 1.15;
                 this.log.push(`覚醒する知性！ ダメージ倍率: ${this.awakeningMultiplier.toFixed(2)}倍`);
             }
 
@@ -247,7 +250,7 @@ export class BattleSystem {
                 this.currentHitIndex < (this.selectedCard.hits || 1)) {
                 // もう1問出題
                 const weights = this.spacedRep.getWeights();
-                const nextWord = this.wordDb.getWeightedRandomWord(3, weights, [this.currentQuiz.word.id]);
+                const nextWord = this.wordDb.getWeightedRandomWord(this.currentFloor || 1, weights, [this.currentQuiz.word.id]);
                 const type = Math.random() > 0.5 ? 'en_to_jp' : 'jp_to_en';
                 this.currentQuiz = this.wordDb.generateQuestion(nextWord, type);
 

@@ -172,7 +172,8 @@ export class GameEngine {
             [...this.playerDeck],
             this.scaling,
             this.wordDb,
-            this.spacedRep
+            this.spacedRep,
+            this.currentFloor  // フロア情報を渡す
         );
 
         this.scaling.comboCount = 0;
@@ -193,7 +194,8 @@ export class GameEngine {
             [...this.playerDeck],
             this.scaling,
             this.wordDb,
-            this.spacedRep
+            this.spacedRep,
+            this.currentFloor  // フロア情報を渡す
         );
 
         this.scaling.comboCount = 0;
