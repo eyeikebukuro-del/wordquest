@@ -24,6 +24,10 @@ export const QUIZ_MODES = {
  * 全カード定義マスタ
  */
 export const CARD_DEFINITIONS = {
+    // =========================================================================
+    // === ワードマスター（wordmaster）専用カード定義 ===
+    // =========================================================================
+
     // === 攻撃カード ===
     slash: {
         id: 'slash',
@@ -413,6 +417,873 @@ export const CARD_DEFINITIONS = {
         mirrorRatio: 1, // 初期は1倍
         rarity: 'rare',
         color: '#e17055'
+    },
+
+    // =========================================================================
+    // === 算術マスター（mathmaster）専用カード定義 ===
+    // =========================================================================
+
+    // ── 算術マスター：攻撃カード ──
+    abacus_strike: {
+        id: 'abacus_strike',
+        name: 'そろばん弾き',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 6,
+        emoji: '🧮',
+        description: '🧮 6ダメージ！はじき出した数で攻撃！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#ff6b6b'
+    },
+    mental_math: {
+        id: 'mental_math',
+        name: '暗算ショット',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 0,
+        baseDamage: 3,
+        emoji: '💡',
+        description: '💡 3ダメージ！コスト0ですばやく計算！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#a8e6cf'
+    },
+    prime_slash: {
+        id: 'prime_slash',
+        name: '素数スラッシュ',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 4,
+        emoji: '📏',
+        description: '📏 4ダメージ！敵の攻撃力を2さげる（1ターン）',
+        quizMode: QUIZ_MODES.CHOICE,
+        debuff: { type: 'weakened', value: 2, turns: 1 },
+        rarity: 'common',
+        color: '#74b9ff'
+    },
+    nine_tables: {
+        id: 'nine_tables',
+        name: '九九の連弾',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 5,
+        hits: 2,
+        emoji: '🔢',
+        description: '🔢 5ダメージを2回！計算を2問とく！',
+        quizMode: QUIZ_MODES.CHOICE_DOUBLE,
+        rarity: 'uncommon',
+        color: '#ffa500'
+    },
+    indian_math: {
+        id: 'indian_math',
+        name: 'インド式魔導砲',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 12,
+        twoDigitBonusDamage: 8,
+        emoji: '🇮🇳',
+        description: '🇮🇳 12ダメージ！2けたの計算ならさらに+8ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#ff4500'
+    },
+    exponential_strike: {
+        id: 'exponential_strike',
+        name: '累乗インパクト',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 10,
+        comboBonus: 6,
+        emoji: '📈',
+        description: '📈 10ダメージ！コンボ中はさらに+6ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#ffea00'
+    },
+    fractal_venom: {
+        id: 'fractal_venom',
+        name: 'フラクタル侵食',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 3,
+        poison: 3,
+        emoji: '🧪',
+        description: '🧪 3ダメージ＋毒3！無限に広がる数式の毒！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#6c5ce7'
+    },
+    paradox_flame: {
+        id: 'paradox_flame',
+        name: 'パラドックスの炎',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 3,
+        rageFlame: true,
+        emoji: '🔥',
+        description: '🔥 3ダメージ！さらに、へったHP÷5ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#e74c3c'
+    },
+    factor_vortex: {
+        id: 'factor_vortex',
+        name: '因数うずしお',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 2,
+        vortex: true,
+        emoji: '🌊',
+        description: '🌊 2ダメージ！さらに手札のまい数×2ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#0984e3'
+    },
+    product_burst: {
+        id: 'product_burst',
+        name: '積のバースト',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 4,
+        digitSumSynergy: 2,
+        emoji: '💥',
+        description: '💥 4ダメージ＋こたえの各けたの合計×2のダメージとブロック！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#5f27cd'
+    },
+    big_number_cannon: {
+        id: 'big_number_cannon',
+        name: '大数カノン',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 8,
+        answerScaleDivisor: 15,
+        emoji: '🚀',
+        description: '🚀 8ダメージ！さらに「こたえ÷15」ダメージ追加！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#00cec9'
+    },
+    fibonacci_spiral: {
+        id: 'fibonacci_spiral',
+        name: '黄金比スパイラル',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 10,
+        comboMultiplierBonus: 5,
+        emoji: '🌀',
+        description: '🌀 10ダメージ＋コンボ数×5ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#ff9f43'
+    },
+    square_meteor: {
+        id: 'square_meteor',
+        name: '平方メテオ',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 3,
+        baseDamage: 24,
+        emoji: '☄️',
+        description: '☄️ 24ダメージ！巨大な立方体をおとす大技！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#e056fd'
+    },
+    triple_matrix: {
+        id: 'triple_matrix',
+        name: '三重マトリクス',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 4,
+        baseDamage: 12,
+        hits: 3,
+        emoji: '⚡',
+        description: '⚡ 12ダメージを3回！計算を3問とく！',
+        quizMode: QUIZ_MODES.CHOICE_TRIPLE,
+        rarity: 'rare',
+        color: '#ff3f3f'
+    },
+    theorem_blade: {
+        id: 'theorem_blade',
+        name: '定理の刃',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 4,
+        soulBlade: true,
+        emoji: '📜',
+        description: '📜 4ダメージ！さらに正解数×2ダメージ追加！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#8e44ad'
+    },
+    sequence_snowball: {
+        id: 'sequence_snowball',
+        name: '等差ストーム',
+        character: 'mathmaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 2,
+        snowball: true,
+        snowballBuff: 4,
+        emoji: '🌨️',
+        description: '🌨️ 2ダメージ！使うたびにずっと+4ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#74b9ff'
+    },
+
+    // ── 算術マスター：防御カード ──
+    geometric_shield: {
+        id: 'geometric_shield',
+        name: '幾何学バリア',
+        character: 'mathmaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 1,
+        baseBlock: 5,
+        emoji: '📐',
+        description: '📐 5ブロック！美しい図形で攻撃をふせぐ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#74b9ff'
+    },
+    magic_square: {
+        id: 'magic_square',
+        name: '魔方陣ウォール',
+        character: 'mathmaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 2,
+        baseBlock: 12,
+        emoji: '🧱',
+        description: '🧱 12ブロック！完璧な魔方陣でかためる！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#636e72'
+    },
+    inverse_counter: {
+        id: 'inverse_counter',
+        name: '逆算カウンター',
+        character: 'mathmaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 1,
+        baseBlock: 3,
+        baseDamage: 3,
+        emoji: '🔄',
+        description: '🔄 3ブロック！さらに3ダメージ返す！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#fd79a8'
+    },
+    compass_needle: {
+        id: 'compass_needle',
+        name: 'コンパスの針',
+        character: 'mathmaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 1,
+        baseBlock: 4,
+        thornArmor: 3,
+        emoji: '🧭',
+        description: '🧭 4ブロック！攻撃されるたびに3ダメージ返す！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#55efc4'
+    },
+    mobius_ring: {
+        id: 'mobius_ring',
+        name: 'メビウスの輪',
+        character: 'mathmaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 2,
+        baseBlock: 8,
+        persistent: true,
+        persistBlock: 4,
+        emoji: '♾️',
+        description: '♾️ 8ブロック！次のターンも4ブロック残る！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#00cec9'
+    },
+    golden_fortress: {
+        id: 'golden_fortress',
+        name: '黄金律の要塞',
+        character: 'mathmaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 3,
+        baseBlock: 15,
+        healAmount: 10,
+        emoji: '🏛️',
+        description: '🏛️ 15ブロック！さらにHPを10かいふく！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#feca57'
+    },
+
+    // ── 算術マスター：スキルカード ──
+    proof_heal: {
+        id: 'proof_heal',
+        name: '証明完了',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        healAmount: 5,
+        emoji: '📝',
+        description: '📝 HPを5かいふく！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#00b894'
+    },
+    formula_boost: {
+        id: 'formula_boost',
+        name: '公式展開',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        emoji: '📊',
+        description: '📊 次の攻撃のダメージが+50%！',
+        quizMode: QUIZ_MODES.CHOICE,
+        buff: { type: 'strength', value: 1.5, turns: 1 },
+        rarity: 'uncommon',
+        color: '#e17055'
+    },
+    brain_accelerate: {
+        id: 'brain_accelerate',
+        name: '思考加速',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        drawCount: 2,
+        emoji: '🧠',
+        description: '🧠 カードを2まい引く！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#dfe6e9'
+    },
+    double_formula: {
+        id: 'double_formula',
+        name: '2倍角の公式',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 0,
+        weakPoint: true,
+        emoji: '🎯',
+        description: '🎯 次の攻撃のダメージが2倍！コスト0！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#00b894'
+    },
+    zero_point: {
+        id: 'zero_point',
+        name: 'ゼロの発見',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 0,
+        emoji: '0️⃣',
+        description: '0️⃣ 次のターン、エナジー+1！コスト0！',
+        quizMode: QUIZ_MODES.CHOICE,
+        buff: { type: 'next_turn_energy', value: 1, turns: 1 },
+        rarity: 'rare',
+        color: '#a29bfe'
+    },
+    perfect_number: {
+        id: 'perfect_number',
+        name: '完全数リカバリー',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 2,
+        healAmount: 12,
+        emoji: '💖',
+        description: '💖 HPを12かいふく！美しい数の調和！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#fd79a8'
+    },
+    exponential_poison: {
+        id: 'exponential_poison',
+        name: '倍々ゲーム',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 2,
+        poison: 5,
+        catalyst: true,
+        emoji: '☣️',
+        description: '☣️ 毒5を与える！さらに敵の毒を2倍にする！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#8e44ad'
+    },
+    axiom_power: {
+        id: 'axiom_power',
+        name: '公理の蓄積',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        accumulate: 3,
+        emoji: '📚',
+        description: '📚 全攻撃ダメージがずっと+3！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#6c5ce7'
+    },
+    symmetry_mirror: {
+        id: 'symmetry_mirror',
+        name: '線対称ミラー',
+        character: 'mathmaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        mirrorCopy: true,
+        mirrorRatio: 1,
+        emoji: '🪞',
+        description: '🪞 前のカードをもう1回使う！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#e17055'
+    },
+
+    // =========================================================================
+    // === カンフーマスター（kungfumaster）専用カード定義 ===
+    // =========================================================================
+
+    // ── カンフーマスター：攻撃カード ──
+    seiken_tsuki: {
+        id: 'seiken_tsuki',
+        name: '正拳突き',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 6,
+        emoji: '👊',
+        description: '👊 6ダメージ！まっすぐな拳で突きぬく！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#ff6b6b'
+    },
+    shippu_kick: {
+        id: 'shippu_kick',
+        name: '疾風脚',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 0,
+        baseDamage: 3,
+        emoji: '🦶',
+        description: '🦶 3ダメージ！コスト0のすばやい蹴り！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#a8e6cf'
+    },
+    hakkei_palm: {
+        id: 'hakkei_palm',
+        name: '発勁掌',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 4,
+        emoji: '✋',
+        description: '✋ 4ダメージ！敵の攻撃力を2さげる（1ターン）',
+        quizMode: QUIZ_MODES.CHOICE,
+        debuff: { type: 'weakened', value: 2, turns: 1 },
+        rarity: 'common',
+        color: '#74b9ff'
+    },
+    renbu_ken: {
+        id: 'renbu_ken',
+        name: '連舞拳',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 5,
+        hits: 2,
+        emoji: '🥋',
+        description: '🥋 5ダメージを2回！漢字クイズを2問とく！',
+        quizMode: QUIZ_MODES.CHOICE_DOUBLE,
+        rarity: 'uncommon',
+        color: '#ffa500'
+    },
+    dragon_kick: {
+        id: 'dragon_kick',
+        name: '龍神脚',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 14,
+        emoji: '🐉',
+        description: '🐉 14ダメージ！龍のような跳び蹴り！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#ff4500'
+    },
+    gouken_strike: {
+        id: 'gouken_strike',
+        name: '剛拳砕き',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 12,
+        highStrokeBonusDamage: 8,
+        emoji: '💥',
+        description: '💥 12ダメージ！10画以上の漢字ならさらに+8ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#e17055'
+    },
+    raijin_ken: {
+        id: 'raijin_ken',
+        name: '雷神拳',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 10,
+        comboBonus: 6,
+        emoji: '⚡',
+        description: '⚡ 10ダメージ！コンボ中はさらに+6ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#ffea00'
+    },
+    dokushu_ken: {
+        id: 'dokushu_ken',
+        name: '毒手拳',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 3,
+        poison: 3,
+        emoji: '🦂',
+        description: '🦂 3ダメージ＋毒3！秘伝の毒手で攻撃！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#6c5ce7'
+    },
+    haisui_ken: {
+        id: 'haisui_ken',
+        name: '背水の拳',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 3,
+        rageFlame: true,
+        emoji: '🔥',
+        description: '🔥 3ダメージ！さらに、へったHP÷5ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#e74c3c'
+    },
+    senpu_kyaku: {
+        id: 'senpu_kyaku',
+        name: '旋風脚',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 2,
+        vortex: true,
+        emoji: '🌪️',
+        description: '🌪️ 2ダメージ！さらに手札のまい数×2ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#0984e3'
+    },
+    kakusu_burst: {
+        id: 'kakusu_burst',
+        name: '画数バースト',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 4,
+        strokeSynergy: 2,
+        emoji: '🖌️',
+        description: '🖌️ 4ダメージ＋漢字の画数×2のダメージとブロック！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#5f27cd'
+    },
+    renki_hadou: {
+        id: 'renki_hadou',
+        name: '練気波動',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 10,
+        comboMultiplierBonus: 5,
+        emoji: '🌀',
+        description: '🌀 10ダメージ＋コンボ数×5ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#ff9f43'
+    },
+    tenchi_haoh: {
+        id: 'tenchi_haoh',
+        name: '天地覇王拳',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 3,
+        baseDamage: 24,
+        emoji: '☄️',
+        description: '☄️ 24ダメージ！天地をゆらす究極奥義！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#e056fd'
+    },
+    hyakuretsu_ken: {
+        id: 'hyakuretsu_ken',
+        name: '百烈拳',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 4,
+        baseDamage: 12,
+        hits: 3,
+        emoji: '👊',
+        description: '👊 12ダメージを3回！漢字クイズを3問とく！',
+        quizMode: QUIZ_MODES.CHOICE_TRIPLE,
+        rarity: 'rare',
+        color: '#ff3f3f'
+    },
+    bushin_blade: {
+        id: 'bushin_blade',
+        name: '武神の魂',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 1,
+        baseDamage: 4,
+        soulBlade: true,
+        emoji: '🏮',
+        description: '🏮 4ダメージ！さらに正解数×2ダメージ追加！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#8e44ad'
+    },
+    shugyo_snowball: {
+        id: 'shugyo_snowball',
+        name: '千日修行',
+        character: 'kungfumaster',
+        type: CARD_TYPES.ATTACK,
+        cost: 2,
+        baseDamage: 2,
+        snowball: true,
+        snowballBuff: 4,
+        emoji: '⛰️',
+        description: '⛰️ 2ダメージ！使うたびにずっと+4ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#74b9ff'
+    },
+
+    // ── カンフーマスター：防御カード ──
+    kiko_guard: {
+        id: 'kiko_guard',
+        name: '気功ガード',
+        character: 'kungfumaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 1,
+        baseBlock: 5,
+        emoji: '🛡️',
+        description: '🛡️ 5ブロック！気のオーラで攻撃をふせぐ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#74b9ff'
+    },
+    kongou_stance: {
+        id: 'kongou_stance',
+        name: '金剛立ち',
+        character: 'kungfumaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 2,
+        baseBlock: 12,
+        emoji: '🗿',
+        description: '🗿 12ブロック！岩のように動かない構え！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#636e72'
+    },
+    taikyoku_counter: {
+        id: 'taikyoku_counter',
+        name: '太極カウンター',
+        character: 'kungfumaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 1,
+        baseBlock: 3,
+        baseDamage: 3,
+        emoji: '☯️',
+        description: '☯️ 3ブロック！敵の力を受け流して3ダメージ！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#fd79a8'
+    },
+    ryu_uroko: {
+        id: 'ryu_uroko',
+        name: '龍のうろこ',
+        character: 'kungfumaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 1,
+        baseBlock: 4,
+        thornArmor: 3,
+        emoji: '🐲',
+        description: '🐲 4ブロック！攻撃されるたびに3ダメージ返す！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#55efc4'
+    },
+    fudou_stance: {
+        id: 'fudou_stance',
+        name: '不動の構え',
+        character: 'kungfumaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 2,
+        baseBlock: 8,
+        persistent: true,
+        persistBlock: 4,
+        emoji: '🏯',
+        description: '🏯 8ブロック！次のターンも4ブロック残る！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#00cec9'
+    },
+    senjutsu_wall: {
+        id: 'senjutsu_wall',
+        name: '仙術の護り',
+        character: 'kungfumaster',
+        type: CARD_TYPES.DEFENSE,
+        cost: 3,
+        baseBlock: 15,
+        healAmount: 10,
+        emoji: '✨',
+        description: '✨ 15ブロック！さらにHPを10かいふく！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#feca57'
+    },
+
+    // ── カンフーマスター：スキルカード ──
+    kokyu_ho: {
+        id: 'kokyu_ho',
+        name: '呼吸法',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        healAmount: 5,
+        emoji: '🍃',
+        description: '🍃 HPを5かいふく！深い呼吸で気を整える！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'common',
+        color: '#00b894'
+    },
+    kiai_boost: {
+        id: 'kiai_boost',
+        name: '気合充実',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        emoji: '💪',
+        description: '💪 次の攻撃のダメージが+50%！',
+        quizMode: QUIZ_MODES.CHOICE,
+        buff: { type: 'strength', value: 1.5, turns: 1 },
+        rarity: 'uncommon',
+        color: '#e17055'
+    },
+    shingan_draw: {
+        id: 'shingan_draw',
+        name: '心眼',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        drawCount: 2,
+        emoji: '👁️',
+        description: '👁️ カードを2まい引く！心の目で動きを読む！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#dfe6e9'
+    },
+    kyusho_strike: {
+        id: 'kyusho_strike',
+        name: '急所見切り',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 0,
+        weakPoint: true,
+        emoji: '🎯',
+        description: '🎯 次の攻撃のダメージが2倍！コスト0！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'uncommon',
+        color: '#00b894'
+    },
+    mu_stance: {
+        id: 'mu_stance',
+        name: '無の境地',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 0,
+        emoji: '🧘',
+        description: '🧘 次のターン、エナジー+1！コスト0！',
+        quizMode: QUIZ_MODES.CHOICE,
+        buff: { type: 'next_turn_energy', value: 1, turns: 1 },
+        rarity: 'rare',
+        color: '#a29bfe'
+    },
+    daishuten_heal: {
+        id: 'daishuten_heal',
+        name: '大周天',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 2,
+        healAmount: 12,
+        emoji: '💖',
+        description: '💖 HPを12かいふく！全身に気をめぐらせる！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#fd79a8'
+    },
+    keiraku_poison: {
+        id: 'keiraku_poison',
+        name: '経絡秘孔',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 2,
+        poison: 5,
+        catalyst: true,
+        emoji: '☣️',
+        description: '☣️ 毒5を与える！さらに敵の毒を2倍にする！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#8e44ad'
+    },
+    tanden_power: {
+        id: 'tanden_power',
+        name: '丹田練気',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        accumulate: 3,
+        emoji: '🔥',
+        description: '🔥 全攻撃ダメージがずっと+3！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#6c5ce7'
+    },
+    zanshin_mirror: {
+        id: 'zanshin_mirror',
+        name: '残心演武',
+        character: 'kungfumaster',
+        type: CARD_TYPES.SKILL,
+        cost: 1,
+        mirrorCopy: true,
+        mirrorRatio: 1,
+        emoji: '🪞',
+        description: '🪞 前のカードをもう1回使う！',
+        quizMode: QUIZ_MODES.CHOICE,
+        rarity: 'rare',
+        color: '#e17055'
     }
 };
 
@@ -461,7 +1332,7 @@ export function addCardXP(card) {
         if (card.baseBlock) card.baseBlock = Math.ceil(card.baseBlock * 1.3);
         if (card.healAmount) card.healAmount = Math.ceil(card.healAmount * 1.3);
 
-        // レベルアップボーナス（スキル系）
+        // レベルアップボーナス（スキル・特殊効果系）
         if (card.drawCount) card.drawCount += 1;
         if (card.poison) card.poison = Math.ceil(card.poison * 1.4);
         if (card.comboBonus) card.comboBonus = Math.ceil(card.comboBonus * 1.3);
@@ -470,6 +1341,11 @@ export function addCardXP(card) {
         if (card.accumulate) card.accumulate += 1;
         if (card.snowballBuff) card.snowballBuff += 1; // 3->4->5
         if (card.lengthSynergy) card.lengthSynergy += 1; // 3->4->5
+        if (card.twoDigitBonusDamage) card.twoDigitBonusDamage = Math.ceil(card.twoDigitBonusDamage * 1.3);
+        if (card.digitSumSynergy) card.digitSumSynergy += 1; // 2->3->4
+        if (card.answerScaleDivisor) card.answerScaleDivisor = Math.max(6, card.answerScaleDivisor - 3); // 15->12->9
+        if (card.strokeSynergy) card.strokeSynergy += 1; // 2->3->4
+        if (card.highStrokeBonusDamage) card.highStrokeBonusDamage = Math.ceil(card.highStrokeBonusDamage * 1.3);
         if (card.mirrorRatio) card.mirrorRatio += 0.5; // 1->1.5->2.0
         if (card.buff) {
             if (card.buff.type === 'strength') {
@@ -495,7 +1371,7 @@ export function getCardDescription(card) {
     // カードIDごとに、現在の数値を反映した説明を生成
     const suffix = card.type === CARD_TYPES.SKILL ? '（1回だけ）' : '';
     switch (card.id) {
-        // === 攻撃カード ===
+        // === ワードマスター：攻撃カード ===
         case 'slash':
             return `⚔️ ${card.baseDamage}ダメージ！ちからいっぱいきりつける！`;
         case 'fireball':
@@ -527,7 +1403,7 @@ export function getCardDescription(card) {
         case 'vortex':
             return `🌊 ${card.baseDamage}ダメージ！さらに手札のまい数×2ダメージ！`;
 
-        // === 防御カード ===
+        // === ワードマスター：防御カード ===
         case 'shield':
             return `🛡️ ${card.baseBlock}ブロック！敵の攻撃をふせぐ！`;
         case 'iron_wall':
@@ -541,7 +1417,7 @@ export function getCardDescription(card) {
         case 'holy_shield':
             return `✨ ${card.baseBlock}ブロック！さらにHPを${card.healAmount}かいふく！`;
 
-        // === スキルカード ===
+        // === ワードマスター：スキルカード ===
         case 'heal':
             return `💚 HPを${card.healAmount}かいふく！` + suffix;
         case 'power_up': {
@@ -565,23 +1441,171 @@ export function getCardDescription(card) {
             return `🪞 前のカードをもう1回使う${ratioStr}！` + suffix;
         }
 
+        // === 算術マスター：攻撃カード ===
+        case 'abacus_strike':
+            return `🧮 ${card.baseDamage}ダメージ！はじき出した数で攻撃！`;
+        case 'mental_math':
+            return `💡 ${card.baseDamage}ダメージ！コスト0ですばやく計算！`;
+        case 'prime_slash':
+            return `📏 ${card.baseDamage}ダメージ！敵の攻撃力を${card.debuff.value}さげる（${card.debuff.turns}ターン）`;
+        case 'nine_tables':
+            return `🔢 ${card.baseDamage}ダメージを${card.hits}回！計算を${card.hits}問とく！`;
+        case 'indian_math':
+            return `🇮🇳 ${card.baseDamage}ダメージ！2けたの計算ならさらに+${card.twoDigitBonusDamage}ダメージ！`;
+        case 'exponential_strike':
+            return `📈 ${card.baseDamage}ダメージ！コンボ中はさらに+${card.comboBonus}ダメージ！`;
+        case 'fractal_venom':
+            return `🧪 ${card.baseDamage}ダメージ＋毒${card.poison}！無限に広がる数式の毒！`;
+        case 'paradox_flame':
+            return `🔥 ${card.baseDamage}ダメージ！さらに、へったHP÷5ダメージ！`;
+        case 'factor_vortex':
+            return `🌊 ${card.baseDamage}ダメージ！さらに手札のまい数×2ダメージ！`;
+        case 'product_burst':
+            return `💥 ${card.baseDamage}ダメージ＋こたえの各けたの合計×${card.digitSumSynergy}のダメージとブロック！`;
+        case 'big_number_cannon':
+            return `🚀 ${card.baseDamage}ダメージ！さらに「こたえ÷${card.answerScaleDivisor}」ダメージ追加！`;
+        case 'fibonacci_spiral':
+            return `🌀 ${card.baseDamage}ダメージ＋コンボ数×${card.comboMultiplierBonus}ダメージ！`;
+        case 'square_meteor':
+            return `☄️ ${card.baseDamage}ダメージ！巨大な立方体をおとす大技！`;
+        case 'triple_matrix':
+            return `⚡ ${card.baseDamage}ダメージを${card.hits}回！計算を${card.hits}問とく！`;
+        case 'theorem_blade':
+            return `📜 ${card.baseDamage}ダメージ！さらに正解数×2ダメージ追加！`;
+        case 'sequence_snowball':
+            return `🌨️ ${card.baseDamage}ダメージ！使うたびにずっと+${card.snowballBuff}ダメージ！`;
+
+        // === 算術マスター：防御カード ===
+        case 'geometric_shield':
+            return `📐 ${card.baseBlock}ブロック！美しい図形で攻撃をふせぐ！`;
+        case 'magic_square':
+            return `🧱 ${card.baseBlock}ブロック！完璧な魔方陣でかためる！`;
+        case 'inverse_counter':
+            return `🔄 ${card.baseBlock}ブロック！さらに${card.baseDamage}ダメージ返す！`;
+        case 'compass_needle':
+            return `🧭 ${card.baseBlock}ブロック！攻撃されるたびに${card.thornArmor}ダメージ返す！`;
+        case 'mobius_ring':
+            return `♾️ ${card.baseBlock}ブロック！次のターンも${card.persistBlock}ブロック残る！`;
+        case 'golden_fortress':
+            return `🏛️ ${card.baseBlock}ブロック！さらにHPを${card.healAmount}かいふく！`;
+
+        // === 算術マスター：スキルカード ===
+        case 'proof_heal':
+            return `📝 HPを${card.healAmount}かいふく！` + suffix;
+        case 'formula_boost': {
+            const pct = Math.round((card.buff.value - 1) * 100);
+            return `📊 次の攻撃のダメージが+${pct}%！` + suffix;
+        }
+        case 'brain_accelerate':
+            return `🧠 カードを${card.drawCount}まい引く！` + suffix;
+        case 'double_formula':
+            return `🎯 次の攻撃のダメージが2倍！コスト0！` + suffix;
+        case 'zero_point':
+            return `0️⃣ 次のターン、エナジー+${card.buff.value}！コスト0！` + suffix;
+        case 'perfect_number':
+            return `💖 HPを${card.healAmount}かいふく！美しい数の調和！` + suffix;
+        case 'exponential_poison':
+            return `☣️ 毒${card.poison}を与える！さらに敵の毒を2倍にする！` + suffix;
+        case 'axiom_power':
+            return `📚 全攻撃ダメージがずっと+${card.accumulate}！` + suffix;
+        case 'symmetry_mirror': {
+            const ratioStr = card.mirrorRatio > 1 ? `（威力${card.mirrorRatio}倍！）` : '';
+            return `🪞 前のカードをもう1回使う${ratioStr}！` + suffix;
+        }
+
+        // === カンフーマスター：攻撃カード ===
+        case 'seiken_tsuki':
+            return `👊 ${card.baseDamage}ダメージ！まっすぐな拳で突きぬく！`;
+        case 'shippu_kick':
+            return `🦶 ${card.baseDamage}ダメージ！コスト0のすばやい蹴り！`;
+        case 'hakkei_palm':
+            return `✋ ${card.baseDamage}ダメージ！敵の攻撃力を${card.debuff.value}さげる（${card.debuff.turns}ターン）`;
+        case 'renbu_ken':
+            return `🥋 ${card.baseDamage}ダメージを${card.hits}回！漢字クイズを${card.hits}問とく！`;
+        case 'dragon_kick':
+            return `🐉 ${card.baseDamage}ダメージ！龍のような跳び蹴り！`;
+        case 'gouken_strike':
+            return `💥 ${card.baseDamage}ダメージ！10画以上の漢字ならさらに+${card.highStrokeBonusDamage}ダメージ！`;
+        case 'raijin_ken':
+            return `⚡ ${card.baseDamage}ダメージ！コンボ中はさらに+${card.comboBonus}ダメージ！`;
+        case 'dokushu_ken':
+            return `🦂 ${card.baseDamage}ダメージ＋毒${card.poison}！秘伝の毒手で攻撃！`;
+        case 'haisui_ken':
+            return `🔥 ${card.baseDamage}ダメージ！さらに、へったHP÷5ダメージ！`;
+        case 'senpu_kyaku':
+            return `🌪️ ${card.baseDamage}ダメージ！さらに手札のまい数×2ダメージ！`;
+        case 'kakusu_burst':
+            return `🖌️ ${card.baseDamage}ダメージ＋漢字の画数×${card.strokeSynergy}のダメージとブロック！`;
+        case 'renki_hadou':
+            return `🌀 ${card.baseDamage}ダメージ＋コンボ数×${card.comboMultiplierBonus}ダメージ！`;
+        case 'tenchi_haoh':
+            return `☄️ ${card.baseDamage}ダメージ！天地をゆらす究極奥義！`;
+        case 'hyakuretsu_ken':
+            return `👊 ${card.baseDamage}ダメージを${card.hits}回！漢字クイズを${card.hits}問とく！`;
+        case 'bushin_blade':
+            return `🏮 ${card.baseDamage}ダメージ！さらに正解数×2ダメージ追加！`;
+        case 'shugyo_snowball':
+            return `⛰️ ${card.baseDamage}ダメージ！使うたびにずっと+${card.snowballBuff}ダメージ！`;
+
+        // === カンフーマスター：防御カード ===
+        case 'kiko_guard':
+            return `🛡️ ${card.baseBlock}ブロック！気のオーラで攻撃をふせぐ！`;
+        case 'kongou_stance':
+            return `🗿 ${card.baseBlock}ブロック！岩のように動かない構え！`;
+        case 'taikyoku_counter':
+            return `☯️ ${card.baseBlock}ブロック！敵の力を受け流して${card.baseDamage}ダメージ！`;
+        case 'ryu_uroko':
+            return `🐲 ${card.baseBlock}ブロック！攻撃されるたびに${card.thornArmor}ダメージ返す！`;
+        case 'fudou_stance':
+            return `🏯 ${card.baseBlock}ブロック！次のターンも${card.persistBlock}ブロック残る！`;
+        case 'senjutsu_wall':
+            return `✨ ${card.baseBlock}ブロック！さらにHPを${card.healAmount}かいふく！`;
+
+        // === カンフーマスター：スキルカード ===
+        case 'kokyu_ho':
+            return `🍃 HPを${card.healAmount}かいふく！深い呼吸で気を整える！` + suffix;
+        case 'kiai_boost': {
+            const pct = Math.round((card.buff.value - 1) * 100);
+            return `💪 次の攻撃のダメージが+${pct}%！` + suffix;
+        }
+        case 'shingan_draw':
+            return `👁️ カードを${card.drawCount}まい引く！心の目で動きを読む！` + suffix;
+        case 'kyusho_strike':
+            return `🎯 次の攻撃のダメージが2倍！コスト0！` + suffix;
+        case 'mu_stance':
+            return `🧘 次のターン、エナジー+${card.buff.value}！コスト0！` + suffix;
+        case 'daishuten_heal':
+            return `💖 HPを${card.healAmount}かいふく！全身に気をめぐらせる！` + suffix;
+        case 'keiraku_poison':
+            return `☣️ 毒${card.poison}を与える！さらに敵の毒を2倍にする！` + suffix;
+        case 'tanden_power':
+            return `🔥 全攻撃ダメージがずっと+${card.accumulate}！` + suffix;
+        case 'zanshin_mirror': {
+            const ratioStr = card.mirrorRatio > 1 ? `（威力${card.mirrorRatio}倍！）` : '';
+            return `🪞 前のカードをもう1回使う${ratioStr}！` + suffix;
+        }
+
         default:
             return card.description;
     }
 }
 
 /**
- * レアリティに基づいてランダムなカードを取得
+ * レアリティおよびキャラクターに基づいてランダムなカードを取得
  * @param {number} count - 取得枚数
  * @param {string} minRarity - 最低レアリティ
+ * @param {string} characterId - キャラクターID（'wordmaster' | 'mathmaster' | 'kungfumaster'）
  * @returns {Array} カード定義IDの配列
  */
-export function getRandomCards(count, minRarity = 'common') {
+export function getRandomCards(count, minRarity = 'common', characterId = 'wordmaster') {
     const rarityOrder = ['common', 'uncommon', 'rare'];
     const minIndex = rarityOrder.indexOf(minRarity);
 
     const eligibleCards = Object.entries(CARD_DEFINITIONS)
-        .filter(([, def]) => rarityOrder.indexOf(def.rarity) >= minIndex);
+        .filter(([, def]) => {
+            const cardChar = def.character || 'wordmaster';
+            return cardChar === characterId && rarityOrder.indexOf(def.rarity) >= minIndex;
+        });
 
     const result = [];
     const used = new Set();
@@ -599,15 +1623,33 @@ export function getRandomCards(count, minRarity = 'common') {
 
 /**
  * 初期デッキを生成
+ * @param {string} characterId - キャラクターID（'wordmaster' | 'mathmaster' | 'kungfumaster'）
  * @returns {Array} カードインスタンスの配列
  */
-export function createStarterDeck() {
-    const deckDef = [
-        'slash', 'slash', 'slash', 'slash',
-        'shield', 'shield', 'shield',
-        'quick_slash', 'quick_slash',
-        'heal'
-    ];
+export function createStarterDeck(characterId = 'wordmaster') {
+    let deckDef;
+    if (characterId === 'mathmaster') {
+        deckDef = [
+            'abacus_strike', 'abacus_strike', 'abacus_strike', 'abacus_strike',
+            'geometric_shield', 'geometric_shield', 'geometric_shield',
+            'mental_math', 'mental_math',
+            'proof_heal'
+        ];
+    } else if (characterId === 'kungfumaster') {
+        deckDef = [
+            'seiken_tsuki', 'seiken_tsuki', 'seiken_tsuki', 'seiken_tsuki',
+            'kiko_guard', 'kiko_guard', 'kiko_guard',
+            'shippu_kick', 'shippu_kick',
+            'kokyu_ho'
+        ];
+    } else {
+        deckDef = [
+            'slash', 'slash', 'slash', 'slash',
+            'shield', 'shield', 'shield',
+            'quick_slash', 'quick_slash',
+            'heal'
+        ];
+    }
     return deckDef.map(id => createCard(id));
 }
 

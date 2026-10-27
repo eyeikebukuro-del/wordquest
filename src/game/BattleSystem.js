@@ -146,8 +146,8 @@ export class BattleSystem {
         this.currentHitIndex = 0;
         this.state = BATTLE_STATES.QUIZ_ACTIVE;
 
-        // フロアに応じた難易度重み付きで単語を選択
-        const quizFloor = this.enemy.isBoss ? 3 : (this.currentFloor || 1);
+        // フロアに応じた難易度重み付きで問題を選択（1Fボス等でもフロア基準の難易度を維持）
+        const quizFloor = this.currentFloor || 1;
         const weights = this.spacedRep.getWeights();
         const word = this.wordDb.getWeightedRandomWord(quizFloor, weights);
 
@@ -219,7 +219,12 @@ export class BattleSystem {
             word: this.currentQuiz.word,
             combo: this.scaling.comboCount,
             comboText: this.scaling.getComboText(),
-            comboMultiplier: this.scaling.getComboMultiplier()
+            comboMultiplier: this.scaling.getComboMultiplier(),
+            mathBonusText: (correct && this.currentQuiz.word && this.currentQuiz.word.twoDigitCount >= 2)
+                ? '🌟2けた×2けた威力1.5倍!'
+                : (correct && this.currentQuiz.word && this.currentQuiz.word.twoDigitCount === 1)
+                    ? '🔥2けた計算威力1.2倍!'
+                    : ''
         };
 
         if (correct) {
@@ -309,6 +314,10 @@ export class BattleSystem {
      */
     applyCardEffect(card) {
         const result = { type: card.type, cost: card.cost, effects: [] };
+        // 算術マスターの2桁計算威力ボーナス倍率（1桁同士: 1.0, 片方2桁: 1.2, 両方2桁: 1.5）
+        const mathPowerMult = (this.currentQuiz && this.currentQuiz.word && this.currentQuiz.word.powerMultiplier)
+            ? this.currentQuiz.word.powerMultiplier
+            : 1.0;
 
         // 攻撃
         if (card.baseDamage !== undefined) {
@@ -324,12 +333,12 @@ export class BattleSystem {
                 damage = Math.ceil(damage * this.awakeningMultiplier);
             }
 
-            // コンボボーナス（サンダーカード）
+            // コンボボーナス（サンダーカード・累乗インパクト）
             if (card.comboBonus && this.scaling.comboCount >= 2) {
                 damage += card.comboBonus;
             }
 
-            // コンボ・ブレード（コンボ数×倍率）
+            // コンボ・ブレード / 黄金比スパイラル（コンボ数×倍率）
             if (card.comboMultiplierBonus && this.scaling.comboCount > 0) {
                 damage += this.scaling.comboCount * card.comboMultiplierBonus;
             }
@@ -343,14 +352,51 @@ export class BattleSystem {
                 if (window.sm) window.sm.playBlock();
             }
 
-            // ソウルブレード：このバトルの正解数×2の追加ダメージ
+            // インド式魔導砲（2桁を含む計算のとき追加ダメージ）
+            if (card.twoDigitBonusDamage && this.currentQuiz && this.currentQuiz.word && this.currentQuiz.word.twoDigitCount >= 1) {
+                damage += card.twoDigitBonusDamage;
+            }
+
+            // 積のバースト（答えの各桁の合計×係数のダメージ＆ブロック）
+            if (card.digitSumSynergy && this.currentQuiz && this.currentQuiz.word && this.currentQuiz.word.answerValue !== undefined) {
+                const digitSum = String(this.currentQuiz.word.answerValue)
+                    .split('')
+                    .reduce((sum, ch) => sum + (parseInt(ch, 10) || 0), 0);
+                const synergyVal = Math.ceil(digitSum * card.digitSumSynergy * mathPowerMult);
+                damage += synergyVal;
+                this.playerBlock += synergyVal;
+                result.effects.push({ type: 'block', value: synergyVal });
+                if (window.sm) window.sm.playBlock();
+            }
+
+            // 大数カノン（答え÷係数の追加ダメージ）
+            if (card.answerScaleDivisor && this.currentQuiz && this.currentQuiz.word && this.currentQuiz.word.answerValue !== undefined) {
+                const scaleBonus = Math.floor(this.currentQuiz.word.answerValue / card.answerScaleDivisor);
+                damage += scaleBonus;
+            }
+
+            // 剛拳砕き（10画以上の漢字のとき追加ダメージ）
+            if (card.highStrokeBonusDamage && this.currentQuiz && this.currentQuiz.word && this.currentQuiz.word.strokes >= 10) {
+                damage += card.highStrokeBonusDamage;
+            }
+
+            // 画数バースト（漢字の画数×係数のダメージ＆ブロック）
+            if (card.strokeSynergy && this.currentQuiz && this.currentQuiz.word && this.currentQuiz.word.strokes !== undefined) {
+                const strokeVal = this.currentQuiz.word.strokes * card.strokeSynergy;
+                damage += strokeVal;
+                this.playerBlock += strokeVal;
+                result.effects.push({ type: 'block', value: strokeVal });
+                if (window.sm) window.sm.playBlock();
+            }
+
+            // ソウルブレード / 定理の刃：このバトルの正解数×2の追加ダメージ
             if (card.soulBlade) {
                 const bonus = this.correctCount * 2;
                 damage += bonus;
                 result.effects.push({ type: 'soul_bonus', value: bonus });
             }
 
-            // いかりの炎：失ったHP÷5の追加ダメージ
+            // いかりの炎 / パラドックスの炎：失ったHP÷5の追加ダメージ
             if (card.rageFlame) {
                 const lostHp = this.player.maxHp - this.player.hp;
                 const bonus = Math.floor(lostHp / 5);
@@ -358,7 +404,7 @@ export class BattleSystem {
                 result.effects.push({ type: 'rage_bonus', value: bonus });
             }
 
-            // うずしお：手札の枚数×2の追加ダメージ
+            // うずしお / 因数うずしお：手札の枚数×2の追加ダメージ
             if (card.vortex) {
                 // 自分自身は手札の外なので手札枚数そのまま使う
                 const handCount = this.deck.hand.length;
@@ -367,7 +413,12 @@ export class BattleSystem {
                 result.effects.push({ type: 'vortex_bonus', value: bonus, hand: handCount });
             }
 
-            // ウィークポイント：次の攻撃倍率適用
+            // 算術マスター：2桁計算威力ボーナス適用
+            if (mathPowerMult > 1.0) {
+                damage = Math.ceil(damage * mathPowerMult);
+            }
+
+            // ウィークポイント / 2倍角の公式：次の攻撃倍率適用
             if (this.nextAttackMultiplier > 1) {
                 damage *= this.nextAttackMultiplier;
                 result.effects.push({ type: 'weak_point_triggered', multiplier: this.nextAttackMultiplier });
@@ -387,7 +438,7 @@ export class BattleSystem {
 
             result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
 
-            // ゆきだるま：使用後にbaseDamageを永続成長
+            // ゆきだるま / 等差ストーム：使用後にbaseDamageを永続成長
             if (card.snowball) {
                 const buff = card.snowballBuff || 3;
                 card.baseDamage += buff;
@@ -400,13 +451,16 @@ export class BattleSystem {
 
         // 防御
         if (card.baseBlock) {
-            const block = this.scaling.calculateBlock(card);
+            let block = this.scaling.calculateBlock(card);
+            if (mathPowerMult > 1.0) {
+                block = Math.ceil(block * mathPowerMult);
+            }
             this.playerBlock += block;
             if (window.sm) window.sm.playBlock();
             result.effects.push({ type: 'block', value: block });
         }
 
-        // とげのよろい：このターン中の敵ヒット1回ごとに反撃ダメージを加算
+        // とげのよろい / コンパスの針：このターン中の敵ヒット1回ごとに反撃ダメージを加算
         if (card.thornArmor) {
             this.thornArmorDamage += card.thornArmor;
             result.effects.push({ type: 'thorn_armor', value: this.thornArmorDamage });
@@ -414,7 +468,8 @@ export class BattleSystem {
 
         // 回復
         if (card.healAmount) {
-            const heal = Math.min(card.healAmount, this.player.maxHp - this.player.hp);
+            const rawHeal = mathPowerMult > 1.0 ? Math.ceil(card.healAmount * mathPowerMult) : card.healAmount;
+            const heal = Math.min(rawHeal, this.player.maxHp - this.player.hp);
             this.player.hp += heal;
             if (window.sm) window.sm.playPotion();
             result.effects.push({ type: 'heal', value: heal });

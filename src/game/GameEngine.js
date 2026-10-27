@@ -2,6 +2,8 @@
 // ゲーム全体の状態管理と画面遷移を制御するメインコントローラー
 
 import { WordDatabase } from '../vocabulary/WordDatabase.js';
+import { MathDatabase } from '../vocabulary/MathDatabase.js';
+import { KanjiDatabase } from '../vocabulary/KanjiDatabase.js';
 import { SpacedRepetition } from '../vocabulary/SpacedRepetition.js';
 import { createStarterDeck, createCard, getRandomCards } from './CardSystem.js';
 import { BattleSystem } from './BattleSystem.js';
@@ -33,6 +35,10 @@ export class GameEngine {
     constructor() {
         // システム
         this.wordDb = new WordDatabase();
+        this.mathDb = new MathDatabase();
+        this.kanjiDb = new KanjiDatabase();
+        this.activeDb = this.wordDb;
+        this.characterId = 'wordmaster';
         this.spacedRep = new SpacedRepetition();
         this.scaling = new ScalingSystem();
         this.saveManager = new SaveManager();
@@ -76,19 +82,51 @@ export class GameEngine {
 
     /**
      * 新しいランを開始
+     * @param {string} characterId - 選択されたキャラクターID（'wordmaster' | 'mathmaster' | 'kungfumaster'）
      */
-    startNewRun() {
+    startNewRun(characterId = 'wordmaster') {
+        this.characterId = characterId;
+        if (characterId === 'mathmaster') {
+            this.activeDb = this.mathDb;
+        } else if (characterId === 'kungfumaster') {
+            this.activeDb = this.kanjiDb;
+        } else {
+            this.activeDb = this.wordDb;
+        }
+
+        const charProfileMap = {
+            wordmaster: {
+                name: 'ワードマスター',
+                emoji: '🧙‍♂️',
+                image: './characters/wordmaster.png'
+            },
+            mathmaster: {
+                name: '算術マスター',
+                emoji: '🧮',
+                image: './characters/mathmaster.png'
+            },
+            kungfumaster: {
+                name: 'カンフーマスター',
+                emoji: '🥋',
+                image: './characters/kungfumaster.png'
+            }
+        };
+        const profile = charProfileMap[characterId] || charProfileMap.wordmaster;
+
         // プレイヤー初期化
         this.player = {
             hp: 60,
             maxHp: 60,
             gold: 50,
             maxEnergy: 3,
-            name: '言葉の勇者'
+            characterId,
+            name: profile.name,
+            emoji: profile.emoji,
+            image: profile.image
         };
 
-        // デッキ初期化
-        this.playerDeck = createStarterDeck();
+        // デッキ初期化（キャラクター別専用デッキ）
+        this.playerDeck = createStarterDeck(characterId);
 
         // スケーリングリセット
         this.scaling = new ScalingSystem();
@@ -171,7 +209,7 @@ export class GameEngine {
             enemy,
             [...this.playerDeck],
             this.scaling,
-            this.wordDb,
+            this.activeDb,
             this.spacedRep,
             this.currentFloor  // フロア情報を渡す
         );
@@ -193,7 +231,7 @@ export class GameEngine {
             enemy,
             [...this.playerDeck],
             this.scaling,
-            this.wordDb,
+            this.activeDb,
             this.spacedRep,
             this.currentFloor  // フロア情報を渡す
         );
@@ -239,7 +277,7 @@ export class GameEngine {
             }
 
             // 報酬生成
-            this.currentRewards = generateBattleRewards(this.battle.enemy, this.scaling);
+            this.currentRewards = generateBattleRewards(this.battle.enemy, this.scaling, this.characterId);
             this.changeScreen(SCREENS.REWARD);
         } else {
             this.changeScreen(SCREENS.GAME_OVER);
@@ -284,7 +322,7 @@ export class GameEngine {
      * ショップを開く
      */
     openShop() {
-        this.currentShop = generateShopItems(this.scaling);
+        this.currentShop = generateShopItems(this.scaling, this.characterId);
         this.changeScreen(SCREENS.SHOP);
     }
 
@@ -362,7 +400,7 @@ export class GameEngine {
                 result.message = `${effect.value}ゴールドを手に入れた！`;
                 break;
             case 'random_card':
-                const card = createCard(getRandomCards(1)[0]);
+                const card = createCard(getRandomCards(1, 'common', this.characterId)[0]);
                 this.playerDeck.push(card);
                 result.message = `「${card.name}」を手に入れた！`;
                 result.card = card;

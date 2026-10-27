@@ -266,6 +266,30 @@
     margin-bottom: 12px;
 }
 
+.math-bonus-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: var(--font-xs);
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.math-bonus-badge.tier-1 {
+    background: linear-gradient(135deg, rgba(255, 159, 67, 0.25), rgba(255, 107, 107, 0.25));
+    border: 1px solid var(--accent-orange);
+    color: var(--accent-yellow);
+    box-shadow: 0 0 10px rgba(255, 159, 67, 0.35);
+}
+
+.math-bonus-badge.tier-2 {
+    background: linear-gradient(135deg, rgba(192, 132, 252, 0.3), rgba(56, 189, 248, 0.3));
+    border: 1px solid var(--accent-cyan);
+    color: #fff;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+}
+
 .quiz-question .question-emoji {
     font-size: 2rem;
     display: block;

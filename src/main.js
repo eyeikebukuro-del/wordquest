@@ -7,6 +7,8 @@ import { BATTLE_STATES } from './game/BattleSystem.js';
 import { NODE_TYPES, NODE_ICONS, FLOOR_THEMES } from './game/MapGenerator.js';
 import { RELIC_DEFINITIONS, POTION_DEFINITIONS } from './game/ScalingSystem.js';
 import { WordDatabase } from './vocabulary/WordDatabase.js';
+import { MathDatabase } from './vocabulary/MathDatabase.js';
+import { KanjiDatabase } from './vocabulary/KanjiDatabase.js';
 
 // マップ背景画像のアセットインポート (Viteで正しくパス解決させるため)
 import bgForestMap from './assets/bg_forest_map.png';
@@ -383,12 +385,19 @@ function renderBattle() {
     showEnemyTurnEffects(result);
   });
 
-  // プレイヤー表示 (Forcing reload)
+  // プレイヤー表示（選択キャラクターに応じた立ち絵・名前・絵文字を反映）
   const playerEmojiEl = document.getElementById('player-emoji');
   const playerImageEl = document.getElementById('player-image');
-  // ワードマスターの画像を設定
-  const playerHasImage = true;
-  const playerImageSrc = './characters/wordmaster.png';
+  const playerNameEl = document.querySelector('.player-name');
+  if (playerNameEl) {
+    playerNameEl.textContent = player.name || 'プレイヤー';
+  }
+  if (playerEmojiEl && player.emoji) {
+    playerEmojiEl.textContent = player.emoji;
+  }
+
+  const playerHasImage = Boolean(player.image);
+  const playerImageSrc = player.image || './characters/wordmaster.png';
 
   if (playerHasImage) {
     playerImageEl.src = playerImageSrc;
@@ -674,10 +683,23 @@ function showQuiz(quiz) {
 
   // 問題表示
   const questionEl = document.getElementById('quiz-question');
-  const labelText = quiz.type === 'en_to_jp' ? 'この英語の意味は？'
-    : quiz.type === 'jp_to_en' ? 'この日本語を英語で言うと？' : 'スペルを入力しよう！';
+  const labelText = quiz.type === 'math_choice' ? 'こたえは いくつ？'
+    : quiz.type === 'kanji_read' ? '【 】の漢字のよみかたは？'
+    : quiz.type === 'kanji_write' ? '【 】に入る漢字はどれ？'
+    : quiz.type === 'en_to_jp' ? 'この英語の意味は？'
+    : quiz.type === 'jp_to_en' ? 'この日本語を英語で言うと？' : 'こたえを入力しよう！';
+
+  let mathBonusBadge = '';
+  if (quiz.twoDigitCount >= 2) {
+    mathBonusBadge = `<div class="math-bonus-badge tier-2">🌟 2けた×2けたボーナス！ 威力1.5倍！</div>`;
+  } else if (quiz.twoDigitCount === 1) {
+    mathBonusBadge = `<div class="math-bonus-badge tier-1">🔥 2けた計算ボーナス！ 威力1.2倍！</div>`;
+  } else if (quiz.grade && quiz.strokes) {
+    mathBonusBadge = `<div class="math-bonus-badge tier-1">📖 小学${quiz.grade}年生の漢字（${quiz.strokes}画）</div>`;
+  }
 
   questionEl.innerHTML = `
+    ${mathBonusBadge}
     <span class="question-emoji">${quiz.questionEmoji || ''}</span>
     <span class="question-text">${quiz.question}</span>
     <span class="question-label">${labelText}</span>
@@ -768,6 +790,7 @@ function onQuizAnswer(answer, quiz) {
   resultEl.style.display = 'block';
   if (result.correct) {
     let txt = `⭕ 正解！${result.comboText ? ' ' + result.comboText : ''}`;
+    if (result.mathBonusText) txt += ` ${result.mathBonusText}`;
     if (result.leveledUp) txt += ' ⬆️ カードレベルアップ！';
     resultEl.className = 'quiz-result correct';
     resultEl.textContent = txt;
@@ -1352,15 +1375,21 @@ function renderGameOver() {
     <div class="stat-row"><span class="stat-label">最大コンボ</span><span class="stat-value">${game.stats.maxCombo}</span></div>
   `;
 
-  // 弱点単語
+  // 弱点単語・計算問題・漢字問題
   const weakIds = game.spacedRep.getWeakWords(8);
   const weakEl = document.getElementById('gameover-weak-words');
+  const allItems = [...game.wordDb.words, ...game.mathDb.words, ...game.kanjiDb.words];
+  const weakLabel = game.characterId === 'mathmaster'
+    ? '📝 にがてな計算'
+    : game.characterId === 'kungfumaster'
+      ? '📝 にがてな漢字'
+      : '📝 にがてな単語';
   if (weakIds.length > 0) {
     const words = weakIds.map(id => {
-      const word = game.wordDb.words.find(w => w.id === id);
+      const word = allItems.find(w => w.id === id);
       return word ? `<span class="weak-word-tag">${word.emoji} ${word.english} = ${word.japanese}</span>` : '';
     }).join('');
-    weakEl.innerHTML = `<p style="font-size:var(--font-sm);color:var(--text-secondary);margin-bottom:4px">📝 にがてな単語</p><div class="weak-word-list">${words}</div>`;
+    weakEl.innerHTML = `<p style="font-size:var(--font-sm);color:var(--text-secondary);margin-bottom:4px">${weakLabel}</p><div class="weak-word-list">${words}</div>`;
   } else {
     weakEl.innerHTML = '';
   }
@@ -1404,11 +1433,11 @@ function renderVictory() {
     </div>
   `;
 
-  // リーダーボードに保存
+  // リーダーボードに保存（選択したキャラクター情報を反映）
   const scoreData = {
     date: Date.now(),
-    character: 'ワードマスター', // 現状固定
-    emoji: '🧙‍♂️',
+    character: game.player?.name || 'ワードマスター',
+    emoji: game.player?.emoji || '🧙‍♂️',
     score: totalScore,
     bossName: game.stats.lastBossName || 'なし'
   };
@@ -1477,15 +1506,15 @@ function showStats() {
       </div>
       <div class="stats-card">
         <div class="stats-card-value" style="color:var(--accent-blue)">${stats.totalAttempted}</div>
-        <div class="stats-card-label">出題単語数</div>
+        <div class="stats-card-label">出題数</div>
       </div>
       <div class="stats-card">
         <div class="stats-card-value" style="color:var(--accent-purple)">${stats.wordsLearned}</div>
-        <div class="stats-card-label">覚えた単語</div>
+        <div class="stats-card-label">マスター数</div>
       </div>
       <div class="stats-card">
         <div class="stats-card-value" style="color:var(--accent-red)">${stats.weakWords}</div>
-        <div class="stats-card-label">にがてな単語</div>
+        <div class="stats-card-label">にがてな問題</div>
       </div>
     </div>
     <div style="text-align:center;color:var(--text-secondary);font-size:var(--font-sm);margin-top:15px;">
@@ -1539,6 +1568,9 @@ window.addEventListener('resize', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 現在選択中のキャラクターID
+  let selectedCharacterId = 'wordmaster';
+
   // メニュー
   document.getElementById('btn-new-game').addEventListener('click', () => {
     // キャラクター選択画面への遷移とスクロール初期化
@@ -1549,16 +1581,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 10); // 画面アクティブ化の時間を少し待つことで確実に適用させる
   });
 
-  // キャラクター選択画面
+  // キャラクター選択画面：「冒険にしゅっぱつ！」ボタン
   document.getElementById('btn-start-adventure').addEventListener('click', () => {
     if (window.sm) window.sm.playGameStart();
-    game.startNewRun();
+    game.startNewRun(selectedCharacterId);
   });
 
-  // キャラクター（解放済）を直接クリックしてもスタートするように
+  // キャラクターカード（解放済）のクリックで選択切り替え（既に選択中ならそのまま出撃も可能）
   document.querySelectorAll('.char-card:not(.locked)').forEach(card => {
     card.addEventListener('click', () => {
-      game.startNewRun();
+      const charId = card.dataset.char || 'wordmaster';
+      document.querySelectorAll('.char-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      selectedCharacterId = charId;
+      if (window.sm) window.sm.playUIClick();
     });
   });
 
@@ -1643,8 +1679,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modal-stats').style.display = 'none';
   });
 
-  // === たんごリスト ===
+  // === たんご・かけ算・かんじリスト ===
   const wordListDb = new WordDatabase();
+  const mathListDb = new MathDatabase();
+  const kanjiListDb = new KanjiDatabase();
   const CATEGORY_LABELS = {
     food: '🍎 たべもの', animal: '🐱 どうぶつ', color: '🎨 いろ',
     number: '🔢 かず', body: '🤚 からだ', family: '👨‍👩‍👧 かぞく',
@@ -1652,7 +1690,15 @@ document.addEventListener('DOMContentLoaded', () => {
     clothes: '👕 ふく', home: '🏠 おうち', action: '🏃 うごき',
     feeling: '😊 きもち', place: '🏞️ ばしょ', time: '⏰ じかん',
     shape: '🔺 かたち', transport: '🚗 のりもの', toy: '🎮 おもちゃ',
-    pronoun: '🙋 だいめいし', person: '🧑 ひと', object: '📦 もの', other: '✨ その他'
+    pronoun: '🙋 だいめいし', person: '🧑 ひと', object: '📦 もの', other: '✨ その他',
+    math_1_9: '🔢 九九 (1〜9の段)',
+    math_10_12: '🧮 かけ算 (10〜12の段)',
+    math_13_15: '📐 かけ算 (13〜15の段)',
+    math_16_19: '🌟 かけ算 (16〜19の段)',
+    kanji_g1: '🌱 小1の漢字',
+    kanji_g2: '🌿 小2の漢字',
+    kanji_g3: '🥋 小3の漢字',
+    kanji_g4: '🐉 小4の漢字'
   };
 
   function showWordList(filterCat = 'all') {
@@ -1660,20 +1706,31 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'block';
 
     const learningData = game.spacedRep.learningData;
+    const allListItems = [...wordListDb.words, ...mathListDb.words, ...kanjiListDb.words];
 
     // カテゴリフィルタボタン生成
     const filterEl = document.getElementById('wordlist-filter');
-    const cats = wordListDb.categories;
-    filterEl.innerHTML = `<button class="wordlist-cat-btn ${filterCat === 'all' ? 'active' : ''}" data-cat="all">🌟 ぜんぶ</button>` +
+    const cats = [...wordListDb.categories, ...mathListDb.categories, ...kanjiListDb.categories];
+    filterEl.innerHTML =
+      `<button class="wordlist-cat-btn ${filterCat === 'all' ? 'active' : ''}" data-cat="all">🌟 ぜんぶ</button>` +
+      `<button class="wordlist-cat-btn ${filterCat === 'all_math' ? 'active' : ''}" data-cat="all_math">🧮 かけ算 (1×1〜19×19)</button>` +
+      `<button class="wordlist-cat-btn ${filterCat === 'all_kanji' ? 'active' : ''}" data-cat="all_kanji">🥋 かんじ (小1〜小4)</button>` +
       cats.map(c => `<button class="wordlist-cat-btn ${filterCat === c ? 'active' : ''}" data-cat="${c}">${CATEGORY_LABELS[c] || c}</button>`).join('');
 
     filterEl.querySelectorAll('.wordlist-cat-btn').forEach(btn => {
       btn.addEventListener('click', () => showWordList(btn.dataset.cat));
     });
 
-    // 単語リスト生成
+    // 単語・計算・漢字リスト生成
     const contentEl = document.getElementById('wordlist-content');
-    const words = filterCat === 'all' ? wordListDb.words : wordListDb.words.filter(w => w.category === filterCat);
+    let words = allListItems;
+    if (filterCat === 'all_math') {
+      words = mathListDb.words;
+    } else if (filterCat === 'all_kanji') {
+      words = kanjiListDb.words;
+    } else if (filterCat !== 'all') {
+      words = allListItems.filter(w => w.category === filterCat);
+    }
 
     // カテゴリごとにグルーピング
     const grouped = {};

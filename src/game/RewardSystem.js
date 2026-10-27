@@ -18,9 +18,10 @@ export const REWARD_TYPES = {
  * バトル報酬を生成
  * @param {Object} enemy - 倒した敵
  * @param {Object} scaling - スケーリングシステム
+ * @param {string} characterId - キャラクターID
  * @returns {Array} 報酬リスト
  */
-export function generateBattleRewards(enemy, scaling) {
+export function generateBattleRewards(enemy, scaling, characterId = 'wordmaster') {
     const rewards = [];
 
     // ゴールド報酬
@@ -38,7 +39,7 @@ export function generateBattleRewards(enemy, scaling) {
 
     // カード報酬（3枚から1枚選択）
     const minRarity = enemy.isBoss ? 'uncommon' : (enemy.isElite ? 'common' : 'common');
-    const cardIds = getRandomCards(3, minRarity);
+    const cardIds = getRandomCards(3, minRarity, characterId);
     const cardOptions = cardIds.map(id => createCard(id));
 
     rewards.push({
@@ -78,13 +79,14 @@ export function generateBattleRewards(enemy, scaling) {
 /**
  * ショップ品ぞろえを生成
  * @param {Object} scaling - スケーリングシステム
+ * @param {string} characterId - キャラクターID
  * @returns {Object} ショップデータ
  */
-export function generateShopItems(scaling) {
+export function generateShopItems(scaling, characterId = 'wordmaster') {
     const items = [];
 
     // カード販売（5枚）
-    const cardIds = getRandomCards(5);
+    const cardIds = getRandomCards(5, 'common', characterId);
     for (const id of cardIds) {
         const card = createCard(id);
         let price = 50;
