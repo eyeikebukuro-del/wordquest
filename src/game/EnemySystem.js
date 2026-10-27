@@ -255,6 +255,66 @@ export const ENEMY_DEFINITIONS = {
             { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 5, hits: 3, emoji: '⚡' }
         ],
         floor: 3
+    },
+
+    // === フロア4: 天空の聖域の敵 ===
+    astral_knight: {
+        id: 'astral_knight',
+        name: 'アストラルナイト',
+        emoji: '🌟',
+        image: './characters/astral_knight.png',
+        baseHp: 55,
+        patterns: [
+            { intent: ENEMY_INTENTS.DEFEND, block: 12, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 16, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 8, hits: 2, emoji: '⚡' }
+        ],
+        floor: 4
+    },
+    thunder_griffin: {
+        id: 'thunder_griffin',
+        name: 'サンダーグリフォン',
+        emoji: '🦅',
+        image: './characters/thunder_griffin.png',
+        baseHp: 60,
+        patterns: [
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 6, hits: 3, emoji: '⚡' },
+            { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 4 }, emoji: '💪' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 18, emoji: '⚔️' }
+        ],
+        floor: 4
+    },
+    arcane_sphinx: {
+        id: 'arcane_sphinx',
+        name: 'ちえのスフィンクス',
+        emoji: '🦁',
+        image: './characters/arcane_sphinx.png',
+        baseHp: 65,
+        patterns: [
+            { intent: ENEMY_INTENTS.ATTACK, damage: 15, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.DEFEND, block: 14, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 4 }, emoji: '💪' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 20, emoji: '⚔️' }
+        ],
+        floor: 4
+    },
+
+    // === フロア4 ボス（最終ボス） ===
+    omni_deity: {
+        id: 'omni_deity',
+        name: '全知の創造神クロノス',
+        emoji: '🌌',
+        image: './characters/omni_deity.png',
+        baseHp: 180,
+        isBoss: true,
+        patterns: [
+            { intent: ENEMY_INTENTS.ATTACK, damage: 16, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.DEFEND, block: 18, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 8, hits: 3, emoji: '⚡' },
+            { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 5 }, emoji: '💪' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 25, emoji: '☄️' }
+        ],
+        floor: 4
     }
 };
 
@@ -264,7 +324,8 @@ export const ENEMY_DEFINITIONS = {
 export const ELITE_ENEMIES = {
     1: ['goblin', 'mushroom', 'metal_slime'],
     2: ['golem', 'dark_mage'],
-    3: ['demon', 'dark_knight']
+    3: ['demon', 'dark_knight'],
+    4: ['thunder_griffin', 'arcane_sphinx']
 };
 
 /**

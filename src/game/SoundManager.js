@@ -5,6 +5,30 @@ export class SoundManager {
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = 0.5;
         this.masterGain.connect(this.ctx.destination);
+
+        // 英単語ネイティブ発音用のAudioキャッシュとWeb Speech API英語ボイスの事前ロード
+        this.audioCache = new Map();
+        this.currentWordAudio = null;
+        this.englishVoice = null;
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            const loadEnglishVoice = () => {
+                const voices = window.speechSynthesis.getVoices() || [];
+                // 日本語音声エンジン（Haruka等）を厳密に除外し、純粋な英語ネイティブ音声のみを選択
+                const enVoices = voices.filter(v =>
+                    v.lang &&
+                    v.lang.toLowerCase().startsWith('en') &&
+                    !/ja|japanese|日本語|haruka|ayumi|ichiro|sayaka|kyoko|otoya/i.test(v.name + ' ' + v.lang)
+                );
+                this.englishVoice =
+                    enVoices.find(v => /Google US English/i.test(v.name)) ||
+                    enVoices.find(v => /Aria|Jenny|Guy|Samantha|Alex|Daniel|Karen/i.test(v.name)) ||
+                    enVoices.find(v => v.lang === 'en-US' || v.lang === 'en_US') ||
+                    enVoices[0] ||
+                    null;
+            };
+            loadEnglishVoice();
+            window.speechSynthesis.onvoiceschanged = loadEnglishVoice;
+        }
     }
 
     // --- Helper. オシレーター（ブザーや鐘、ドーンという音）の再生 ---
@@ -216,5 +240,85 @@ export class SoundManager {
         this._playTone('sine', 1500, 1500, 1.0, 0.1, 0, 0.2);
         this._playTone('sine', 2500, 2500, 1.0, 0.1, 0, 0.2);
         this._playTone('triangle', 3000, 3000, 0.5, 0.05, 0, 0.1);
+    }
+
+    // ==========================================
+    // 6. 英単語ネイティブ発音読み上げ（実録音辞書音声 ＋ Web Speech APIフォールバック）
+    // ==========================================
+    /**
+     * 英単語を本物のネイティブ発音（Oxford米語辞書録音データを最優先）で読み上げる
+     * Windows環境で日本語音声（Haruka等）が「he」を「エイチイー」と読んだり日本語訛りになる問題を完全に回避
+     * @param {string} text - 読み上げる英単語テキスト
+     */
+    speakEnglish(text) {
+        if (!text || typeof window === 'undefined') return;
+        const cleanWord = String(text).trim().toLowerCase();
+        if (!cleanWord) return;
+
+        // 再生中の音声があれば停止
+        if (this.currentWordAudio) {
+            try {
+                this.currentWordAudio.pause();
+                this.currentWordAudio.currentTime = 0;
+            } catch {
+                // 無視
+            }
+        }
+        if ('speechSynthesis' in window) {
+            try { window.speechSynthesis.cancel(); } catch { /* 無視 */ }
+        }
+
+        // 1. Google Oxford米語辞書MP3 ➔ 2. 米語辞書音声ストリーム(type=2: US English) ➔ 3. 英語ネイティブTTS の3段階フォールバック
+        const urls = [];
+        if (/^[a-z]+$/.test(cleanWord)) {
+            urls.push(`https://ssl.gstatic.com/dictionary/static/sounds/20200429/${cleanWord}--_us_1.mp3`);
+        }
+        urls.push(`https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(cleanWord)}&type=2`);
+
+        const tryPlayUrl = (index) => {
+            if (index >= urls.length) {
+                this._speakWithNativeTTS(cleanWord);
+                return;
+            }
+            const audio = new Audio(urls[index]);
+            this.currentWordAudio = audio;
+            let handled = false;
+            const fallback = () => {
+                if (handled) return;
+                handled = true;
+                tryPlayUrl(index + 1);
+            };
+            audio.onerror = fallback;
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(fallback);
+            }
+        };
+
+        tryPlayUrl(0);
+    }
+
+    /**
+     * オフライン時等のフォールバック用ネイティブTTS再生
+     * @param {string} cleanWord - 小文字化済み英単語
+     */
+    _speakWithNativeTTS(cleanWord) {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        try {
+            window.speechSynthesis.cancel();
+            // 2文字単語（he, in, on等）がアルファベット読み（エイチイー）されないよう小文字のまま設定
+            const utter = new SpeechSynthesisUtterance(cleanWord);
+            utter.lang = 'en-US';
+            utter.rate = 0.9;
+            utter.pitch = 1.0;
+            utter.volume = 1.0;
+
+            if (this.englishVoice) {
+                utter.voice = this.englishVoice;
+            }
+            window.speechSynthesis.speak(utter);
+        } catch {
+            // 無視
+        }
     }
 }

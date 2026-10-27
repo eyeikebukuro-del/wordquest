@@ -14,6 +14,7 @@ import { KanjiDatabase } from './vocabulary/KanjiDatabase.js';
 import bgForestMap from './assets/bg_forest_map.png';
 import bgCaveMap from './assets/bg_cave_map.png';
 import bgTowerMap from './assets/bg_tower_map.png';
+import bgSkyMap from './assets/bg_sky_map.png';
 import { SoundManager } from './game/SoundManager.js';
 
 // ゲームエンジンのインスタンス
@@ -103,11 +104,12 @@ function renderMap() {
 
   const theme = FLOOR_THEMES[game.currentFloor];
   const container = document.getElementById('map-container');
-  // 背景画像とグラデーションの合成
+  // 背景画像とグラデーションの合成（フロア1〜4）
   let bgImage = '';
-  if (game.currentFloor === 0) bgImage = bgForestMap;
-  else if (game.currentFloor === 1) bgImage = bgCaveMap;
-  else if (game.currentFloor === 2) bgImage = bgTowerMap;
+  if (game.currentFloor === 1) bgImage = bgForestMap;
+  else if (game.currentFloor === 2) bgImage = bgCaveMap;
+  else if (game.currentFloor === 3) bgImage = bgTowerMap;
+  else if (game.currentFloor === 4) bgImage = bgSkyMap;
 
   if (bgImage) {
     container.style.background = `url(${bgImage}) center center / cover no-repeat, ${theme.bgGradient}`;
@@ -373,7 +375,8 @@ function renderBattle() {
   const bgMap = {
     1: 'url(./assets/bg_forest.png)',
     2: 'url(./assets/bg_cave.png)',
-    3: 'url(./assets/bg_tower.png)'
+    3: 'url(./assets/bg_tower.png)',
+    4: 'url(./assets/bg_sky.png)'
   };
   const battleField = document.querySelector('.battle-field');
   if (battleField) {
@@ -698,12 +701,31 @@ function showQuiz(quiz) {
     mathBonusBadge = `<div class="math-bonus-badge tier-1">📖 小学${quiz.grade}年生の漢字（${quiz.strokes}画）</div>`;
   }
 
+  // 英単語問題（英語→日本語）の場合はネイティブ発音ボタンを表示＆自動読み上げ
+  const isEnglishWordQuiz = quiz.word && !quiz.word.isMath && !quiz.word.isKanji;
+  const canSpeakNow = isEnglishWordQuiz && quiz.type === 'en_to_jp';
+  const speakBtnHtml = canSpeakNow
+    ? `<div><button type="button" id="btn-quiz-speak" class="quiz-speak-btn">🔊 発音をきく</button></div>`
+    : '';
+
   questionEl.innerHTML = `
     ${mathBonusBadge}
     <span class="question-emoji">${quiz.questionEmoji || ''}</span>
     <span class="question-text">${quiz.question}</span>
     <span class="question-label">${labelText}</span>
+    ${speakBtnHtml}
   `;
+
+  if (canSpeakNow) {
+    if (window.sm) window.sm.speakEnglish(quiz.word.english);
+    const speakBtn = document.getElementById('btn-quiz-speak');
+    if (speakBtn) {
+      speakBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.sm) window.sm.speakEnglish(quiz.word.english);
+      });
+    }
+  }
 
   // 選択肢 or タイピング
   const choicesEl = document.getElementById('quiz-choices');
@@ -784,6 +806,11 @@ function onQuizAnswer(answer, quiz) {
       if (i === quiz.correctIndex) btn.classList.add('correct');
       if (i === answer && !result.correct) btn.classList.add('incorrect');
     });
+  }
+
+  // 日本語→英語 や タイピング問題では回答直後に英単語のネイティブ発音を読み上げる
+  if (quiz.word && !quiz.word.isMath && !quiz.word.isKanji && quiz.type !== 'en_to_jp') {
+    if (window.sm) window.sm.speakEnglish(quiz.word.english);
   }
 
   // 結果表示
@@ -1370,7 +1397,7 @@ function renderEvent() {
 function renderGameOver() {
   const statsEl = document.getElementById('gameover-stats');
   statsEl.innerHTML = `
-    <div class="stat-row"><span class="stat-label">到達フロア</span><span class="stat-value">${game.currentFloor} / 3</span></div>
+    <div class="stat-row"><span class="stat-label">到達フロア</span><span class="stat-value">${game.currentFloor} / 4</span></div>
     <div class="stat-row"><span class="stat-label">勝利バトル</span><span class="stat-value">${game.stats.battlesWon}</span></div>
     <div class="stat-row"><span class="stat-label">最大コンボ</span><span class="stat-value">${game.stats.maxCombo}</span></div>
   `;
@@ -1386,7 +1413,7 @@ function renderGameOver() {
       : '📝 にがてな単語';
   if (weakIds.length > 0) {
     const words = weakIds.map(id => {
-      const word = allItems.find(w => w.id === id);
+      const word = allItems.find(w => String(w.id) === String(id));
       return word ? `<span class="weak-word-tag">${word.emoji} ${word.english} = ${word.japanese}</span>` : '';
     }).join('');
     weakEl.innerHTML = `<p style="font-size:var(--font-sm);color:var(--text-secondary);margin-bottom:4px">${weakLabel}</p><div class="weak-word-list">${words}</div>`;
@@ -1411,7 +1438,8 @@ function renderVictory() {
 
   // ボス撃破ボーナス
   let bossBonus = 0;
-  if (game.stats.lastBossId === 'word_king') bossBonus = 5000;
+  if (game.stats.lastBossId === 'omni_deity') bossBonus = 15000;
+  else if (game.stats.lastBossId === 'word_king') bossBonus = 5000;
   else if (game.stats.lastBossId === 'evolving_archive') bossBonus = 10000;
   else if (game.stats.lastBossId === 'cave_dragon') bossBonus = 3000;
   else if (game.stats.lastBossId === 'forest_guardian') bossBonus = 2000;
@@ -1465,7 +1493,29 @@ function showStats() {
 
   const stats = game.spacedRep.getStats();
   const best = game.saveManager.loadBestRun();
+  const mastery = game.getMasteryBonus();
+  const achievements = game.getAchievements();
+  const unlockedCount = achievements.filter(a => a.unlocked).length;
   const leaderboard = game.saveManager.getLeaderboard ? game.saveManager.getLeaderboard() : [];
+
+  const badgesHtml = `
+    <div style="margin-top:18px; text-align:left;">
+      <h3 style="text-align:center; color: var(--accent-yellow); margin-bottom: 6px;">🏅 称号・バッジコレクション (${unlockedCount} / ${achievements.length})</h3>
+      <div class="mastery-banner">
+        🎁 図鑑マスター報酬：冒険スタート時の最大HP <strong>+${mastery.hpBonus}</strong>（✅${mastery.masteredTotal}問 / 👑${mastery.crownedTotal}個）
+      </div>
+      <div class="badge-grid">
+        ${achievements.map(a => `
+          <div class="badge-card ${a.unlocked ? 'unlocked' : 'locked'}">
+            <div class="badge-emoji">${a.unlocked ? a.emoji : '🔒'}</div>
+            <div class="badge-title">${a.title}</div>
+            <div class="badge-desc">${a.desc}</div>
+            <div class="badge-progress">${a.unlocked ? '✨ 獲得ずみ！' : a.progress}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
 
   let topHtml = '';
   if (leaderboard.length > 0) {
@@ -1520,6 +1570,7 @@ function showStats() {
     <div style="text-align:center;color:var(--text-secondary);font-size:var(--font-sm);margin-top:15px;">
       <p>総プレイ回数: ${best.totalRuns || 0} / クリアしたフロア: ${best.floorsCleared || 0}</p>
     </div>
+    ${badgesHtml}
     ${topHtml}
   `;
 }
@@ -1706,6 +1757,12 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'block';
 
     const learningData = game.spacedRep.learningData;
+    const mastery = game.getMasteryBonus();
+    const bannerEl = document.getElementById('wordlist-mastery-banner');
+    if (bannerEl) {
+      bannerEl.innerHTML = `🎁 図鑑マスター報酬：<strong>最大HP +${mastery.hpBonus}</strong>（✅マスター ${mastery.masteredTotal}問 / 👑王冠 ${mastery.crownedTotal}個）`;
+    }
+
     const allListItems = [...wordListDb.words, ...mathListDb.words, ...kanjiListDb.words];
 
     // カテゴリフィルタボタン生成
@@ -1713,6 +1770,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cats = [...wordListDb.categories, ...mathListDb.categories, ...kanjiListDb.categories];
     filterEl.innerHTML =
       `<button class="wordlist-cat-btn ${filterCat === 'all' ? 'active' : ''}" data-cat="all">🌟 ぜんぶ</button>` +
+      `<button class="wordlist-cat-btn ${filterCat === 'all_english' ? 'active' : ''}" data-cat="all_english">🧙‍♂️ えいご</button>` +
       `<button class="wordlist-cat-btn ${filterCat === 'all_math' ? 'active' : ''}" data-cat="all_math">🧮 かけ算 (1×1〜19×19)</button>` +
       `<button class="wordlist-cat-btn ${filterCat === 'all_kanji' ? 'active' : ''}" data-cat="all_kanji">🥋 かんじ (小1〜小4)</button>` +
       cats.map(c => `<button class="wordlist-cat-btn ${filterCat === c ? 'active' : ''}" data-cat="${c}">${CATEGORY_LABELS[c] || c}</button>`).join('');
@@ -1724,7 +1782,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 単語・計算・漢字リスト生成
     const contentEl = document.getElementById('wordlist-content');
     let words = allListItems;
-    if (filterCat === 'all_math') {
+    if (filterCat === 'all_english') {
+      words = wordListDb.words;
+    } else if (filterCat === 'all_math') {
       words = mathListDb.words;
     } else if (filterCat === 'all_kanji') {
       words = kanjiListDb.words;
@@ -1752,8 +1812,12 @@ document.addEventListener('DOMContentLoaded', () => {
       html += `<div class="wordlist-grid">`;
       catWords.forEach(w => {
         const data = learningData[w.id] || { correct: 0, incorrect: 0, weight: 1 };
-        const mastery = data.correct >= 5 ? '👑' : (data.correct >= 2 ? '✅' : '');
+        const masteryIcon = data.correct >= 5 ? '👑' : (data.correct >= 2 ? '✅' : '');
         const diffStars = '⭐'.repeat(w.difficulty);
+        const isEnglishWord = !w.isMath && !w.isKanji;
+        const speakBtn = isEnglishWord
+          ? `<button type="button" class="wordlist-speak-btn" data-speak="${w.english}" title="発音をきく">🔊</button>`
+          : '';
 
         html += `<div class="wordlist-item diff-${w.difficulty}">
           <span class="wordlist-emoji">${w.emoji}</span>
@@ -1761,8 +1825,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="wordlist-english">${w.english}</span>
             <span class="wordlist-japanese">${w.japanese}</span>
           </div>
+          ${speakBtn}
           <div class="wordlist-stats">
-            <span class="word-mastery">${mastery}</span>
+            <span class="word-mastery">${masteryIcon}</span>
             <span class="word-count-badge correct">○ ${data.correct}</span>
             <span class="word-count-badge incorrect">× ${data.incorrect}</span>
           </div>
@@ -1772,10 +1837,182 @@ document.addEventListener('DOMContentLoaded', () => {
       html += `</div></div>`;
     }
     contentEl.innerHTML = html;
+
+    // 図鑑内の英語発音ボタンイベントを設定
+    contentEl.querySelectorAll('.wordlist-speak-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const text = btn.dataset.speak;
+        if (window.sm && text) window.sm.speakEnglish(text);
+      });
+    });
   }
 
   document.getElementById('btn-word-list').addEventListener('click', () => showWordList());
   document.getElementById('btn-close-wordlist').addEventListener('click', () => {
     document.getElementById('modal-wordlist').style.display = 'none';
   });
+
+  // === 🥋 にがて克服トレーニング道場 ===
+  let dojoStreak = 0;
+  let currentDojoSubject = 'all';
+
+  function showDojoModal(subject = currentDojoSubject) {
+    currentDojoSubject = subject;
+    const modal = document.getElementById('modal-dojo');
+    modal.style.display = 'block';
+
+    const filterEl = document.getElementById('dojo-filter');
+    filterEl.innerHTML = `
+      <button class="wordlist-cat-btn ${subject === 'all' ? 'active' : ''}" data-subj="all">🌟 ぜんぶ</button>
+      <button class="wordlist-cat-btn ${subject === 'english' ? 'active' : ''}" data-subj="english">🧙‍♂️ えいご</button>
+      <button class="wordlist-cat-btn ${subject === 'math' ? 'active' : ''}" data-subj="math">🧮 かけ算</button>
+      <button class="wordlist-cat-btn ${subject === 'kanji' ? 'active' : ''}" data-subj="kanji">🥋 かんじ</button>
+    `;
+    filterEl.querySelectorAll('.wordlist-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        dojoStreak = 0;
+        showDojoModal(btn.dataset.subj);
+      });
+    });
+
+    renderNextDojoQuestion();
+  }
+
+  function renderNextDojoQuestion() {
+    const contentEl = document.getElementById('dojo-content');
+    const learningData = game.spacedRep.learningData || {};
+
+    let pool = [];
+    if (currentDojoSubject === 'english') pool = wordListDb.words.filter(w => !w.english.includes(' '));
+    else if (currentDojoSubject === 'math') pool = mathListDb.words;
+    else if (currentDojoSubject === 'kanji') pool = kanjiListDb.words;
+    else pool = [...wordListDb.words.filter(w => !w.english.includes(' ')), ...mathListDb.words, ...kanjiListDb.words];
+
+    // 苦手問題（weight > 1.5 または incorrect > 0 かつ weight > 1.0）を抽出
+    const weakPool = pool.filter(w => {
+      const d = learningData[w.id];
+      return d && (d.weight > 1.5 || (d.incorrect > 0 && d.weight > 1.0));
+    });
+
+    const isFreePractice = weakPool.length === 0;
+    const targetItem = isFreePractice
+      ? pool[Math.floor(Math.random() * pool.length)]
+      : weakPool[Math.floor(Math.random() * weakPool.length)];
+
+    // データベース別に4択クイズを生成
+    let quiz;
+    const randomDir = Math.random() > 0.5 ? 'en_to_jp' : 'jp_to_en';
+    if (targetItem.isMath) {
+      quiz = mathListDb.generateQuestion(targetItem);
+    } else if (targetItem.isKanji) {
+      quiz = kanjiListDb.generateQuestion(targetItem, randomDir);
+    } else {
+      quiz = wordListDb.generateQuestion(targetItem, randomDir);
+    }
+
+    const labelText = quiz.type === 'math_choice' ? 'こたえは いくつ？'
+      : quiz.type === 'kanji_read' ? '【 】の漢字のよみかたは？'
+      : quiz.type === 'kanji_write' ? '【 】に入る漢字はどれ？'
+      : quiz.type === 'en_to_jp' ? 'この英語の意味は？'
+      : 'この日本語を英語で言うと？';
+
+    const isEnglish = !targetItem.isMath && !targetItem.isKanji;
+    const canSpeakNow = isEnglish && quiz.type === 'en_to_jp';
+
+    contentEl.innerHTML = `
+      <div class="dojo-arena">
+        <div class="dojo-header-stats">
+          <span>🎯 のこり苦手問題: <strong style="color:var(--accent-red)">${weakPool.length}問</strong></span>
+          <span>🔥 れんぞく正解: <strong style="color:var(--accent-yellow)">${dojoStreak}回</strong></span>
+        </div>
+        ${isFreePractice ? `<div style="font-size:0.78rem; color:var(--accent-green); margin-bottom:4px;">✨ この分野のにがて問題は 0個 です！（自由特訓モード）</div>` : ''}
+        <div class="dojo-dummy-wrap">
+          <div id="dojo-dummy-icon" class="dojo-dummy-icon">🪵</div>
+          <div style="text-align:left;">
+            <div style="font-weight:800; font-size:0.95rem;">特訓の木人（もくじん）</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">正解して苦手をうちやぶろう！</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem; color:var(--text-secondary);">${labelText}</div>
+        <div class="dojo-quiz-question">${quiz.questionEmoji || ''} ${quiz.question}</div>
+        ${canSpeakNow ? `<button type="button" id="btn-dojo-speak" class="quiz-speak-btn" style="margin-bottom:10px;">🔊 発音をきく</button>` : ''}
+        <div class="dojo-choices" id="dojo-choices">
+          ${quiz.choices.map((c, idx) => `<button type="button" class="quiz-choice" data-idx="${idx}">${c}</button>`).join('')}
+        </div>
+        <div id="dojo-result" class="quiz-result" style="display:none; margin-top:10px; width:100%; text-align:center;"></div>
+      </div>
+    `;
+
+    if (canSpeakNow && window.sm) {
+      window.sm.speakEnglish(targetItem.english);
+      const speakBtn = document.getElementById('btn-dojo-speak');
+      if (speakBtn) {
+        speakBtn.addEventListener('click', () => window.sm.speakEnglish(targetItem.english));
+      }
+    }
+
+    const choiceBtns = contentEl.querySelectorAll('#dojo-choices .quiz-choice');
+    const resultEl = document.getElementById('dojo-result');
+    const dummyIcon = document.getElementById('dojo-dummy-icon');
+
+    choiceBtns.forEach((btn, idx) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('disabled')) return;
+        choiceBtns.forEach(b => b.classList.add('disabled'));
+
+        const correct = idx === quiz.correctIndex;
+        choiceBtns[quiz.correctIndex].classList.add('correct');
+        if (!correct) btn.classList.add('incorrect');
+
+        if (isEnglish && quiz.type !== 'en_to_jp' && window.sm) {
+          window.sm.speakEnglish(targetItem.english);
+        }
+
+        resultEl.style.display = 'block';
+        if (correct) {
+          dojoStreak++;
+          if (window.sm) {
+            window.sm.playQuizCorrect();
+            setTimeout(() => window.sm.playAttack(), 150);
+          }
+          if (dummyIcon) {
+            dummyIcon.classList.add('hit');
+            setTimeout(() => dummyIcon.classList.remove('hit'), 300);
+          }
+          const graduated = game.spacedRep.recordDojoCorrect(targetItem.id);
+          resultEl.className = 'quiz-result correct';
+          resultEl.textContent = graduated
+            ? `⭕ 正解！ 🎉 にがてを克服したよ！`
+            : `⭕ 正解！ ナイス特訓！（${dojoStreak}れんぞく！）`;
+        } else {
+          dojoStreak = 0;
+          if (window.sm) window.sm.playQuizIncorrect();
+          game.spacedRep.recordIncorrect(targetItem.id);
+          resultEl.className = 'quiz-result incorrect';
+          resultEl.textContent = `❌ 残念… 正解は「${quiz.choices[quiz.correctIndex]}」`;
+        }
+
+        setTimeout(() => {
+          if (document.getElementById('modal-dojo').style.display !== 'none') {
+            renderNextDojoQuestion();
+          }
+        }, 1200);
+      });
+    });
+  }
+
+  const btnDojo = document.getElementById('btn-dojo');
+  if (btnDojo) {
+    btnDojo.addEventListener('click', () => {
+      dojoStreak = 0;
+      showDojoModal('all');
+    });
+  }
+  const btnCloseDojo = document.getElementById('btn-close-dojo');
+  if (btnCloseDojo) {
+    btnCloseDojo.addEventListener('click', () => {
+      document.getElementById('modal-dojo').style.display = 'none';
+    });
+  }
 });

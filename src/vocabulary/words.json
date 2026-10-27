@@ -3517,6 +3517,782 @@
       "category": "place",
       "difficulty": 3,
       "emoji": "💊"
+    },
+    {
+      "id": "1973",
+      "english": "tea",
+      "japanese": "おちゃ",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🍵"
+    },
+    {
+      "id": "1974",
+      "english": "ham",
+      "japanese": "ハム",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🍖"
+    },
+    {
+      "id": "1975",
+      "english": "pie",
+      "japanese": "パイ",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🥧"
+    },
+    {
+      "id": "1976",
+      "english": "oil",
+      "japanese": "あぶら",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "🫒"
+    },
+    {
+      "id": "1977",
+      "english": "arm",
+      "japanese": "うで",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "💪"
+    },
+    {
+      "id": "1978",
+      "english": "toe",
+      "japanese": "あしのゆび",
+      "category": "body",
+      "difficulty": 2,
+      "emoji": "🦶"
+    },
+    {
+      "id": "1979",
+      "english": "age",
+      "japanese": "ねんれい",
+      "category": "person",
+      "difficulty": 2,
+      "emoji": "🎂"
+    },
+    {
+      "id": "1980",
+      "english": "air",
+      "japanese": "くうき",
+      "category": "nature",
+      "difficulty": 1,
+      "emoji": "💨"
+    },
+    {
+      "id": "1981",
+      "english": "toy",
+      "japanese": "おもちゃ",
+      "category": "toy",
+      "difficulty": 1,
+      "emoji": "🧸"
+    },
+    {
+      "id": "1982",
+      "english": "see",
+      "japanese": "みる（目にはいる）",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "👀"
+    },
+    {
+      "id": "1983",
+      "english": "buy",
+      "japanese": "かう",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🛒"
+    },
+    {
+      "id": "1984",
+      "english": "try",
+      "japanese": "やってみる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "✨"
+    },
+    {
+      "id": "1985",
+      "english": "use",
+      "japanese": "つかう",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🔧"
+    },
+    {
+      "id": "1986",
+      "english": "ask",
+      "japanese": "たずねる・きく",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "❓"
+    },
+    {
+      "id": "1987",
+      "english": "say",
+      "japanese": "いう",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "💬"
+    },
+    {
+      "id": "1988",
+      "english": "put",
+      "japanese": "おく",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "📥"
+    },
+    {
+      "id": "1989",
+      "english": "get",
+      "japanese": "てにいれる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🎁"
+    },
+    {
+      "id": "1990",
+      "english": "dry",
+      "japanese": "かわいた",
+      "category": "feeling",
+      "difficulty": 2,
+      "emoji": "☀️"
+    },
+    {
+      "id": "1991",
+      "english": "shy",
+      "japanese": "はずかしがり",
+      "category": "feeling",
+      "difficulty": 2,
+      "emoji": "😳"
+    },
+    {
+      "id": "1992",
+      "english": "low",
+      "japanese": "ひくい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "⬇️"
+    },
+    {
+      "id": "1993",
+      "english": "far",
+      "japanese": "とおい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "🔭"
+    },
+    {
+      "id": "1994",
+      "english": "out",
+      "japanese": "そとへ",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "🚪"
+    },
+    {
+      "id": "1995",
+      "english": "end",
+      "japanese": "おわり",
+      "category": "time",
+      "difficulty": 1,
+      "emoji": "🏁"
+    },
+    {
+      "id": "1996",
+      "english": "meat",
+      "japanese": "おにく",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🍖"
+    },
+    {
+      "id": "1997",
+      "english": "beef",
+      "japanese": "ぎゅうにく",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🥩"
+    },
+    {
+      "id": "1998",
+      "english": "pork",
+      "japanese": "ぶたにく",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🥓"
+    },
+    {
+      "id": "1999",
+      "english": "salt",
+      "japanese": "しお",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🧂"
+    },
+    {
+      "id": "2000",
+      "english": "pear",
+      "japanese": "洋なし",
+      "category": "food",
+      "difficulty": 2,
+      "emoji": "🍐"
+    },
+    {
+      "id": "2001",
+      "english": "bean",
+      "japanese": "まめ",
+      "category": "food",
+      "difficulty": 1,
+      "emoji": "🫘"
+    },
+    {
+      "id": "2002",
+      "english": "fork",
+      "japanese": "フォーク",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🍴"
+    },
+    {
+      "id": "2003",
+      "english": "bowl",
+      "japanese": "ボウル・どんぶり",
+      "category": "home",
+      "difficulty": 2,
+      "emoji": "🥣"
+    },
+    {
+      "id": "2004",
+      "english": "dish",
+      "japanese": "おさら",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🍽️"
+    },
+    {
+      "id": "2005",
+      "english": "face",
+      "japanese": "かお",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "😊"
+    },
+    {
+      "id": "2006",
+      "english": "neck",
+      "japanese": "くび",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "🦒"
+    },
+    {
+      "id": "2007",
+      "english": "back",
+      "japanese": "せなか",
+      "category": "body",
+      "difficulty": 1,
+      "emoji": "🔙"
+    },
+    {
+      "id": "2008",
+      "english": "tail",
+      "japanese": "しっぽ",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐕"
+    },
+    {
+      "id": "2009",
+      "english": "wing",
+      "japanese": "つばさ",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🪽"
+    },
+    {
+      "id": "2010",
+      "english": "wolf",
+      "japanese": "おおかみ",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐺"
+    },
+    {
+      "id": "2011",
+      "english": "crab",
+      "japanese": "かに",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🦀"
+    },
+    {
+      "id": "2012",
+      "english": "deer",
+      "japanese": "しか",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🦌"
+    },
+    {
+      "id": "2013",
+      "english": "goat",
+      "japanese": "やぎ",
+      "category": "animal",
+      "difficulty": 1,
+      "emoji": "🐐"
+    },
+    {
+      "id": "2014",
+      "english": "rose",
+      "japanese": "バラの花",
+      "category": "nature",
+      "difficulty": 1,
+      "emoji": "🌹"
+    },
+    {
+      "id": "2015",
+      "english": "fire",
+      "japanese": "ひ・ほのお",
+      "category": "nature",
+      "difficulty": 1,
+      "emoji": "🔥"
+    },
+    {
+      "id": "2016",
+      "english": "hill",
+      "japanese": "おか",
+      "category": "nature",
+      "difficulty": 1,
+      "emoji": "⛰️"
+    },
+    {
+      "id": "2017",
+      "english": "lake",
+      "japanese": "みずうみ",
+      "category": "nature",
+      "difficulty": 1,
+      "emoji": "🏞️"
+    },
+    {
+      "id": "2018",
+      "english": "wave",
+      "japanese": "なみ",
+      "category": "nature",
+      "difficulty": 1,
+      "emoji": "🌊"
+    },
+    {
+      "id": "2019",
+      "english": "cave",
+      "japanese": "どうくつ",
+      "category": "nature",
+      "difficulty": 2,
+      "emoji": "🦇"
+    },
+    {
+      "id": "2020",
+      "english": "home",
+      "japanese": "おうち・いえ",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🏠"
+    },
+    {
+      "id": "2021",
+      "english": "camp",
+      "japanese": "キャンプ",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "🏕️"
+    },
+    {
+      "id": "2022",
+      "english": "tent",
+      "japanese": "テント",
+      "category": "object",
+      "difficulty": 1,
+      "emoji": "⛺"
+    },
+    {
+      "id": "2023",
+      "english": "road",
+      "japanese": "どうろ・みち",
+      "category": "place",
+      "difficulty": 1,
+      "emoji": "🛣️"
+    },
+    {
+      "id": "2024",
+      "english": "noon",
+      "japanese": "しょうご（ひるの12じ）",
+      "category": "time",
+      "difficulty": 2,
+      "emoji": "🕛"
+    },
+    {
+      "id": "2025",
+      "english": "name",
+      "japanese": "なまえ",
+      "category": "school",
+      "difficulty": 1,
+      "emoji": "📛"
+    },
+    {
+      "id": "2026",
+      "english": "test",
+      "japanese": "テスト",
+      "category": "school",
+      "difficulty": 1,
+      "emoji": "📝"
+    },
+    {
+      "id": "2027",
+      "english": "club",
+      "japanese": "クラブ・ぶかつ",
+      "category": "school",
+      "difficulty": 1,
+      "emoji": "⚽"
+    },
+    {
+      "id": "2028",
+      "english": "song",
+      "japanese": "うた（曲）",
+      "category": "school",
+      "difficulty": 1,
+      "emoji": "🎵"
+    },
+    {
+      "id": "2029",
+      "english": "math",
+      "japanese": "さんすう・すうがく",
+      "category": "school",
+      "difficulty": 1,
+      "emoji": "🧮"
+    },
+    {
+      "id": "2030",
+      "english": "page",
+      "japanese": "ページ",
+      "category": "school",
+      "difficulty": 1,
+      "emoji": "📄"
+    },
+    {
+      "id": "2031",
+      "english": "flag",
+      "japanese": "はた",
+      "category": "object",
+      "difficulty": 1,
+      "emoji": "🚩"
+    },
+    {
+      "id": "2032",
+      "english": "bell",
+      "japanese": "ベル・すず",
+      "category": "object",
+      "difficulty": 1,
+      "emoji": "🔔"
+    },
+    {
+      "id": "2033",
+      "english": "gift",
+      "japanese": "おくりもの",
+      "category": "object",
+      "difficulty": 1,
+      "emoji": "🎁"
+    },
+    {
+      "id": "2034",
+      "english": "ring",
+      "japanese": "ゆびわ",
+      "category": "clothes",
+      "difficulty": 1,
+      "emoji": "💍"
+    },
+    {
+      "id": "2035",
+      "english": "shoe",
+      "japanese": "くつ（片方）",
+      "category": "clothes",
+      "difficulty": 1,
+      "emoji": "👟"
+    },
+    {
+      "id": "2036",
+      "english": "sock",
+      "japanese": "くつした（片方）",
+      "category": "clothes",
+      "difficulty": 1,
+      "emoji": "🧦"
+    },
+    {
+      "id": "2037",
+      "english": "soap",
+      "japanese": "せっけん",
+      "category": "home",
+      "difficulty": 1,
+      "emoji": "🧼"
+    },
+    {
+      "id": "2038",
+      "english": "coin",
+      "japanese": "コイン・こうか",
+      "category": "object",
+      "difficulty": 1,
+      "emoji": "🪙"
+    },
+    {
+      "id": "2039",
+      "english": "card",
+      "japanese": "カード",
+      "category": "toy",
+      "difficulty": 1,
+      "emoji": "🃏"
+    },
+    {
+      "id": "2040",
+      "english": "hero",
+      "japanese": "ヒーロー",
+      "category": "person",
+      "difficulty": 1,
+      "emoji": "🦸"
+    },
+    {
+      "id": "2041",
+      "english": "tall",
+      "japanese": "せがたかい",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "🦒"
+    },
+    {
+      "id": "2042",
+      "english": "high",
+      "japanese": "（山などが）たかい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "🏔️"
+    },
+    {
+      "id": "2043",
+      "english": "long",
+      "japanese": "ながい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "📏"
+    },
+    {
+      "id": "2044",
+      "english": "full",
+      "japanese": "いっぱいの",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "🈵"
+    },
+    {
+      "id": "2045",
+      "english": "dark",
+      "japanese": "くらい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "🌑"
+    },
+    {
+      "id": "2046",
+      "english": "soft",
+      "japanese": "やわらかい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "☁️"
+    },
+    {
+      "id": "2047",
+      "english": "hard",
+      "japanese": "かたい",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "🪨"
+    },
+    {
+      "id": "2048",
+      "english": "busy",
+      "japanese": "いそがしい",
+      "category": "feeling",
+      "difficulty": 2,
+      "emoji": "💦"
+    },
+    {
+      "id": "2049",
+      "english": "safe",
+      "japanese": "あんぜんな",
+      "category": "other",
+      "difficulty": 2,
+      "emoji": "🔰"
+    },
+    {
+      "id": "2050",
+      "english": "cute",
+      "japanese": "かわいい",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "🎀"
+    },
+    {
+      "id": "2051",
+      "english": "nice",
+      "japanese": "すてきな",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "✨"
+    },
+    {
+      "id": "2052",
+      "english": "easy",
+      "japanese": "かんたんな",
+      "category": "other",
+      "difficulty": 1,
+      "emoji": "👌"
+    },
+    {
+      "id": "2053",
+      "english": "love",
+      "japanese": "だいすき・あいする",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "❤️"
+    },
+    {
+      "id": "2054",
+      "english": "like",
+      "japanese": "すき",
+      "category": "feeling",
+      "difficulty": 1,
+      "emoji": "👍"
+    },
+    {
+      "id": "2055",
+      "english": "make",
+      "japanese": "つくる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🔨"
+    },
+    {
+      "id": "2056",
+      "english": "take",
+      "japanese": "とる・もっていく",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "✋"
+    },
+    {
+      "id": "2057",
+      "english": "give",
+      "japanese": "あげる・あたえる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🎁"
+    },
+    {
+      "id": "2058",
+      "english": "come",
+      "japanese": "くる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🚶"
+    },
+    {
+      "id": "2059",
+      "english": "talk",
+      "japanese": "はなす・おしゃべりする",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🗣️"
+    },
+    {
+      "id": "2060",
+      "english": "hear",
+      "japanese": "きこえる・きく",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "👂"
+    },
+    {
+      "id": "2061",
+      "english": "kick",
+      "japanese": "ける",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "⚽"
+    },
+    {
+      "id": "2062",
+      "english": "ride",
+      "japanese": "（のりものに）のる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🚲"
+    },
+    {
+      "id": "2063",
+      "english": "wait",
+      "japanese": "まつ",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "⏳"
+    },
+    {
+      "id": "2064",
+      "english": "show",
+      "japanese": "みせる",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "👀"
+    },
+    {
+      "id": "2065",
+      "english": "find",
+      "japanese": "みつける",
+      "category": "action",
+      "difficulty": 1,
+      "emoji": "🔍"
+    },
+    {
+      "id": "2066",
+      "english": "fall",
+      "japanese": "おちる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "🍂"
+    },
+    {
+      "id": "2067",
+      "english": "grow",
+      "japanese": "そだつ・おおきくなる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "🌱"
+    },
+    {
+      "id": "2068",
+      "english": "turn",
+      "japanese": "まがる・むく",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "🔄"
+    },
+    {
+      "id": "2069",
+      "english": "wear",
+      "japanese": "（ふくを）きる",
+      "category": "action",
+      "difficulty": 2,
+      "emoji": "👕"
     }
   ]
 }

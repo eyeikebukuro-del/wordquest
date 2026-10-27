@@ -51,6 +51,24 @@ export class SpacedRepetition {
     }
 
     /**
+     * 道場での特訓正答を記録（通常より早く苦手を克服できる）
+     * @param {number|string} wordId - 問題ID
+     * @returns {boolean} 苦手（weight > 1.5）から卒業したかどうか
+     */
+    recordDojoCorrect(wordId) {
+        if (!this.learningData[wordId]) {
+            this.learningData[wordId] = { correct: 0, incorrect: 0, weight: 1, lastSeen: 0 };
+        }
+        const data = this.learningData[wordId];
+        const wasWeak = data.weight > 1.5;
+        data.correct++;
+        data.weight = Math.max(0.5, data.weight * 0.55);
+        data.lastSeen = Date.now();
+        this.save();
+        return wasWeak && data.weight <= 1.5;
+    }
+
+    /**
      * 誤答を記録
      * @param {number} wordId - 単語ID
      */

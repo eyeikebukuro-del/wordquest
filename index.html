@@ -29,24 +29,28 @@
         <div class="menu-logo">
           <div class="logo-emoji">⚔️📖</div>
           <h1 class="logo-title">WordQuest</h1>
-          <p class="logo-subtitle">〜 英語の塔 〜</p>
+          <p class="logo-subtitle">〜 知恵と冒険の塔 〜</p>
         </div>
         <div class="menu-buttons">
           <button id="btn-new-game" class="btn btn-primary btn-glow">
             <span class="btn-icon">🗡️</span>
             <span>ぼうけんに出る</span>
           </button>
+          <button id="btn-dojo" class="btn btn-secondary">
+            <span class="btn-icon">🥋</span>
+            <span>にがて道場（特訓）</span>
+          </button>
           <button id="btn-word-list" class="btn btn-secondary">
             <span class="btn-icon">📖</span>
-            <span>たんごリスト</span>
+            <span>まなびの図鑑</span>
           </button>
           <button id="btn-stats" class="btn btn-secondary">
-            <span class="btn-icon">📊</span>
-            <span>がくしゅう記録</span>
+            <span class="btn-icon">🏅</span>
+            <span>きろく・称号</span>
           </button>
         </div>
         <div class="menu-footer">
-          <p>小学生向け英単語ローグライク</p>
+          <p>小学生向け えいご・かけ算・かんじ ローグライク</p>
         </div>
       </div>
     </div>
@@ -315,10 +319,23 @@
     <div id="modal-wordlist" class="modal" style="display:none;">
       <div class="modal-overlay">
         <div class="modal-panel">
-          <h2 class="modal-title">📖 たんごリスト</h2>
+          <h2 class="modal-title">📖 まなびの図鑑</h2>
+          <div id="wordlist-mastery-banner" class="mastery-banner"></div>
           <div class="wordlist-filter" id="wordlist-filter"></div>
           <div class="modal-content wordlist-content" id="wordlist-content"></div>
           <button id="btn-close-wordlist" class="btn btn-secondary">とじる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- にがて克服トレーニング道場モーダル -->
+    <div id="modal-dojo" class="modal" style="display:none;">
+      <div class="modal-overlay">
+        <div class="modal-panel dojo-panel">
+          <h2 class="modal-title">🥋 にがて克服トレーニング道場</h2>
+          <div class="wordlist-filter" id="dojo-filter"></div>
+          <div class="modal-content" id="dojo-content"></div>
+          <button id="btn-close-dojo" class="btn btn-secondary">道場を出る</button>
         </div>
       </div>
     </div>

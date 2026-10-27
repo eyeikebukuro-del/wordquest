@@ -112,17 +112,20 @@ export class GameEngine {
             }
         };
         const profile = charProfileMap[characterId] || charProfileMap.wordmaster;
+        const masteryBonus = this.getMasteryBonus();
+        const startMaxHp = 60 + masteryBonus.hpBonus;
 
-        // プレイヤー初期化
+        // プレイヤー初期化（図鑑コンプリート報酬の最大HPボーナスを反映）
         this.player = {
-            hp: 60,
-            maxHp: 60,
+            hp: startMaxHp,
+            maxHp: startMaxHp,
             gold: 50,
             maxEnergy: 3,
             characterId,
             name: profile.name,
             emoji: profile.emoji,
-            image: profile.image
+            image: profile.image,
+            masteryHpBonus: masteryBonus.hpBonus
         };
 
         // デッキ初期化（キャラクター別専用デッキ）
@@ -269,8 +272,8 @@ export class GameEngine {
             if (node && node.type === NODE_TYPES.BOSS) {
                 this.stats.floorsCleared++;
 
-                if (this.currentFloor >= 3) {
-                    // ゲームクリア
+                if (this.currentFloor >= 4) {
+                    // フロア4（最終ボス）撃破でゲームクリア
                     this.changeScreen(SCREENS.VICTORY);
                     return;
                 }
@@ -308,8 +311,8 @@ export class GameEngine {
         const map = this.maps[this.currentFloor];
         const node = map.nodes.find(n => n.id === this.currentNodeId);
 
-        // ボス勝利後は次のフロアへ
-        if (node && node.type === NODE_TYPES.BOSS && this.currentFloor < 3) {
+        // ボス勝利後は次のフロアへ（全4フロア）
+        if (node && node.type === NODE_TYPES.BOSS && this.currentFloor < 4) {
             this.currentFloor++;
             this.maps[this.currentFloor] = generateMap(this.currentFloor);
             this.currentNodeId = 'start';
@@ -455,5 +458,138 @@ export class GameEngine {
      */
     getCurrentMap() {
         return this.maps[this.currentFloor];
+    }
+
+    /**
+     * 図鑑コンプリート（マスター数）に応じたボーナスを計算
+     * @returns {Object} { masteredTotal, crownedTotal, hpBonus, wordMastered, mathMastered, kanjiMastered }
+     */
+    getMasteryBonus() {
+        const learningData = this.spacedRep.learningData || {};
+        let wordMastered = 0;
+        let mathMastered = 0;
+        let kanjiMastered = 0;
+        let crownedTotal = 0;
+
+        for (const [idStr, data] of Object.entries(learningData)) {
+            if (!data || data.correct < 2) continue;
+            const numId = parseInt(idStr, 10);
+            if (numId >= 20000) {
+                kanjiMastered++;
+            } else if (numId >= 10000) {
+                mathMastered++;
+            } else {
+                wordMastered++;
+            }
+            if (data.correct >= 5) {
+                crownedTotal++;
+            }
+        }
+
+        const masteredTotal = wordMastered + mathMastered + kanjiMastered;
+        // 5問マスター（✅以上）ごとに最大HP+1、さらに王冠（👑）3個ごとに最大HP+1（最大+50）
+        const hpBonus = Math.min(50, Math.floor(masteredTotal / 5) + Math.floor(crownedTotal / 3));
+
+        return {
+            masteredTotal,
+            crownedTotal,
+            hpBonus,
+            wordMastered,
+            mathMastered,
+            kanjiMastered
+        };
+    }
+
+    /**
+     * 称号・実績バッジ一覧と解放状況を取得
+     * @returns {Array} バッジ情報の配列
+     */
+    getAchievements() {
+        const stats = this.spacedRep.getStats();
+        const best = this.saveManager.loadBestRun();
+        const mastery = this.getMasteryBonus();
+
+        return [
+            {
+                id: 'first_step',
+                emoji: '🌱',
+                title: 'はじめの一歩',
+                desc: 'クイズに合計10問以上正解する',
+                unlocked: stats.totalCorrect >= 10,
+                progress: `${Math.min(10, stats.totalCorrect)} / 10`
+            },
+            {
+                id: 'scholar_50',
+                emoji: '📘',
+                title: 'ちえの探究者',
+                desc: 'クイズに合計50問以上正解する',
+                unlocked: stats.totalCorrect >= 50,
+                progress: `${Math.min(50, stats.totalCorrect)} / 50`
+            },
+            {
+                id: 'scholar_200',
+                emoji: '🎓',
+                title: '博識グランドマスター',
+                desc: 'クイズに合計200問以上正解する',
+                unlocked: stats.totalCorrect >= 200,
+                progress: `${Math.min(200, stats.totalCorrect)} / 200`
+            },
+            {
+                id: 'word_collector',
+                emoji: '🧙‍♂️',
+                title: 'えいご博士',
+                desc: '英単語を20個以上マスター（✅2回以上正解）',
+                unlocked: mastery.wordMastered >= 20,
+                progress: `${Math.min(20, mastery.wordMastered)} / 20`
+            },
+            {
+                id: 'math_collector',
+                emoji: '🧮',
+                title: 'かけ算の達人',
+                desc: 'かけ算を20個以上マスター（✅2回以上正解）',
+                unlocked: mastery.mathMastered >= 20,
+                progress: `${Math.min(20, mastery.mathMastered)} / 20`
+            },
+            {
+                id: 'kanji_collector',
+                emoji: '🥋',
+                title: '漢字の免許皆伝',
+                desc: '漢字を20個以上マスター（✅2回以上正解）',
+                unlocked: mastery.kanjiMastered >= 20,
+                progress: `${Math.min(20, mastery.kanjiMastered)} / 20`
+            },
+            {
+                id: 'crown_jewel',
+                emoji: '👑',
+                title: 'かんぺき王冠コレクター',
+                desc: '王冠マーク（5回以上正解）を10個集める',
+                unlocked: mastery.crownedTotal >= 10,
+                progress: `${Math.min(10, mastery.crownedTotal)} / 10`
+            },
+            {
+                id: 'combo_10',
+                emoji: '🔥',
+                title: 'れんぞく10コンボ！',
+                desc: 'バトルで10コンボ以上を達成する',
+                unlocked: (best.maxCombo || 0) >= 10,
+                progress: `最大 ${best.maxCombo || 0} / 10`
+            },
+            {
+                id: 'dojo_master',
+                emoji: '🪵',
+                title: 'にがてゼロの証',
+                desc: '15問以上学習した状態で「にがてな問題」を0個にする',
+                unlocked: stats.totalAttempted >= 15 && stats.weakWords === 0,
+                progress: stats.totalAttempted < 15 ? `学習数 ${stats.totalAttempted}/15` : `にがて残り ${stats.weakWords}個`
+            },
+            {
+                id: 'sky_conqueror',
+                emoji: '🌌',
+                title: '天空の覇者',
+                desc: 'フロア4「天空の聖域」をクリアする',
+                unlocked: (best.floorsCleared || 0) >= 4,
+                progress: `到達クリア ${best.floorsCleared || 0} / 4F`
+            }
+        ];
     }
 }

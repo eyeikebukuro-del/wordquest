@@ -39,9 +39,10 @@ export class WordDatabase {
     const configs = {
       1: { maxDiff: 2, diffWeights: { 1: 3, 2: 1 } },        // フロア1：難易度1多め、難易度2少し
       2: { maxDiff: 3, diffWeights: { 1: 1, 2: 3, 3: 1 } },   // フロア2：難易度2多め
-      3: { maxDiff: 3, diffWeights: { 1: 1, 2: 1, 3: 1 } }    // フロア3：均等
+      3: { maxDiff: 3, diffWeights: { 1: 1, 2: 1, 3: 1 } },   // フロア3：均等
+      4: { maxDiff: 3, diffWeights: { 1: 1, 2: 2, 3: 3 } }    // フロア4：難易度2〜3中心
     };
-    return configs[floor] || configs[3];
+    return configs[floor] || configs[4];
   }
 
   /**

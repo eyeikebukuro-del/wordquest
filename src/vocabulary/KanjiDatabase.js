@@ -384,9 +384,10 @@ export class KanjiDatabase {
     const gradeProbs = {
       1: { 1: 90, 2: 10, 3: 0, 4: 0 },    // 1F: 小1が90%、小2が10%
       2: { 1: 10, 2: 50, 3: 40, 4: 0 },   // 2F: 小2〜小3が中心
-      3: { 1: 0, 2: 15, 3: 45, 4: 40 }    // 3F: 小3〜小4が中心
+      3: { 1: 0, 2: 15, 3: 45, 4: 40 },   // 3F: 小3〜小4が中心
+      4: { 1: 0, 2: 5, 3: 35, 4: 60 }     // 4F: 小4が中心（60%）
     };
-    return gradeProbs[floor] || gradeProbs[3];
+    return gradeProbs[floor] || gradeProbs[4];
   }
 
   /**

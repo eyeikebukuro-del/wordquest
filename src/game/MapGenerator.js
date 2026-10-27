@@ -20,7 +20,8 @@ export const NODE_TYPES = {
 export const FLOOR_THEMES = {
     1: { name: 'まよいの森', emoji: '🌲', color: '#27ae60', bgGradient: 'linear-gradient(180deg, #1a3a1a 0%, #0d1f0d 100%)' },
     2: { name: 'やみの洞窟', emoji: '🕳️', color: '#8e44ad', bgGradient: 'linear-gradient(180deg, #2d1b4e 0%, #1a0d2e 100%)' },
-    3: { name: '英語の塔', emoji: '🏰', color: '#e74c3c', bgGradient: 'linear-gradient(180deg, #4a1a1a 0%, #2d0d0d 100%)' }
+    3: { name: '知恵の塔', emoji: '🏰', color: '#e74c3c', bgGradient: 'linear-gradient(180deg, #4a1a1a 0%, #2d0d0d 100%)' },
+    4: { name: '天空の聖域', emoji: '🌌', color: '#3498db', bgGradient: 'linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%)' }
 };
 
 /**
