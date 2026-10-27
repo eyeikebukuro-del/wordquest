@@ -1613,7 +1613,7 @@ window.addEventListener('resize', () => {
   }
 
   // マップ画面を開いている時はリサイズに合わせて線を再描画
-  if (game && game.state === GAME_STATES.MAP && document.getElementById('screen-map').classList.contains('active')) {
+  if (game && game.currentScreen === SCREENS.MAP && document.getElementById('screen-map').classList.contains('active')) {
     drawMapConnections();
   }
 });

@@ -96,9 +96,18 @@ export class WordDatabase {
       wrongCandidates = [...wrongCandidates, ...otherWords];
     }
 
-    // ランダムに3つ選択
+    // ランダムにシャッフルし、表示テキストが重複しない誤答を3つ選択
     const shuffled = wrongCandidates.sort(() => Math.random() - 0.5);
-    const wrongChoices = shuffled.slice(0, 3);
+    const wrongChoices = [];
+    const usedText = new Set([questionType === 'en_to_jp' ? correctWord.japanese : correctWord.english]);
+    for (const cand of shuffled) {
+      const text = questionType === 'en_to_jp' ? cand.japanese : cand.english;
+      if (!usedText.has(text)) {
+        usedText.add(text);
+        wrongChoices.push(cand);
+        if (wrongChoices.length >= 3) break;
+      }
+    }
 
     // 正解を含む4択を作成してシャッフル
     const allChoices = [...wrongChoices, correctWord].sort(() => Math.random() - 0.5);

@@ -251,6 +251,7 @@ export class GameEngine {
         if (result === 'victory') {
             this.stats.battlesWon++;
             this.stats.enemiesDefeated++;
+            this.stats.totalCorrect += (this.battle.correctCount || 0);
             this.stats.maxCombo = Math.max(this.stats.maxCombo, this.scaling.maxCombo);
             this.stats.maxDamage = Math.max(this.stats.maxDamage || 0, this.battle.maxDamageThisBattle || 0);
             this.stats.totalWisdomScore += (this.battle.wisdomScore || 0);
@@ -343,6 +344,14 @@ export class GameEngine {
             case 'card':
                 this.playerDeck.push(item.card);
                 break;
+            case 'relic': {
+                const addedRelic = this.scaling.addRelic(item.relicId);
+                if (addedRelic && addedRelic.effect && addedRelic.effect.type === 'max_hp_bonus') {
+                    this.player.maxHp += addedRelic.effect.value;
+                    this.player.hp += addedRelic.effect.value;
+                }
+                break;
+            }
             case 'potion':
                 this.scaling.addPotion(item.potionId);
                 break;

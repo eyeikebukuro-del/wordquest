@@ -117,7 +117,7 @@ export class SpacedRepetition {
         const entries = Object.values(this.learningData);
         const totalCorrect = entries.reduce((sum, d) => sum + d.correct, 0);
         const totalIncorrect = entries.reduce((sum, d) => sum + d.incorrect, 0);
-        const wordsLearned = entries.filter(d => d.correct >= 3 && d.weight < 1.0).length;
+        const wordsLearned = entries.filter(d => d.correct >= 2).length;
         const weakWords = entries.filter(d => d.weight > 1.5).length;
 
         return {

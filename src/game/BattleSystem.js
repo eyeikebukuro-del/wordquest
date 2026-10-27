@@ -228,9 +228,14 @@ export class BattleSystem {
         };
 
         if (correct) {
-            // カードにXP付与
-            let xpAmount = 1 + this.scaling.getRelicBonus('xp_bonus');
-            const leveledUp = addCardXP(this.selectedCard);
+            // カードにXP付与（レリック「言葉の巻物」のxp_bonusを反映）
+            const xpAmount = 1 + this.scaling.getRelicBonus('xp_bonus');
+            let leveledUp = false;
+            for (let i = 0; i < xpAmount; i++) {
+                if (addCardXP(this.selectedCard)) {
+                    leveledUp = true;
+                }
+            }
             result.leveledUp = leveledUp;
 
             // カード効果発動
