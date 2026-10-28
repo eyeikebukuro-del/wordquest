@@ -425,6 +425,12 @@ function renderBattle() {
   enemyImageEl.classList.remove('anim-death', 'anim-hit');
 
   if (enemy.image) {
+    enemyImageEl.onerror = () => {
+      enemyImageEl.style.display = 'none';
+      enemyEmojiEl.style.display = 'block';
+      enemyEmojiEl.textContent = enemy.emoji;
+      enemyEmojiEl.style.fontSize = enemy.isBoss ? '5rem' : '4rem';
+    };
     enemyImageEl.src = enemy.image;
     enemyImageEl.style.display = 'block';
     enemyEmojiEl.style.display = 'none';

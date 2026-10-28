@@ -584,12 +584,23 @@
 }
 
 /* プレイヤーステータスエリア */
-.player-status,
-.enemy-status {
+.player-status {
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
     min-height: 24px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* 敵ステータスエリア（プレイヤーの .player-block-container と同じ 30px 固定高さにしてHPバーと名前のズレを完全に防ぐ） */
+.enemy-status {
+    display: flex;
+    gap: 4px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    height: 30px;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -879,18 +890,26 @@
     width: 100%;
 }
 
-/* === 敵ギミック説明バナー === */
+/* === 敵ギミック説明バナー（画面上部中央に絶対配置し、キャラクターやHPバーの高さを一切ずらさない） === */
 .enemy-gimmick-banner {
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(253, 203, 110, 0.45);
-    border-radius: 8px;
-    padding: 4px 8px;
-    font-size: 0.7rem;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid rgba(253, 203, 110, 0.5);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
     color: #ffeaa7;
     text-align: center;
     line-height: 1.3;
-    max-width: 220px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    width: max-content;
+    max-width: min(92vw, 520px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
 }
 
 /* === テストプレイ専用ツールバー === */
