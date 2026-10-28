@@ -1568,7 +1568,9 @@ function renderOnlineLeaderboardBlockHTML(lbData, prefix = 'lb') {
     }
   }
 
-  const top10HTML = top10.map((item, idx) => renderLeaderboardRowHTML(item, idx + 1, prefix)).join('');
+  const top10HTML = top10.length > 0
+    ? top10.map((item, idx) => renderLeaderboardRowHTML(item, idx + 1, prefix)).join('')
+    : `<div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 0.85rem;">🏆 まだ記録がありません。クリアして最初の全国1位になろう！</div>`;
 
   // 11位以下の場合は「・・・」の下に現在の自分の順位のみを表示
   let outsideTop10HTML = '';

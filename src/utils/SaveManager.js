@@ -5,12 +5,12 @@ import { CARD_DEFINITIONS } from '../game/CardSystem.js';
 
 const SAVE_KEY = 'wordquest_save';
 const BEST_KEY = 'wordquest_best';
-const LB_CACHE_KEY = 'wordquest_online_lb_cache_v2';
+const LB_CACHE_KEY = 'wordquest_online_lb_cache_v3';
 const PLAYER_NAME_KEY = 'wordquest_player_name';
-const MY_BEST_ENTRY_KEY = 'wordquest_my_best_entry_v2';
+const MY_BEST_ENTRY_KEY = 'wordquest_my_best_entry_v3';
 
 // クラウド同期エンドポイント（CORS対応・認証不要の公開リーダーボードチャネル）
-const NTFY_TOPIC_URL = 'https://ntfy.sh/wordquest_prod_lb_v2_iszk';
+const NTFY_TOPIC_URL = 'https://ntfy.sh/wordquest_prod_lb_v3_iszk';
 const KV_APP_KEY = 'ehjyh4v4';
 const KV_BASE_URL = `https://keyvalue.immanuel.co/api/KeyVal`;
 const CARD_KEY_LIST = Object.keys(CARD_DEFINITIONS);
@@ -100,224 +100,9 @@ function decodeCompactSlot(b64) {
 }
 
 /**
- * 初期ベンチマークランカー（12名：TOP10表示＋11位以下の順位表示がすぐ体験できる初期データ）
+ * 初期ベンチマークランカー（リセット済み・空配列）
  */
-const INITIAL_BENCHMARK_ENTRIES = [
-    {
-        id: 'bench_1',
-        name: 'えいごキング',
-        characterId: 'wordmaster',
-        character: 'ワードマスター',
-        emoji: '🧙‍♂️',
-        ascensionLevel: 3,
-        score: 34200,
-        bossName: 'アストラル・イーター',
-        date: '2026/10/25',
-        timestamp: 1792900001000,
-        relics: ['🗡️', '⚙️', '💎', '👑'],
-        deck: [
-            { id: 'meteor', name: 'メテオ', emoji: '☄️', level: 3, rarity: 'rare', count: 2 },
-            { id: 'snowball', name: 'ゆきだるま', emoji: '⛄', level: 3, rarity: 'rare', count: 1 },
-            { id: 'mirror_copy', name: 'ミラーコピー', emoji: '🪞', level: 3, rarity: 'rare', count: 1 },
-            { id: 'accumulate', name: 'ちくせきの力', emoji: '🌀', level: 2, rarity: 'uncommon', count: 2 },
-            { id: 'barrier', name: 'バリア', emoji: '✨', level: 2, rarity: 'rare', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_2',
-        name: 'ハルト',
-        characterId: 'mathmaster',
-        character: '算術マスター',
-        emoji: '🧮',
-        ascensionLevel: 2,
-        score: 31500,
-        bossName: '全知の神 オムニ・ディエティ',
-        date: '2026/10/26',
-        timestamp: 1792900002000,
-        relics: ['🗡️', '🪭', '🔥'],
-        deck: [
-            { id: 'prime_meteor', name: '素数メテオ', emoji: '☄️', level: 3, rarity: 'rare', count: 2 },
-            { id: 'golden_spiral', name: '黄金比スパイラル', emoji: '🌀', level: 3, rarity: 'rare', count: 1 },
-            { id: 'double_angle', name: '2倍角の公式', emoji: '📐', level: 2, rarity: 'uncommon', count: 2 },
-            { id: 'vedic_cannon', name: 'インド式魔導砲', emoji: '🕉️', level: 2, rarity: 'uncommon', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_3',
-        name: 'カンフーたつじん',
-        characterId: 'kungfumaster',
-        character: 'カンフーマスター',
-        emoji: '🥋',
-        ascensionLevel: 2,
-        score: 28900,
-        bossName: '全知の神 オムニ・ディエティ',
-        date: '2026/10/26',
-        timestamp: 1792900003000,
-        relics: ['🗡️', '🔨', '💪'],
-        deck: [
-            { id: 'tenchi_haoh', name: '天地覇王拳', emoji: '🐉', level: 3, rarity: 'rare', count: 2 },
-            { id: 'kakusu_burst', name: '画数バースト', emoji: '🖌️', level: 3, rarity: 'rare', count: 1 },
-            { id: 'tanden_power', name: '丹田のちから', emoji: '🔥', level: 2, rarity: 'uncommon', count: 2 },
-            { id: 'fudou_stance', name: '不動の構え', emoji: '🏯', level: 2, rarity: 'rare', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_4',
-        name: 'ユイ',
-        characterId: 'wordmaster',
-        character: 'ワードマスター',
-        emoji: '🧙‍♂️',
-        ascensionLevel: 1,
-        score: 26400,
-        bossName: 'アストラル・イーター',
-        date: '2026/10/26',
-        timestamp: 1792900004000,
-        relics: ['💀', '🪭', '💍'],
-        deck: [
-            { id: 'catalyst', name: '毒の触媒', emoji: '🧪', level: 3, rarity: 'rare', count: 2 },
-            { id: 'poison_blade', name: 'ポイズンブレード', emoji: '🗡️', level: 3, rarity: 'uncommon', count: 3 },
-            { id: 'holy_shield', name: 'ホーリーシールド', emoji: '✨', level: 2, rarity: 'rare', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_5',
-        name: 'ソラ',
-        characterId: 'mathmaster',
-        character: '算術マスター',
-        emoji: '🧮',
-        ascensionLevel: 1,
-        score: 24100,
-        bossName: '全知の神 オムニ・ディエティ',
-        date: '2026/10/27',
-        timestamp: 1792900005000,
-        relics: ['⚙️', '📜', '🍀'],
-        deck: [
-            { id: 'arithmetic_storm', name: '等差ストーム', emoji: '🌪️', level: 3, rarity: 'rare', count: 2 },
-            { id: 'product_burst', name: '積のバースト', emoji: '✨', level: 2, rarity: 'rare', count: 1 },
-            { id: 'fortress_matrix', name: '要塞マトリクス', emoji: '🏰', level: 2, rarity: 'uncommon', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_6',
-        name: 'レン',
-        characterId: 'kungfumaster',
-        character: 'カンフーマスター',
-        emoji: '🥋',
-        ascensionLevel: 0,
-        score: 21800,
-        bossName: '全知の神 オムニ・ディエティ',
-        date: '2026/10/27',
-        timestamp: 1792900006000,
-        relics: ['🗡️', '💍'],
-        deck: [
-            { id: 'hyakuretsu_ken', name: '百烈拳', emoji: '👊', level: 3, rarity: 'rare', count: 1 },
-            { id: 'gouken_kudaki', name: '剛拳砕き', emoji: '💥', level: 2, rarity: 'uncommon', count: 2 },
-            { id: 'senjutsu_wall', name: '仙術の壁', emoji: '✨', level: 2, rarity: 'rare', count: 1 }
-        ]
-    },
-    {
-        id: 'bench_7',
-        name: 'アオイ',
-        characterId: 'wordmaster',
-        character: 'ワードマスター',
-        emoji: '🧙‍♂️',
-        ascensionLevel: 0,
-        score: 19500,
-        bossName: '全知の神 オムニ・ディエティ',
-        date: '2026/10/27',
-        timestamp: 1792900007000,
-        relics: ['🔥', '🍀'],
-        deck: [
-            { id: 'combo_blade', name: 'コンボ・ブレード', emoji: '🔪', level: 2, rarity: 'rare', count: 1 },
-            { id: 'fireball', name: 'ファイアボール', emoji: '🔥', level: 2, rarity: 'uncommon', count: 2 },
-            { id: 'iron_wall', name: 'アイアンウォール', emoji: '🏰', level: 2, rarity: 'uncommon', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_8',
-        name: 'コウキ',
-        characterId: 'mathmaster',
-        character: '算術マスター',
-        emoji: '🧮',
-        ascensionLevel: 0,
-        score: 17200,
-        bossName: 'アストラル・イーター',
-        date: '2026/10/27',
-        timestamp: 1792900008000,
-        relics: ['🔨', '💎'],
-        deck: [
-            { id: 'theorem_blade', name: '定理の刃', emoji: '⚔️', level: 2, rarity: 'rare', count: 1 },
-            { id: 'power_impact', name: '累乗インパクト', emoji: '⚡', level: 2, rarity: 'uncommon', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_9',
-        name: 'メイ',
-        characterId: 'wordmaster',
-        character: 'ワードマスター',
-        emoji: '🧙‍♂️',
-        ascensionLevel: 0,
-        score: 15400,
-        bossName: '全知の神 オムニ・ディエティ',
-        date: '2026/10/28',
-        timestamp: 1792900009000,
-        relics: ['💍', '📜'],
-        deck: [
-            { id: 'longword_burst', name: '長文バースト', emoji: '📚', level: 2, rarity: 'rare', count: 1 },
-            { id: 'double_strike', name: 'ダブルストライク', emoji: '⚡', level: 2, rarity: 'uncommon', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_10',
-        name: 'リク',
-        characterId: 'kungfumaster',
-        character: 'カンフーマスター',
-        emoji: '🥋',
-        ascensionLevel: 0,
-        score: 13800,
-        bossName: 'アストラル・イーター',
-        date: '2026/10/28',
-        timestamp: 1792900010000,
-        relics: ['💪', '🍀'],
-        deck: [
-            { id: 'ryusei_kyaku', name: '流星脚', emoji: '☄️', level: 2, rarity: 'uncommon', count: 2 },
-            { id: 'kongou_stance', name: '金剛の構え', emoji: '🗿', level: 2, rarity: 'uncommon', count: 2 }
-        ]
-    },
-    {
-        id: 'bench_11',
-        name: 'ヒナタ',
-        characterId: 'wordmaster',
-        character: 'ワードマスター',
-        emoji: '🧙‍♂️',
-        ascensionLevel: 0,
-        score: 11500,
-        bossName: 'ことばの王',
-        date: '2026/10/28',
-        timestamp: 1792900011000,
-        relics: ['💍'],
-        deck: [
-            { id: 'thunder', name: 'サンダー', emoji: '⛈️', level: 2, rarity: 'uncommon', count: 1 },
-            { id: 'slash', name: 'スラッシュ', emoji: '⚔️', level: 2, rarity: 'common', count: 4 }
-        ]
-    },
-    {
-        id: 'bench_12',
-        name: 'タクミ',
-        characterId: 'mathmaster',
-        character: '算術マスター',
-        emoji: '🧮',
-        ascensionLevel: 0,
-        score: 9800,
-        bossName: '洞窟ドラゴン',
-        date: '2026/10/28',
-        timestamp: 1792900012000,
-        relics: ['🍀'],
-        deck: [
-            { id: 'abacus_strike', name: 'そろばんアタック', emoji: '🧮', level: 2, rarity: 'common', count: 4 }
-        ]
-    }
-];
+const INITIAL_BENCHMARK_ENTRIES = [];
 
 /**
  * 現在日付を YYYY/MM/DD 形式で返す
@@ -546,12 +331,12 @@ export class SaveManager {
         // 3. 最新のオンラインランキングを取得して順位を算出
         const onlineData = await this.fetchOnlineLeaderboard(entry);
 
-        // 4. 永続クラウドスロット（TOP10全員分 wq_p10_0〜wq_p10_9）をバックグラウンドで同期更新
+        // 4. 永続クラウドスロット（TOP10全員分 wq_v3_p10_0〜wq_v3_p10_9）をバックグラウンドで同期更新
         if (onlineData.myRank && onlineData.myRank <= 10) {
             const top10ToSync = (onlineData.top10 || []).slice(0, 10);
             top10ToSync.forEach((item, idx) => {
                 const encoded = encodeCompactSlot(item);
-                fetch(`${KV_BASE_URL}/UpdateValue/${KV_APP_KEY}/wq_p10_${idx}/${encoded}`, {
+                fetch(`${KV_BASE_URL}/UpdateValue/${KV_APP_KEY}/wq_v3_p10_${idx}/${encoded}`, {
                     method: 'POST'
                 }).catch(() => {});
             });
@@ -575,7 +360,7 @@ export class SaveManager {
             const [ntfyRes, ...slotResponses] = await Promise.allSettled([
                 fetch(`${NTFY_TOPIC_URL}/json?poll=1&since=0`, { signal: ctrl.signal }),
                 ...Array.from({ length: 10 }, (_, i) =>
-                    fetch(`${KV_BASE_URL}/GetValue/${KV_APP_KEY}/wq_p10_${i}`, { signal: ctrl.signal })
+                    fetch(`${KV_BASE_URL}/GetValue/${KV_APP_KEY}/wq_v3_p10_${i}`, { signal: ctrl.signal })
                 )
             ]);
             clearTimeout(timer);
