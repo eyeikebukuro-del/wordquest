@@ -26,8 +26,11 @@ export function generateBattleRewards(enemy, scaling, characterId = 'wordmaster'
 
     // ゴールド報酬
     let goldAmount = 15 + Math.floor(Math.random() * 10);
-    if (enemy.isBoss) goldAmount *= 2;
-    if (enemy.isElite) goldAmount = Math.ceil(goldAmount * 1.5);
+    if (enemy.isBoss || enemy.isBurningElite) {
+        goldAmount *= 2;
+    } else if (enemy.isElite) {
+        goldAmount = Math.ceil(goldAmount * 1.5);
+    }
     goldAmount = Math.ceil(goldAmount * (1 + scaling.getRelicBonus('gold_bonus')));
 
     rewards.push({
@@ -37,8 +40,8 @@ export function generateBattleRewards(enemy, scaling, characterId = 'wordmaster'
         description: `${goldAmount} ゴールド`
     });
 
-    // カード報酬（3枚から1枚選択）
-    const minRarity = enemy.isBoss ? 'uncommon' : (enemy.isElite ? 'common' : 'common');
+    // カード報酬（3枚から1枚選択：強敵エリートはレアカード確定！）
+    const minRarity = enemy.isBurningElite ? 'rare' : (enemy.isBoss ? 'uncommon' : 'common');
     const cardIds = getRandomCards(3, minRarity, characterId);
     const cardOptions = cardIds.map(id => createCard(id));
 
@@ -46,11 +49,11 @@ export function generateBattleRewards(enemy, scaling, characterId = 'wordmaster'
         type: REWARD_TYPES.CARD,
         cards: cardOptions,
         emoji: '🃏',
-        description: 'カードを1枚選ぶ'
+        description: enemy.isBurningElite ? '🌟 レアカードを1枚選ぶ！' : 'カードを1枚選ぶ'
     });
 
-    // ポーション（30%確率）
-    if (Math.random() < 0.3) {
+    // ポーション（通常30%確率、強敵エリートは確定）
+    if (enemy.isBurningElite || Math.random() < 0.3) {
         const potionId = scaling.getRandomPotion();
         rewards.push({
             type: REWARD_TYPES.POTION,
@@ -60,8 +63,8 @@ export function generateBattleRewards(enemy, scaling, characterId = 'wordmaster'
         });
     }
 
-    // レリック（ボス/エリートのみ）
-    if (enemy.isBoss || enemy.isElite) {
+    // レリック（ボス/エリート/強敵エリート）
+    if (enemy.isBoss || enemy.isElite || enemy.isBurningElite) {
         const relicIds = scaling.getRandomRelics(3);
         if (relicIds.length > 0) {
             rewards.push({
@@ -71,6 +74,36 @@ export function generateBattleRewards(enemy, scaling, characterId = 'wordmaster'
                 description: 'レリックを1つ選ぶ'
             });
         }
+    }
+
+    return rewards;
+}
+
+/**
+ * 宝箱ノードの報酬を生成
+ * @param {Object} scaling - スケーリングシステム
+ * @returns {Array} 報酬リスト
+ */
+export function generateTreasureRewards(scaling) {
+    const rewards = [];
+    let goldAmount = 25 + Math.floor(Math.random() * 16);
+    goldAmount = Math.ceil(goldAmount * (1 + scaling.getRelicBonus('gold_bonus')));
+
+    rewards.push({
+        type: REWARD_TYPES.GOLD,
+        amount: goldAmount,
+        emoji: '💰',
+        description: `${goldAmount} ゴールド`
+    });
+
+    const relicIds = scaling.getRandomRelics(3);
+    if (relicIds.length > 0) {
+        rewards.push({
+            type: 'relic_choice',
+            relicIds,
+            emoji: '💎',
+            description: '宝箱からレリックを1つ選ぶ！'
+        });
     }
 
     return rewards;

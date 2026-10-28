@@ -878,3 +878,52 @@
     gap: 8px;
     width: 100%;
 }
+
+/* === 敵ギミック説明バナー === */
+.enemy-gimmick-banner {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(253, 203, 110, 0.45);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    color: #ffeaa7;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 220px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* === テストプレイ専用ツールバー === */
+.test-play-toolbar {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    z-index: 9999;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    background: rgba(15, 23, 42, 0.88);
+    border: 1px solid rgba(250, 177, 160, 0.5);
+    padding: 5px 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+}
+
+.test-tool-btn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    color: #dfe6e9;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.test-tool-btn.active {
+    background: linear-gradient(135deg, #e17055, #fdcb6e);
+    color: #1e272e;
+    border-color: #ffeaa7;
+    box-shadow: 0 0 10px rgba(253, 203, 110, 0.6);
+}

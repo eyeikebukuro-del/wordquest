@@ -44,6 +44,10 @@
             <span class="btn-icon">📖</span>
             <span>まなびの図鑑</span>
           </button>
+          <button id="btn-ranking" class="btn btn-secondary">
+            <span class="btn-icon">🏆</span>
+            <span>オンラインランキング</span>
+          </button>
           <button id="btn-stats" class="btn btn-secondary">
             <span class="btn-icon">🏅</span>
             <span>きろく・称号</span>
@@ -84,6 +88,19 @@
             <div class="char-name">？？？</div>
             <div class="char-desc">（？？？）</div>
           </div>
+        </div>
+        <!-- 登塔レベル（アセンション・ラダー）選択 -->
+        <div class="ascension-selector">
+          <div class="ascension-label">🏆 登塔レベル（難易度ラダー）</div>
+          <div class="ascension-buttons" id="ascension-buttons">
+            <button type="button" class="asc-btn active" data-asc="0">Lv.0 標準</button>
+            <button type="button" class="asc-btn" data-asc="1">Lv.1 強敵</button>
+            <button type="button" class="asc-btn" data-asc="2">Lv.2 猛攻</button>
+            <button type="button" class="asc-btn" data-asc="3">Lv.3 達人</button>
+            <button type="button" class="asc-btn" data-asc="4">Lv.4 鉄人</button>
+            <button type="button" class="asc-btn" data-asc="5">Lv.5 神域</button>
+          </div>
+          <div class="ascension-desc" id="ascension-desc">標準の難易度で楽しく学べます（スコア倍率 ×1.0）</div>
         </div>
         <div class="char-select-actions">
           <button id="btn-start-adventure" class="btn btn-primary btn-glow">
@@ -165,6 +182,7 @@
             <span class="hp-text small" id="enemy-hp-text">20/20</span>
           </div>
           <div class="enemy-status" id="enemy-status"></div>
+          <div class="enemy-gimmick-banner" id="enemy-gimmick-banner" style="display:none;"></div>
         </div>
 
         <!-- クイズエリア（オーバーレイ） -->
@@ -298,9 +316,21 @@
     <div id="modal-stats" class="modal" style="display:none;">
       <div class="modal-overlay">
         <div class="modal-panel">
-          <h2 class="modal-title">📊 がくしゅう記録</h2>
+          <h2 class="modal-title">📊 がくしゅう記録・称号</h2>
           <div class="modal-content" id="stats-content"></div>
           <button id="btn-close-stats" class="btn btn-secondary">とじる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 全国オンラインランキングモーダル -->
+    <div id="modal-ranking" class="modal" style="display:none;">
+      <div class="modal-overlay">
+        <div class="modal-panel">
+          <h2 class="modal-title">🏆 全国オンラインランキング</h2>
+          <div class="wordlist-filter" id="ranking-filter"></div>
+          <div class="modal-content" id="ranking-content"></div>
+          <button id="btn-close-ranking" class="btn btn-secondary">とじる</button>
         </div>
       </div>
     </div>
@@ -350,6 +380,15 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- テストプレイ専用ツールバー（ローカル実行時または ?test=1 のみ表示） -->
+    <div id="test-play-toolbar" class="test-play-toolbar" style="display:none;">
+      <button type="button" id="btn-test-9999" class="test-tool-btn">⚡ 9999ダメージ: OFF</button>
+      <button type="button" id="btn-test-map" class="test-tool-btn">🗺️ 自由移動: OFF</button>
+      <button type="button" id="btn-test-next-floor" class="test-tool-btn">⏭️ 次フロアへ</button>
+      <button type="button" id="btn-test-boss" class="test-tool-btn">👑 ボス戦へ</button>
+      <button type="button" id="btn-test-victory" class="test-tool-btn">🎉 クリア画面テスト</button>
     </div>
   </div>
 

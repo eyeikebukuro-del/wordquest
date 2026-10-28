@@ -246,6 +246,16 @@
     animation: bossGlow 1.5s ease-in-out infinite;
 }
 
+.map-node.burning-elite {
+    border-color: #ff7675;
+    box-shadow: 0 0 12px rgba(255, 118, 117, 0.45);
+}
+
+.map-node.treasure {
+    border-color: #fdcb6e;
+    box-shadow: 0 0 12px rgba(253, 203, 110, 0.45);
+}
+
 .map-node-label {
     position: absolute;
     bottom: -16px;

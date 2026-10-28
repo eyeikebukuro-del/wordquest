@@ -8,7 +8,8 @@ export const ENEMY_INTENTS = {
     ATTACK: 'attack',
     DEFEND: 'defend',
     BUFF: 'buff',
-    MULTI_ATTACK: 'multi_attack'
+    MULTI_ATTACK: 'multi_attack',
+    SLEEP: 'sleep'
 };
 
 /**
@@ -103,10 +104,31 @@ export const ENEMY_DEFINITIONS = {
         image: './characters/forest_guardian.png',
         baseHp: 55,
         isBoss: true,
+        gimmick: 'regen_defend',
+        regenValue: 6,
+        gimmickDesc: '🌳 森の再生：防御ターンにHPを6回復する！',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 8, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.DEFEND, block: 10, emoji: '🛡️' },
             { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 3 }, emoji: '💪' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 4, hits: 3, emoji: '⚡' }
+        ],
+        floor: 1
+    },
+    queen_bee: {
+        id: 'queen_bee',
+        name: 'クイーン・ビー',
+        emoji: '🐝',
+        image: './characters/queen_bee.png',
+        baseHp: 58,
+        isBoss: true,
+        gimmick: 'enrage_skill',
+        enrageValue: 2,
+        gimmickDesc: '🐝 女王の逆鱗：防御・スキル（攻撃以外）を使うたび即座に攻撃力+2！',
+        patterns: [
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 3, hits: 2, emoji: '⚡' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 8, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.DEFEND, block: 8, emoji: '🛡️' },
             { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 4, hits: 3, emoji: '⚡' }
         ],
         floor: 1
@@ -165,6 +187,52 @@ export const ENEMY_DEFINITIONS = {
         ],
         floor: 2
     },
+    crystal_turtle: {
+        id: 'crystal_turtle',
+        name: 'クリスタルタートル',
+        emoji: '🐢',
+        image: './characters/crystal_turtle.png',
+        baseHp: 34,
+        passiveThorns: 2,
+        gimmickDesc: '💎 水晶のトゲ：攻撃を受けるたび2ダメージ反射！単発大技か毒が有効！',
+        patterns: [
+            { intent: ENEMY_INTENTS.DEFEND, block: 8, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 9, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.DEFEND, block: 10, emoji: '🛡️' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 11, emoji: '⚔️' }
+        ],
+        floor: 2
+    },
+    sky_harpy: {
+        id: 'sky_harpy',
+        name: 'スカイハーピー',
+        emoji: '🦅',
+        image: './characters/sky_harpy.png',
+        baseHp: 30,
+        flightHitsRequired: 2,
+        gimmickDesc: '🌪️ 風の衣：被ダメージ半減！1ターンに2回攻撃を当てると撃墜して大ダメージ！',
+        patterns: [
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 4, hits: 2, emoji: '⚡' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 10, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 2 }, emoji: '💪' }
+        ],
+        floor: 2
+    },
+    sleeping_dragon: {
+        id: 'sleeping_dragon',
+        name: 'スリーピング・ドラゴン',
+        emoji: '🐉',
+        image: './characters/sleeping_dragon.png',
+        baseHp: 46,
+        asleepTurns: 2,
+        wakeUpStrength: 4,
+        gimmickDesc: '💤 居眠り竜：最初の2ターンは眠っているが、攻撃するか3ターン目に目覚めて猛攻！バフを重ねてから叩こう！',
+        patterns: [
+            { intent: ENEMY_INTENTS.ATTACK, damage: 14, emoji: '🔥' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 7, hits: 2, emoji: '⚡' }
+        ],
+        floor: 2
+    },
 
     // === フロア2 ボス ===
     cave_dragon: {
@@ -174,11 +242,30 @@ export const ENEMY_DEFINITIONS = {
         image: './characters/cave_dragon.png',
         baseHp: 80,
         isBoss: true,
+        gimmick: 'dragon_roar',
+        gimmickDesc: '🐲 竜の咆哮：バフを使うたびにブロック+8も同時獲得する！',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 12, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 6, hits: 3, emoji: '⚡' },
             { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 4 }, emoji: '💪' },
             { intent: ENEMY_INTENTS.ATTACK, damage: 18, emoji: '⚔️' }
+        ],
+        floor: 2
+    },
+    magma_behemoth: {
+        id: 'magma_behemoth',
+        name: 'マグマ・ベヒーモス',
+        emoji: '🌋',
+        image: './characters/magma_behemoth.png',
+        baseHp: 88,
+        isBoss: true,
+        gimmick: 'magma_armor',
+        gimmickDesc: '🌋 灼熱の装甲：敵のブロックを0に破壊すると装甲崩壊で10ダメージ＆弱体化！',
+        patterns: [
+            { intent: ENEMY_INTENTS.DEFEND, block: 16, emoji: '🌋' },
+            { intent: ENEMY_INTENTS.ATTACK, damage: 16, emoji: '☄️' },
+            { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 3 }, emoji: '💪' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 6, hits: 3, emoji: '⚡' }
         ],
         floor: 2
     },
@@ -223,6 +310,21 @@ export const ENEMY_DEFINITIONS = {
         ],
         floor: 3
     },
+    curse_book: {
+        id: 'curse_book',
+        name: 'カースブック',
+        emoji: '📕',
+        image: './characters/curse_book.png',
+        baseHp: 42,
+        gimmick: 'curse_weaken',
+        gimmickDesc: '📕 呪いの言霊：クイズを間違えると敵のブロック+8＆攻撃力+2！',
+        patterns: [
+            { intent: ENEMY_INTENTS.ATTACK, damage: 11, emoji: '📕' },
+            { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 3 }, emoji: '💪' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 6, hits: 2, emoji: '⚡' }
+        ],
+        floor: 3
+    },
 
     // === フロア3 ボス ===
     word_king: {
@@ -232,6 +334,8 @@ export const ENEMY_DEFINITIONS = {
         image: './characters/word_king.png',
         baseHp: 120,
         isBoss: true,
+        gimmick: 'king_pressure',
+        gimmickDesc: '👑 魔王の威圧：クイズを間違えると魔王のブロック+10＆攻撃力+2！',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 14, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 7, hits: 3, emoji: '⚡' },
@@ -248,6 +352,8 @@ export const ENEMY_DEFINITIONS = {
         image: './characters/evolving_archive.png',
         baseHp: 150,
         isBoss: true,
+        gimmick: 'evolving_archive',
+        gimmickDesc: '📖 覚醒する知性：正解するたびダメージ1.15倍乗算！ミスでリセット！',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 10, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.ATTACK, damage: 12, emoji: '⚔️' },
@@ -277,6 +383,8 @@ export const ENEMY_DEFINITIONS = {
         emoji: '🦅',
         image: './characters/thunder_griffin.png',
         baseHp: 60,
+        flightHitsRequired: 2,
+        gimmickDesc: '🌪️ 迅雷の翼：被ダメージ半減！1ターンに2回攻撃を当てると撃墜！',
         patterns: [
             { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 6, hits: 3, emoji: '⚡' },
             { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 4 }, emoji: '💪' },
@@ -290,11 +398,28 @@ export const ENEMY_DEFINITIONS = {
         emoji: '🦁',
         image: './characters/arcane_sphinx.png',
         baseHp: 65,
+        passiveThorns: 3,
+        gimmickDesc: '🦁 謎かけの結界：攻撃を受けるたび3ダメージ反射！',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 15, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.DEFEND, block: 14, emoji: '🛡️' },
             { intent: ENEMY_INTENTS.BUFF, buff: { type: 'strength', value: 4 }, emoji: '💪' },
             { intent: ENEMY_INTENTS.ATTACK, damage: 20, emoji: '⚔️' }
+        ],
+        floor: 4
+    },
+    astral_eater: {
+        id: 'astral_eater',
+        name: 'アストラル・イーター',
+        emoji: '👾',
+        image: './characters/astral_eater.png',
+        baseHp: 68,
+        absorbOnMiss: 15,
+        gimmickDesc: '👾 知識吸収：クイズを間違えるとHP15回復＆攻撃力+3！',
+        patterns: [
+            { intent: ENEMY_INTENTS.ATTACK, damage: 16, emoji: '⚔️' },
+            { intent: ENEMY_INTENTS.MULTI_ATTACK, damage: 7, hits: 3, emoji: '⚡' },
+            { intent: ENEMY_INTENTS.DEFEND, block: 15, emoji: '🛡️' }
         ],
         floor: 4
     },
@@ -307,6 +432,8 @@ export const ENEMY_DEFINITIONS = {
         image: './characters/omni_deity.png',
         baseHp: 180,
         isBoss: true,
+        gimmick: 'chrono_judgment',
+        gimmickDesc: '🌌 時の審判：3コンボ以上で攻撃するとエナジー+1回復！ミスすると神の攻撃力+3！',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 16, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.DEFEND, block: 18, emoji: '🛡️' },
@@ -323,9 +450,9 @@ export const ENEMY_DEFINITIONS = {
  */
 export const ELITE_ENEMIES = {
     1: ['goblin', 'mushroom', 'metal_slime'],
-    2: ['golem', 'dark_mage'],
-    3: ['demon', 'dark_knight'],
-    4: ['thunder_griffin', 'arcane_sphinx']
+    2: ['golem', 'dark_mage', 'sleeping_dragon', 'crystal_turtle'],
+    3: ['demon', 'dark_knight', 'curse_book'],
+    4: ['thunder_griffin', 'arcane_sphinx', 'astral_eater']
 };
 
 /**
@@ -333,24 +460,32 @@ export const ELITE_ENEMIES = {
  * @param {string} enemyId - 敵定義ID
  * @param {number} scalingFactor - スケーリング係数
  * @param {boolean} isElite - エリートかどうか
+ * @param {boolean} isBurningElite - 強敵（燃える）エリートかどうか
  * @returns {Object} 敵インスタンス
  */
-export function createEnemy(enemyId, scalingFactor = 1.0, isElite = false) {
+export function createEnemy(enemyId, scalingFactor = 1.0, isElite = false, isBurningElite = false) {
     const def = ENEMY_DEFINITIONS[enemyId];
     if (!def) throw new Error(`不明な敵: ${enemyId}`);
 
-    const eliteMultiplier = isElite ? 1.5 : 1.0;
+    const eliteMultiplier = isBurningElite ? 1.75 : (isElite ? 1.5 : 1.0);
     const hp = Math.ceil(def.baseHp * scalingFactor * eliteMultiplier);
+    const initialBuffs = {};
+    if (isBurningElite) {
+        initialBuffs.strength = 2; // 強敵エリートは最初から攻撃力+2
+    }
 
     return {
         ...def,
         hp,
         maxHp: hp,
-        block: 0,
-        buffs: {},
+        block: def.asleepTurns ? 15 : 0, // 居眠り竜は開始時ブロック15
+        buffs: initialBuffs,
         currentPatternIndex: 0,
-        isElite,
+        isElite: isElite || isBurningElite,
+        isBurningElite,
         scalingFactor,
+        flightActive: Boolean(def.flightHitsRequired),
+        hitsTakenThisTurn: 0,
         image: def.image || null
     };
 }
@@ -361,6 +496,15 @@ export function createEnemy(enemyId, scalingFactor = 1.0, isElite = false) {
  * @returns {Object} 行動データ
  */
 export function getEnemyIntent(enemy) {
+    if (enemy.asleepTurns && enemy.asleepTurns > 0) {
+        return {
+            intent: ENEMY_INTENTS.SLEEP,
+            emoji: '💤',
+            damage: 0,
+            hits: 0
+        };
+    }
+
     const def = ENEMY_DEFINITIONS[enemy.id];
     const pattern = def.patterns[enemy.currentPatternIndex % def.patterns.length];
 

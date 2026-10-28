@@ -5,11 +5,11 @@ import { WordDatabase } from '../vocabulary/WordDatabase.js';
 import { MathDatabase } from '../vocabulary/MathDatabase.js';
 import { KanjiDatabase } from '../vocabulary/KanjiDatabase.js';
 import { SpacedRepetition } from '../vocabulary/SpacedRepetition.js';
-import { createStarterDeck, createCard, getRandomCards } from './CardSystem.js';
+import { createStarterDeck, createCard, getRandomCards, addCardXP } from './CardSystem.js';
 import { BattleSystem } from './BattleSystem.js';
 import { createEnemy, getRandomEnemy, getFloorBoss, ELITE_ENEMIES } from './EnemySystem.js';
 import { generateMap, visitNode, NODE_TYPES } from './MapGenerator.js';
-import { generateBattleRewards, generateShopItems, generateEvent } from './RewardSystem.js';
+import { generateBattleRewards, generateTreasureRewards, generateShopItems, generateEvent } from './RewardSystem.js';
 import { ScalingSystem, RELIC_DEFINITIONS, POTION_DEFINITIONS } from './ScalingSystem.js';
 import { SaveManager } from '../utils/SaveManager.js';
 
@@ -39,6 +39,7 @@ export class GameEngine {
         this.kanjiDb = new KanjiDatabase();
         this.activeDb = this.wordDb;
         this.characterId = 'wordmaster';
+        this.ascensionLevel = 0;
         this.spacedRep = new SpacedRepetition();
         this.scaling = new ScalingSystem();
         this.saveManager = new SaveManager();
@@ -83,9 +84,11 @@ export class GameEngine {
     /**
      * 新しいランを開始
      * @param {string} characterId - 選択されたキャラクターID（'wordmaster' | 'mathmaster' | 'kungfumaster'）
+     * @param {number} ascensionLevel - 登塔レベル（0〜5）
      */
-    startNewRun(characterId = 'wordmaster') {
+    startNewRun(characterId = 'wordmaster', ascensionLevel = 0) {
         this.characterId = characterId;
+        this.ascensionLevel = ascensionLevel || 0;
         if (characterId === 'mathmaster') {
             this.activeDb = this.mathDb;
         } else if (characterId === 'kungfumaster') {
@@ -122,6 +125,7 @@ export class GameEngine {
             gold: 50,
             maxEnergy: 3,
             characterId,
+            ascensionLevel: this.ascensionLevel,
             name: profile.name,
             emoji: profile.emoji,
             image: profile.image,
@@ -133,6 +137,7 @@ export class GameEngine {
 
         // スケーリングリセット
         this.scaling = new ScalingSystem();
+        this.scaling.ascensionLevel = this.ascensionLevel;
         // テスト用：開始時にヒントポーションを付与
         this.scaling.addPotion('hint_potion');
 
@@ -175,10 +180,16 @@ export class GameEngine {
         // ノードタイプに応じて画面遷移
         switch (node.type) {
             case NODE_TYPES.BATTLE:
-                this.startBattle(false);
+                this.startBattle(false, false);
                 break;
             case NODE_TYPES.ELITE:
-                this.startBattle(true);
+                this.startBattle(true, false);
+                break;
+            case NODE_TYPES.BURNING_ELITE:
+                this.startBattle(true, true);
+                break;
+            case NODE_TYPES.TREASURE:
+                this.openTreasure();
                 break;
             case NODE_TYPES.BOSS:
                 this.startBossBattle();
@@ -196,16 +207,25 @@ export class GameEngine {
     }
 
     /**
+     * 宝箱ノードを開く（レリック＋ゴールド報酬）
+     */
+    openTreasure() {
+        this.currentRewards = generateTreasureRewards(this.scaling);
+        this.changeScreen(SCREENS.REWARD);
+    }
+
+    /**
      * 通常バトルまたはエリートバトルを開始
      * @param {boolean} isElite - エリートかどうか
+     * @param {boolean} isBurningElite - 強化エリート（🔥）かどうか
      */
-    startBattle(isElite = false) {
+    startBattle(isElite = false, isBurningElite = false) {
         const enemyId = isElite
             ? ELITE_ENEMIES[this.currentFloor][Math.floor(Math.random() * ELITE_ENEMIES[this.currentFloor].length)]
             : getRandomEnemy(this.currentFloor);
 
         const scalingFactor = this.scaling.getEnemyScaling(this.currentFloor, this.nodesVisited);
-        const enemy = createEnemy(enemyId, scalingFactor, isElite);
+        const enemy = createEnemy(enemyId, scalingFactor, isElite, isBurningElite);
 
         this.battle = new BattleSystem(
             this.player,
@@ -265,6 +285,18 @@ export class GameEngine {
             if (this.scaling.hasRelic('heal_after_battle')) {
                 const healAmount = this.scaling.getRelicBonus('heal_after_battle');
                 this.player.hp = Math.min(this.player.maxHp, this.player.hp + healAmount);
+            }
+
+            // レリック「鍛冶屋のハンマー（post_battle_card_xp）」効果：ランダムな未強化カード1枚に経験値付与
+            if (this.scaling.hasRelic('post_battle_card_xp')) {
+                const xpBonus = this.scaling.getRelicBonus('post_battle_card_xp');
+                const upgradable = this.playerDeck.filter(c => c.level < 3);
+                if (upgradable.length > 0) {
+                    const targetCard = upgradable[Math.floor(Math.random() * upgradable.length)];
+                    for (let i = 0; i < xpBonus; i++) {
+                        addCardXP(targetCard);
+                    }
+                }
             }
 
             // ボス勝利の場合

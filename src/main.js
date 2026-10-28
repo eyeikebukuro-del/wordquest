@@ -4,11 +4,12 @@
 import { GameEngine, SCREENS } from './game/GameEngine.js';
 import { CARD_TYPES, addCardXP, getCardDescription } from './game/CardSystem.js';
 import { BATTLE_STATES } from './game/BattleSystem.js';
-import { NODE_TYPES, NODE_ICONS, FLOOR_THEMES } from './game/MapGenerator.js';
+import { NODE_TYPES, NODE_ICONS, FLOOR_THEMES, generateMap } from './game/MapGenerator.js';
 import { RELIC_DEFINITIONS, POTION_DEFINITIONS } from './game/ScalingSystem.js';
 import { WordDatabase } from './vocabulary/WordDatabase.js';
 import { MathDatabase } from './vocabulary/MathDatabase.js';
 import { KanjiDatabase } from './vocabulary/KanjiDatabase.js';
+import { summarizeDeck, formatDateYMD } from './utils/SaveManager.js';
 
 // マップ背景画像のアセットインポート (Viteで正しくパス解決させるため)
 import bgForestMap from './assets/bg_forest_map.png';
@@ -119,7 +120,8 @@ function renderMap() {
   }
 
   // フロアタイトル
-  document.getElementById('floor-title').textContent = `${theme.emoji} ${theme.name}`;
+  const ascBadge = game.ascensionLevel > 0 ? ` (🏆Lv.${game.ascensionLevel})` : '';
+  document.getElementById('floor-title').textContent = `${theme.emoji} ${theme.name}${ascBadge}`;
 
   // プレイヤーステータス更新
   document.getElementById('map-hp').textContent = game.player.hp;
@@ -177,11 +179,15 @@ function renderMap() {
       if (node.id === game.currentNodeId) nodeDiv.classList.add('current');
       if (!node.available && !node.visited) nodeDiv.classList.add('locked');
       if (node.type === NODE_TYPES.BOSS) nodeDiv.classList.add('boss');
+      if (node.type === NODE_TYPES.BURNING_ELITE) nodeDiv.classList.add('burning-elite');
+      if (node.type === NODE_TYPES.TREASURE) nodeDiv.classList.add('treasure');
 
       // ノード名ラベル
       const labelMap = {
         [NODE_TYPES.BATTLE]: 'バトル',
         [NODE_TYPES.ELITE]: 'エリート',
+        [NODE_TYPES.BURNING_ELITE]: '強敵🔥',
+        [NODE_TYPES.TREASURE]: '宝箱💎',
         [NODE_TYPES.SHOP]: 'ショップ',
         [NODE_TYPES.REST]: '休憩',
         [NODE_TYPES.EVENT]: 'イベント',
@@ -434,7 +440,17 @@ function renderBattle() {
     enemyEmojiEl.style.fontSize = enemy.isBoss ? '5rem' : '4rem';
   }
 
-  document.getElementById('enemy-name').textContent = enemy.name + (enemy.isElite ? ' ⭐' : '');
+  document.getElementById('enemy-name').textContent = enemy.name + (enemy.isBurningElite ? ' 🔥' : (enemy.isElite ? ' ⭐' : ''));
+
+  const gimmickBanner = document.getElementById('enemy-gimmick-banner');
+  if (gimmickBanner) {
+    if (enemy.gimmickDesc) {
+      gimmickBanner.textContent = enemy.gimmickDesc;
+      gimmickBanner.style.display = 'block';
+    } else {
+      gimmickBanner.style.display = 'none';
+    }
+  }
 
   updateBattleUI();
 
@@ -496,17 +512,27 @@ function updateBattleUI() {
         intentText = `${intent.emoji}`;
         intentClass = 'buff';
         break;
+      case 'sleep':
+        intentText = `${intent.emoji} 居眠り`;
+        intentClass = 'defend';
+        break;
     }
     intentEl.textContent = intentText;
     intentEl.className = 'enemy-intent ' + intentClass;
   }
 
-  // 敵ステータス（バフ/毒等）
+  // 敵ステータス（バフ/毒/ギミック等）
   const statusEl = document.getElementById('enemy-status');
   let statusHTML = '';
   if (enemy.block > 0) statusHTML += `<span class="status-badge">🛡️${enemy.block}</span>`;
   if (enemy.buffs.strength) statusHTML += `<span class="status-badge">💪+${enemy.buffs.strength}</span>`;
   if (b.enemyPoison > 0) statusHTML += `<span class="status-badge status-poison">🟣${b.enemyPoison}</span>`;
+  if (enemy.passiveThorns > 0) statusHTML += `<span class="status-badge status-thorn">💎トゲ${enemy.passiveThorns}</span>`;
+  if (enemy.flightActive) {
+    const remHits = Math.max(1, (enemy.flightHitsRequired || 2) - (enemy.hitsTakenThisTurn || 0));
+    statusHTML += `<span class="status-badge status-buff">🌪️飛翔(あと${remHits}撃)</span>`;
+  }
+  if (enemy.asleepTurns > 0) statusHTML += `<span class="status-badge">💤睡眠(${enemy.asleepTurns}T)</span>`;
   // 敵デバフ（weakened等）
   if (b.enemyDebuffs) {
     for (const [key, debuff] of Object.entries(b.enemyDebuffs)) {
@@ -672,6 +698,11 @@ function onCardSelect(instanceId) {
   if (window.sm) window.sm.playCardSelect();
   const quiz = currentBattle.selectCard(instanceId);
   if (!quiz) return;
+  // カードを使った瞬間に発動するギミック（女王の逆鱗など）を即座にUIと敵インテントに反映
+  updateBattleUI();
+  if (currentBattle.selectedCard && currentBattle.selectedCard.triggeredEnrage) {
+    showDamageNumber(`🐝逆鱗 💪+${currentBattle.selectedCard.triggeredEnrage}`, 'thorn', false);
+  }
   showQuiz(quiz);
 }
 
@@ -792,6 +823,9 @@ function onQuizAnswer(answer, quiz) {
   const result = currentBattle.answerQuiz(answer);
   if (!result) return;
 
+  // 回答直後に敵バフ・インテント・エナジー変化を即座にUIへ反映
+  updateBattleUI();
+
   // エフェクト中フラグを立てる（カード連打防止）
   isAnimating = true;
 
@@ -819,12 +853,18 @@ function onQuizAnswer(answer, quiz) {
     let txt = `⭕ 正解！${result.comboText ? ' ' + result.comboText : ''}`;
     if (result.mathBonusText) txt += ` ${result.mathBonusText}`;
     if (result.leveledUp) txt += ' ⬆️ カードレベルアップ！';
+    if (result.kunaiTriggered) txt += ` 🗡️魔剣+${result.kunaiTriggered}！`;
+    if (result.wisdomGearTriggered) txt += ' ⚙️歯車エナジー+1&ドロー！';
+    if (result.chronoBonus) txt += ' ⏳時の審判エナジー+1！';
+    if (result.fanTriggered) txt += ` 🪭扇ブロック+${result.fanTriggered}！`;
     resultEl.className = 'quiz-result correct';
     resultEl.textContent = txt;
   } else {
     const correctAnswer = quiz.type === 'typing' ? quiz.answer : quiz.choices[quiz.correctIndex];
     resultEl.className = 'quiz-result incorrect';
-    resultEl.textContent = `❌ 残念…正解は「${correctAnswer}」`;
+    let missTxt = `❌ 残念…正解は「${correctAnswer}」`;
+    if (result.gimmickPenalty) missTxt += ` （${result.gimmickPenalty}）`;
+    resultEl.textContent = missTxt;
   }
 
   // 次のクイズ(ダブルストライク)またはクイズ終了
@@ -864,6 +904,10 @@ function onQuizAnswer(answer, quiz) {
           showDamageNumber(eff.value, 'block', true);
         } else if (eff.type === 'heal') {
           showDamageNumber(eff.value, 'heal', true);
+        } else if (eff.type === 'flight_crash' || eff.type === 'armor_break') {
+          setTimeout(() => showDamageNumber(eff.value, 'damage', false), 700);
+        } else if (eff.type === 'enemy_thorns' && eff.actual > 0) {
+          setTimeout(() => showDamageNumber(eff.actual, 'thorn', true), 700);
         }
       }
 
@@ -1067,6 +1111,13 @@ function onEndTurn() {
 function renderRewards() {
   const rewards = game.currentRewards;
   if (!rewards) return;
+
+  const map = game.getCurrentMap();
+  const node = map ? map.nodes.find(n => n.id === game.currentNodeId) : null;
+  const rewardTitleEl = document.querySelector('.reward-title');
+  if (rewardTitleEl) {
+    rewardTitleEl.textContent = (node && node.type === NODE_TYPES.TREASURE) ? '💎 宝箱を発見！' : '🎉 勝利！';
+  }
 
   const listEl = document.getElementById('reward-list');
   listEl.innerHTML = '';
@@ -1424,6 +1475,146 @@ function renderGameOver() {
   game.saveManager.saveBestRun(game.stats);
 }
 
+function escapeHTML(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * オンラインランキングの1行HTMLを生成する
+ * @param {Object} lb - ランキングエントリー
+ * @param {number} rank - 順位（1始まり）
+ * @param {string} prefix - DOM IDプレフィックス
+ * @returns {string} HTML文字列
+ */
+function renderLeaderboardRowHTML(lb, rank, prefix = 'lb') {
+  const rankBadge = rank === 1 ? '🥇 1位' : rank === 2 ? '🥈 2位' : rank === 3 ? '🥉 3位' : `${rank}位`;
+  const ascTag = lb.ascensionLevel > 0 ? `<span class="lb-asc-badge">🏆Lv.${lb.ascensionLevel}</span>` : '';
+  const mineTag = lb.isMine ? `<span class="lb-mine-badge">✨あなた</span>` : '';
+  const dateStr = escapeHTML(lb.date || formatDateYMD(lb.timestamp || Date.now()));
+  const safeName = escapeHTML(lb.name || 'ななしの冒険者');
+  const safeBoss = escapeHTML(lb.bossName || 'ボス');
+  const deckList = Array.isArray(lb.deck) ? lb.deck : [];
+  const totalCards = deckList.reduce((sum, c) => sum + (c.count || 1), 0);
+  const topCardsPreview = deckList.slice(0, 3).map(c =>
+    `<span class="lb-card-chip rarity-${c.rarity || 'common'}">${c.emoji}${escapeHTML(c.name)}${c.level > 1 ? `Lv.${c.level}` : ''}${c.count > 1 ? `×${c.count}` : ''}</span>`
+  ).join('');
+  const fullDeckHTML = deckList.map(c =>
+    `<span class="lb-card-chip rarity-${c.rarity || 'common'}">${c.emoji} ${escapeHTML(c.name)} Lv.${c.level || 1} ×${c.count || 1}</span>`
+  ).join('');
+  const relicsHTML = Array.isArray(lb.relics) && lb.relics.length > 0
+    ? `<div class="lb-relics-row">✨ レリック: ${lb.relics.map(r => escapeHTML(r)).join(' ')}</div>`
+    : '';
+  const detailId = `${prefix}-deck-detail-${rank}-${escapeHTML(lb.id)}`;
+
+  return `
+    <div class="lb-row ${lb.isMine ? 'lb-row-mine' : ''} ${rank <= 3 ? `lb-rank-${rank}` : ''}">
+      <div class="lb-row-main">
+        <div class="lb-left">
+          <span class="lb-rank">${rankBadge}</span>
+          <span class="lb-name">${safeName}</span>
+          ${mineTag}
+          <span class="lb-char">${escapeHTML(lb.emoji || '🧙‍♂️')} ${escapeHTML(lb.character || 'ワードマスター')}</span>
+          ${ascTag}
+        </div>
+        <div class="lb-right">
+          <span class="lb-score">${Number(lb.score || 0).toLocaleString()}点</span>
+          <span class="lb-date">📅 ${dateStr}</span>
+        </div>
+      </div>
+      <div class="lb-row-sub">
+        <div class="lb-deck-preview">
+          <span class="lb-deck-label">🃏 主力:</span>
+          ${topCardsPreview || '<span style="color:var(--text-muted);font-size:0.72rem;">基本デッキ</span>'}
+        </div>
+        ${deckList.length > 0 ? `<button type="button" class="lb-deck-toggle-btn" data-target="${detailId}">🃏 デッキ構成(${totalCards}枚) ▼</button>` : ''}
+      </div>
+      <div id="${detailId}" class="lb-deck-drawer" style="display:none;">
+        <div class="lb-deck-drawer-title">🃏 クリア時のデッキ構成（全${totalCards}枚 / 撃破ボス: ${safeBoss}）</div>
+        <div class="lb-deck-chips-wrap">${fullDeckHTML}</div>
+        ${relicsHTML}
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * オンラインランキング全体（TOP10 ＋ 11位以下の場合は自分の現在順位のみ）のHTMLを生成
+ */
+function renderOnlineLeaderboardBlockHTML(lbData, prefix = 'lb') {
+  const top10 = lbData.top10 || [];
+  const myRank = lbData.myRank;
+  const myEntry = lbData.myEntry;
+  const totalPlayers = lbData.totalPlayers || top10.length;
+
+  let myRankBanner = '';
+  if (myRank && myEntry) {
+    if (myRank <= 10) {
+      myRankBanner = `
+        <div class="lb-my-rank-banner top10">
+          👑 <strong>全国 TOP 10 ランクイン！</strong> 現在の順位：<strong>全国 第 ${myRank} 位</strong> / ${totalPlayers}人中（${Number(myEntry.score).toLocaleString()}点）
+        </div>
+      `;
+    } else {
+      myRankBanner = `
+        <div class="lb-my-rank-banner outside">
+          📍 あなたの現在の順位：<strong>全国 第 ${myRank} 位</strong> / ${totalPlayers}人中（TOP10まであと <strong>${Number((top10[9]?.score || 0) - myEntry.score + 100).toLocaleString()}点</strong>！）
+        </div>
+      `;
+    }
+  }
+
+  const top10HTML = top10.map((item, idx) => renderLeaderboardRowHTML(item, idx + 1, prefix)).join('');
+
+  // 11位以下の場合は「・・・」の下に現在の自分の順位のみを表示
+  let outsideTop10HTML = '';
+  if (myRank && myRank > 10 && myEntry) {
+    outsideTop10HTML = `
+      <div class="lb-separator">・・・（11位以下はあなたの現在順位のみ表示）・・・</div>
+      <div class="lb-current-rank-only-wrap">
+        <div class="lb-current-rank-header">📍 あなたの現在の順位（全国 第 ${myRank} 位 / ${totalPlayers}人中）</div>
+        ${renderLeaderboardRowHTML(myEntry, myRank, `${prefix}-me`)}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="online-lb-container">
+      <div class="online-lb-header">
+        <span>🌐 全国オンラインランキング TOP 10</span>
+        <span class="online-lb-count">参加者: ${totalPlayers}名</span>
+      </div>
+      ${myRankBanner}
+      <div class="online-lb-list">
+        ${top10HTML}
+      </div>
+      ${outsideTop10HTML}
+    </div>
+  `;
+}
+
+/**
+ * ランキング内の「🃏 デッキ構成 ▼」開閉ボタンにイベントをバインド
+ */
+function bindLeaderboardEvents(containerEl) {
+  if (!containerEl) return;
+  containerEl.querySelectorAll('.lb-deck-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const targetId = btn.dataset.target;
+      const drawer = document.getElementById(targetId);
+      if (!drawer) return;
+      const isHidden = drawer.style.display === 'none';
+      drawer.style.display = isHidden ? 'block' : 'none';
+      btn.textContent = btn.textContent.replace(isHidden ? '▼' : '▲', isHidden ? '▲' : '▼');
+    });
+  });
+}
+
 function renderVictory() {
   const statsEl = document.getElementById('victory-stats');
 
@@ -1438,41 +1629,134 @@ function renderVictory() {
 
   // ボス撃破ボーナス
   let bossBonus = 0;
-  if (game.stats.lastBossId === 'omni_deity') bossBonus = 15000;
-  else if (game.stats.lastBossId === 'word_king') bossBonus = 5000;
+  if (game.stats.lastBossId === 'astral_eater') bossBonus = 16000;
+  else if (game.stats.lastBossId === 'omni_deity') bossBonus = 15000;
   else if (game.stats.lastBossId === 'evolving_archive') bossBonus = 10000;
+  else if (game.stats.lastBossId === 'word_king') bossBonus = 5000;
+  else if (game.stats.lastBossId === 'magma_behemoth') bossBonus = 4000;
   else if (game.stats.lastBossId === 'cave_dragon') bossBonus = 3000;
+  else if (game.stats.lastBossId === 'queen_bee') bossBonus = 2500;
   else if (game.stats.lastBossId === 'forest_guardian') bossBonus = 2000;
 
-  const goldScore = (game.player.gold || 0) * 10;
+  const goldScore = (game.player?.gold || 0) * 10;
   const baseScore = 5000;
-  const totalScore = baseScore + enemiesScore + comboScore + damageScore + wisdomBonus + bossBonus + goldScore;
+  const ascMult = 1 + (game.ascensionLevel || 0) * 0.15;
+  const rawScore = baseScore + enemiesScore + comboScore + damageScore + wisdomBonus + bossBonus + goldScore;
+  const totalScore = Math.round(rawScore * ascMult);
+
+  const todayStr = formatDateYMD();
+  const summarizedDeck = summarizeDeck(game.playerDeck || []);
+  const relicEmojis = (game.scaling?.relics || []).map(r => r.emoji);
+  const savedName = game.saveManager.getPlayerName() || '';
+  const deckChipsHTML = summarizedDeck.map(c =>
+    `<span class="lb-card-chip rarity-${c.rarity || 'common'}">${c.emoji} ${c.name} Lv.${c.level} ×${c.count}</span>`
+  ).join('');
 
   statsEl.innerHTML = `
+    <div class="stat-row"><span class="stat-label">📅 クリア達成日</span><span class="stat-value">${todayStr}</span></div>
+    <div class="stat-row"><span class="stat-label">👤 キャラクター</span><span class="stat-value">${game.player?.emoji || '🧙‍♂️'} ${game.player?.name || 'ワードマスター'} (🏆Lv.${game.ascensionLevel || 0})</span></div>
     <div class="stat-row"><span class="stat-label">クリアボーナス</span><span class="stat-value">+${baseScore}点</span></div>
-    <div class="stat-row"><span class="stat-label">ボス撃破ボーナス (${game.stats.lastBossName || 'ボス'})</span><span class="stat-value">+${bossBonus}点</span></div>
+    <div class="stat-row"><span class="stat-label">ボス撃破 (${game.stats.lastBossName || 'ボス'})</span><span class="stat-value">+${bossBonus}点</span></div>
     <div class="stat-row"><span class="stat-label">倒した敵 (${game.stats.enemiesDefeated || 0}体)</span><span class="stat-value">+${enemiesScore}点</span></div>
     <div class="stat-row"><span class="stat-label">最大コンボ (${game.stats.maxCombo || 0})</span><span class="stat-value">+${comboScore}点</span></div>
     <div class="stat-row"><span class="stat-label">最大ダメージ (${maxDamage})</span><span class="stat-value">+${damageScore}点</span></div>
     <div class="stat-row"><span class="stat-label">智恵ボーナス</span><span class="stat-value">+${wisdomBonus}点</span></div>
-    <div class="stat-row"><span class="stat-label">所持ゴールド (${game.player.gold || 0}G)</span><span class="stat-value">+${goldScore}点</span></div>
-    <div class="stat-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 1.2em; font-weight: bold; color: var(--accent-yellow);">
-      <span class="stat-label">最終スコア</span><span class="stat-value">${totalScore}点</span>
+    <div class="stat-row"><span class="stat-label">所持ゴールド (${game.player?.gold || 0}G)</span><span class="stat-value">+${goldScore}点</span></div>
+    ${game.ascensionLevel > 0 ? `<div class="stat-row"><span class="stat-label">登塔レベル倍率 (Lv.${game.ascensionLevel})</span><span class="stat-value">×${ascMult.toFixed(2)}</span></div>` : ''}
+    <div class="stat-row" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 1.2em; font-weight: bold; color: var(--accent-yellow);">
+      <span class="stat-label">最終スコア</span><span class="stat-value">${totalScore.toLocaleString()}点</span>
+    </div>
+
+    <div class="victory-deck-box">
+      <div class="victory-deck-title">🃏 クリア時のデッキ構成（全${(game.playerDeck || []).length}枚）</div>
+      <div class="lb-deck-chips-wrap">${deckChipsHTML}</div>
+      ${relicEmojis.length > 0 ? `<div class="lb-relics-row">✨ 所持レリック: ${relicEmojis.join(' ')}</div>` : ''}
+    </div>
+
+    <div class="victory-submit-box" id="victory-submit-box">
+      <div class="victory-submit-title">🌐 全国オンラインランキングにスコア＆デッキを登録！</div>
+      <div class="victory-submit-row">
+        <input type="text" id="victory-player-name" class="victory-name-input" maxlength="10" placeholder="なまえを入力（10文字まで）" value="${savedName}" />
+        <button type="button" id="btn-submit-online-score" class="btn btn-primary btn-small">🏆 ランキング送信</button>
+      </div>
+      <div id="victory-submit-status" class="victory-submit-status"></div>
+    </div>
+
+    <div id="victory-share-area" style="display:none; margin-top:10px; text-align:center;">
+      <button type="button" id="btn-share-x" class="btn-share-x">🐦 X（旧Twitter）で順位＆デッキをポストする！</button>
+    </div>
+
+    <div id="victory-online-leaderboard" style="margin-top:12px;">
+      <div style="text-align:center; color:var(--text-muted); font-size:0.8rem;">🌐 オンラインランキングを読み込み中...</div>
     </div>
   `;
 
-  // リーダーボードに保存（選択したキャラクター情報を反映）
-  const scoreData = {
-    date: Date.now(),
-    character: game.player?.name || 'ワードマスター',
-    emoji: game.player?.emoji || '🧙‍♂️',
-    score: totalScore,
-    bossName: game.stats.lastBossName || 'なし'
-  };
-  if (game.saveManager.saveLeaderboardScore) {
-    game.saveManager.saveLeaderboardScore(scoreData);
-  }
   game.saveManager.saveBestRun(game.stats);
+
+  const lbContainer = document.getElementById('victory-online-leaderboard');
+  // 初回表示：現在のランキング一覧を非同期取得して表示
+  game.saveManager.fetchOnlineLeaderboard().then(lbData => {
+    if (lbContainer) {
+      lbContainer.innerHTML = renderOnlineLeaderboardBlockHTML(lbData, 'vic-lb');
+      bindLeaderboardEvents(lbContainer);
+    }
+  });
+
+  // 名前送信ボタンのイベント
+  const submitBtn = document.getElementById('btn-submit-online-score');
+  const nameInput = document.getElementById('victory-player-name');
+  const statusEl = document.getElementById('victory-submit-status');
+  const shareArea = document.getElementById('victory-share-area');
+  const shareBtn = document.getElementById('btn-share-x');
+
+  if (submitBtn && nameInput) {
+    submitBtn.addEventListener('click', async () => {
+      if (submitBtn.disabled) return;
+      const playerName = nameInput.value.trim() || 'ななしの冒険者';
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ 送信中...';
+      statusEl.textContent = 'クラウドへスコアとデッキ構成を送信しています...';
+
+      const isTestMode = Boolean(window.USED_TEST_CHEAT || window.TEST_9999_DAMAGE || window.DEBUG_MODE);
+      const onlineData = await game.saveManager.submitOnlineScore({
+        name: playerName,
+        characterId: game.characterId || 'wordmaster',
+        character: game.player?.name || 'ワードマスター',
+        emoji: game.player?.emoji || '🧙‍♂️',
+        ascensionLevel: game.ascensionLevel || 0,
+        score: totalScore,
+        bossName: game.stats.lastBossName || 'ボス',
+        date: todayStr,
+        relics: relicEmojis,
+        deck: summarizedDeck,
+        isTestMode
+      });
+
+      submitBtn.textContent = '✅ 登録完了！';
+      nameInput.disabled = true;
+
+      if (onlineData.myRank <= 10) {
+        statusEl.innerHTML = `🎉 <strong>全国 第 ${onlineData.myRank} 位</strong>（TOP 10！）にランクインしました！`;
+      } else {
+        statusEl.innerHTML = `📍 登録完了！ あなたの現在の順位：<strong>全国 第 ${onlineData.myRank} 位</strong> / ${onlineData.totalPlayers}人中`;
+      }
+
+      if (lbContainer) {
+        lbContainer.innerHTML = renderOnlineLeaderboardBlockHTML(onlineData, 'vic-lb');
+        bindLeaderboardEvents(lbContainer);
+      }
+
+      // X(Twitter)シェアボタンを表示
+      if (shareArea && shareBtn) {
+        shareArea.style.display = 'block';
+        const topCardsText = summarizedDeck.slice(0, 3).map(c => `${c.emoji}${c.name}Lv.${c.level}`).join(' / ');
+        const tweetText = `【WordQuest ⚔️ 知恵と冒険の塔】\n${game.player?.emoji || '🧙‍♂️'}${game.player?.name || 'ワードマスター'}(🏆Lv.${game.ascensionLevel || 0})でクリア！\n🏆 全国ランキング：第${onlineData.myRank}位（${totalScore.toLocaleString()}点）\n🃏 主力デッキ：${topCardsText}\n📅 ${todayStr}\n#WordQuest\nhttps://eyeikebukuro-del.github.io/wordquest/`;
+        shareBtn.onclick = () => {
+          window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`, '_blank', 'noopener,noreferrer');
+        };
+      }
+    });
+  }
 }
 
 // === デッキ表示 ===
@@ -1484,6 +1768,52 @@ function showDeck() {
   list.innerHTML = '<div class="deck-grid">' +
     game.playerDeck.map(c => createCardHTML(c, false, false)).join('') +
     '</div>';
+}
+
+// === 全国オンラインランキングモーダル表示 ===
+let currentRankingFilter = 'all';
+
+function showRanking(filterChar = 'all') {
+  currentRankingFilter = filterChar;
+  const modal = document.getElementById('modal-ranking');
+  if (!modal) return;
+  modal.style.display = 'block';
+
+  const filterEl = document.getElementById('ranking-filter');
+  if (filterEl) {
+    filterEl.innerHTML = `
+      <button type="button" class="wordlist-cat-btn ${filterChar === 'all' ? 'active' : ''}" data-rchar="all">🌟 総合ランキング</button>
+      <button type="button" class="wordlist-cat-btn ${filterChar === 'wordmaster' ? 'active' : ''}" data-rchar="wordmaster">🧙‍♂️ ワードマスター</button>
+      <button type="button" class="wordlist-cat-btn ${filterChar === 'mathmaster' ? 'active' : ''}" data-rchar="mathmaster">🧮 算術マスター</button>
+      <button type="button" class="wordlist-cat-btn ${filterChar === 'kungfumaster' ? 'active' : ''}" data-rchar="kungfumaster">🥋 カンフーマスター</button>
+    `;
+    filterEl.querySelectorAll('.wordlist-cat-btn').forEach(btn => {
+      btn.addEventListener('click', () => showRanking(btn.dataset.rchar));
+    });
+  }
+
+  const contentEl = document.getElementById('ranking-content');
+  if (!contentEl) return;
+  contentEl.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:24px;">🌐 全国オンラインランキングを読み込み中...</div>`;
+
+  game.saveManager.fetchOnlineLeaderboard().then(lbData => {
+    let entries = lbData.entries || [];
+    if (filterChar !== 'all') {
+      entries = entries.filter(e => e.characterId === filterChar);
+    }
+    const myEntry = entries.find(e => e.isMine) || (filterChar === 'all' ? lbData.myEntry : null);
+    const myRank = myEntry ? (entries.findIndex(e => e.id === myEntry.id) + 1) : null;
+
+    const filteredData = {
+      top10: entries.slice(0, 10),
+      entries,
+      myRank: myRank > 0 ? myRank : null,
+      myEntry,
+      totalPlayers: entries.length
+    };
+    contentEl.innerHTML = renderOnlineLeaderboardBlockHTML(filteredData, 'modal-lb');
+    bindLeaderboardEvents(contentEl);
+  });
 }
 
 // === 学習記録表示 ===
@@ -1517,36 +1847,11 @@ function showStats() {
     </div>
   `;
 
-  let topHtml = '';
-  if (leaderboard.length > 0) {
-    const listItems = leaderboard.map((lb, i) => {
-      const dateStr = new Date(lb.date).toLocaleDateString();
-      return `
-        <div style="display:flex; justify-content:space-between; padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center;">
-          <div><span style="display:inline-block; width:20px; color: var(--text-muted);">${i + 1}.</span> ${lb.emoji} ${lb.character} <span style="font-size:0.8em; color:var(--text-muted);">(${lb.bossName || '???'}撃破)</span></div>
-          <div><span style="font-weight:bold; color:var(--accent-yellow);">${lb.score}</span> <span style="font-size:0.7em; color:var(--text-muted);">${dateStr}</span></div>
-        </div>
-      `;
-    }).join('');
-
-    topHtml = `
-      <div style="margin-top:20px; text-align:left;">
-        <h3 style="text-align:center; color: var(--accent-yellow); margin-bottom: 15px;">🏆 リーダーボード TOP10</h3>
-        <div style="background: var(--bg-tertiary); border-radius: 8px; padding: 10px;">
-          ${listItems}
-        </div>
-      </div>
-    `;
-  } else {
-    topHtml = `
-      <div style="margin-top:20px; text-align:left;">
-        <h3 style="text-align:center; color: var(--accent-yellow); margin-bottom: 15px;">🏆 リーダーボード TOP10</h3>
-        <div style="background: var(--bg-tertiary); border-radius: 8px; padding: 20px; text-align:center; color: var(--text-muted);">
-          まだきろくがありません
-        </div>
-      </div>
-    `;
-  }
+  const topHtml = `
+    <div id="stats-online-leaderboard" style="margin-top:20px; text-align:left;">
+      <div style="text-align:center; color:var(--text-muted); padding:16px;">🌐 全国オンラインランキングを読み込み中...</div>
+    </div>
+  `;
 
   document.getElementById('stats-content').innerHTML = `
     <div class="stats-grid">
@@ -1573,6 +1878,14 @@ function showStats() {
     ${badgesHtml}
     ${topHtml}
   `;
+
+  const statsLbEl = document.getElementById('stats-online-leaderboard');
+  game.saveManager.fetchOnlineLeaderboard().then(lbData => {
+    if (statsLbEl) {
+      statsLbEl.innerHTML = renderOnlineLeaderboardBlockHTML(lbData, 'stats-lb');
+      bindLeaderboardEvents(statsLbEl);
+    }
+  });
 }
 
 // === 画面遷移ハンドラー ===
@@ -1619,8 +1932,110 @@ window.addEventListener('resize', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 現在選択中のキャラクターID
+  // 現在選択中のキャラクターIDと登塔レベル（アセンション）
   let selectedCharacterId = 'wordmaster';
+  let selectedAscensionLevel = 0;
+
+  const ASCENSION_DESCRIPTIONS = {
+    0: '標準の難易度で楽しく学べます（スコア倍率 ×1.0）',
+    1: '【Lv.1 強敵】すべての敵のHP・攻撃力が +8% 上昇（スコア倍率 ×1.15）',
+    2: '【Lv.2 猛攻】すべての敵のHP・攻撃力が +16% 上昇（スコア倍率 ×1.30）',
+    3: '【Lv.3 達人】敵ステータス +24% UP（スコア倍率 ×1.45）',
+    4: '【Lv.4 鉄人】敵ステータス +32% UP（スコア倍率 ×1.60）',
+    5: '【Lv.5 神域】敵ステータス +40% UP！最高峰の試練（スコア倍率 ×1.75）'
+  };
+
+  document.querySelectorAll('#ascension-buttons .asc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#ascension-buttons .asc-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedAscensionLevel = parseInt(btn.dataset.asc || '0', 10);
+      const descEl = document.getElementById('ascension-desc');
+      if (descEl) descEl.textContent = ASCENSION_DESCRIPTIONS[selectedAscensionLevel] || '';
+      if (window.sm) window.sm.playUIClick();
+    });
+  });
+
+  // テストプレイ専用ツールバー（ローカル実行時または ?test=1 のみ表示）
+  const isLocalTest = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.search.includes('test=1');
+  const testToolbar = document.getElementById('test-play-toolbar');
+  if (isLocalTest && testToolbar) {
+    testToolbar.style.display = 'flex';
+    const btn9999 = document.getElementById('btn-test-9999');
+    const btnTestMap = document.getElementById('btn-test-map');
+    const btnNextFloor = document.getElementById('btn-test-next-floor');
+    const btnTestBoss = document.getElementById('btn-test-boss');
+
+    if (btn9999) {
+      btn9999.addEventListener('click', () => {
+        window.TEST_9999_DAMAGE = !window.TEST_9999_DAMAGE;
+        window.USED_TEST_CHEAT = true;
+        btn9999.textContent = `⚡ 9999ダメージ: ${window.TEST_9999_DAMAGE ? 'ON' : 'OFF'}`;
+        btn9999.classList.toggle('active', window.TEST_9999_DAMAGE);
+      });
+    }
+
+    if (btnTestMap) {
+      btnTestMap.addEventListener('click', () => {
+        window.DEBUG_MODE = !window.DEBUG_MODE;
+        window.USED_TEST_CHEAT = true;
+        btnTestMap.textContent = `🗺️ 自由移動: ${window.DEBUG_MODE ? 'ON' : 'OFF'}`;
+        btnTestMap.classList.toggle('active', window.DEBUG_MODE);
+        if (game.currentScreen === SCREENS.MAP) {
+          renderMap();
+        }
+      });
+    }
+
+    if (btnNextFloor) {
+      btnNextFloor.addEventListener('click', () => {
+        window.USED_TEST_CHEAT = true;
+        if (!game.player) {
+          game.startNewRun(selectedCharacterId, selectedAscensionLevel);
+        }
+        game.currentFloor = (game.currentFloor % 4) + 1;
+        if (!game.maps[game.currentFloor]) {
+          game.maps[game.currentFloor] = generateMap(game.currentFloor);
+        }
+        game.currentNodeId = 'start';
+        isAnimating = false;
+        game.changeScreen(SCREENS.MAP);
+      });
+    }
+
+    if (btnTestBoss) {
+      btnTestBoss.addEventListener('click', () => {
+        window.USED_TEST_CHEAT = true;
+        if (!game.player) {
+          game.startNewRun(selectedCharacterId, selectedAscensionLevel);
+        }
+        if (!game.maps[game.currentFloor]) {
+          game.maps[game.currentFloor] = generateMap(game.currentFloor);
+        }
+        game.currentNodeId = 'boss';
+        isAnimating = false;
+        game.startBossBattle();
+      });
+    }
+
+    const btnTestVictory = document.getElementById('btn-test-victory');
+    if (btnTestVictory) {
+      btnTestVictory.addEventListener('click', () => {
+        window.USED_TEST_CHEAT = true;
+        if (!game.player) {
+          game.startNewRun(selectedCharacterId, selectedAscensionLevel);
+        }
+        game.stats.enemiesDefeated = Math.max(game.stats.enemiesDefeated || 0, 12);
+        game.stats.maxCombo = Math.max(game.stats.maxCombo || 0, 9);
+        game.stats.maxDamage = Math.max(game.stats.maxDamage || 0, 68);
+        game.stats.totalWisdomScore = Math.max(game.stats.totalWisdomScore || 0, 4500);
+        game.stats.lastBossId = 'omni_deity';
+        game.stats.lastBossName = '全知の神 オムニ・ディエティ';
+        isAnimating = false;
+        game.changeScreen(SCREENS.VICTORY);
+      });
+    }
+  }
 
   // メニュー
   document.getElementById('btn-new-game').addEventListener('click', () => {
@@ -1635,7 +2050,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // キャラクター選択画面：「冒険にしゅっぱつ！」ボタン
   document.getElementById('btn-start-adventure').addEventListener('click', () => {
     if (window.sm) window.sm.playGameStart();
-    game.startNewRun(selectedCharacterId);
+    game.startNewRun(selectedCharacterId, selectedAscensionLevel);
   });
 
   // キャラクターカード（解放済）のクリックで選択切り替え（既に選択中ならそのまま出撃も可能）
@@ -1653,6 +2068,10 @@ document.addEventListener('DOMContentLoaded', () => {
     showScreen('menu');
   });
 
+  document.getElementById('btn-ranking')?.addEventListener('click', () => showRanking('all'));
+  document.getElementById('btn-close-ranking')?.addEventListener('click', () => {
+    document.getElementById('modal-ranking').style.display = 'none';
+  });
   document.getElementById('btn-stats').addEventListener('click', showStats);
 
   // マップ

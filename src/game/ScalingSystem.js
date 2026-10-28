@@ -75,6 +75,41 @@ export const RELIC_DEFINITIONS = {
         emoji: '🔮',
         description: '4択問題のヒントが1つ表示される',
         effect: { type: 'hint', value: 1 }
+    },
+    kunai_blade: {
+        id: 'kunai_blade',
+        name: '成長の魔剣',
+        emoji: '🗡️',
+        description: 'クイズに3回連続正解するたび、バトル中の全攻撃ダメージ+3！',
+        effect: { type: 'kunai_scaling', value: 3 }
+    },
+    iron_fan: {
+        id: 'iron_fan',
+        name: '不動の扇',
+        emoji: '🪭',
+        description: '1ターンにカードを3枚使うたび、自動でブロック+6！',
+        effect: { type: 'fan_block', value: 6 }
+    },
+    venom_skull: {
+        id: 'venom_skull',
+        name: 'ベノムスカル',
+        emoji: '💀',
+        description: '毒を与えるたび、与える毒の量が+2増える！',
+        effect: { type: 'poison_bonus', value: 2 }
+    },
+    wisdom_gear: {
+        id: 'wisdom_gear',
+        name: '知恵の歯車',
+        emoji: '⚙️',
+        description: '難易度3の問題に正解すると、エナジー+1＆カード1枚ドロー！',
+        effect: { type: 'diff3_energy_draw', value: 1 }
+    },
+    smith_hammer: {
+        id: 'smith_hammer',
+        name: '鍛冶屋のハンマー',
+        emoji: '🔨',
+        description: 'バトル勝利時、デッキ内のランダムなカード1枚にXP+2！',
+        effect: { type: 'post_battle_card_xp', value: 2 }
     }
 };
 
@@ -272,13 +307,14 @@ export class ScalingSystem {
     }
 
     /**
-     * 敵スケーリング係数
+     * 敵スケーリング係数（階層ラダー＋登塔アセンション補正）
      * @param {number} floor - フロア番号
      * @param {number} nodeIndex - ノード進捗
+     * @param {number} ascensionLevel - 登塔レベル（0〜5）
      * @returns {number} スケーリング係数
      */
-    getEnemyScaling(floor, nodeIndex) {
-        return 1.0 + (floor - 1) * 0.3 + nodeIndex * 0.05;
+    getEnemyScaling(floor, nodeIndex, ascensionLevel = 0) {
+        return 1.0 + (floor - 1) * 0.3 + nodeIndex * 0.05 + ascensionLevel * 0.12;
     }
 
     /**

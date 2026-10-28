@@ -7,6 +7,8 @@
 export const NODE_TYPES = {
     BATTLE: 'battle',
     ELITE: 'elite',
+    BURNING_ELITE: 'burning_elite',
+    TREASURE: 'treasure',
     SHOP: 'shop',
     REST: 'rest',
     EVENT: 'event',
@@ -30,6 +32,8 @@ export const FLOOR_THEMES = {
 export const NODE_ICONS = {
     [NODE_TYPES.BATTLE]: '⚔️',
     [NODE_TYPES.ELITE]: '💀',
+    [NODE_TYPES.BURNING_ELITE]: '🔥',
+    [NODE_TYPES.TREASURE]: '💎',
     [NODE_TYPES.SHOP]: '🛒',
     [NODE_TYPES.REST]: '🏕️',
     [NODE_TYPES.EVENT]: '❓',
@@ -196,6 +200,16 @@ function generateLayerTypes(layer, totalLayers) {
     // 同じタイプが3つにならないようにする
     if (types.every(t => t === types[0])) {
         types[1] = NODE_TYPES.BATTLE;
+    }
+
+    // 第2層には必ず1つ「💎 宝箱（レリック確定）」ノードを配置（ノード数が2個の場合でも確実に出るよう0または1番目に配置）
+    if (layer === 2) {
+        types[Math.floor(Math.random() * 2)] = NODE_TYPES.TREASURE;
+    }
+
+    // 第3層には必ず1つ「🔥 強敵エリート（レアカード＆レリック確定のハイリスク・ハイリターン）」ノードを配置
+    if (layer === 3) {
+        types[Math.floor(Math.random() * 2)] = NODE_TYPES.BURNING_ELITE;
     }
 
     return types;

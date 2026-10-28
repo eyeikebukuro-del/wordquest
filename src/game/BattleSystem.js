@@ -81,6 +81,10 @@ export class BattleSystem {
         this.nextAttackMultiplier = 1;
         /** ミラーコピー用：最後に使ったカードの定義ID */
         this.lastCardId = null;
+        /** このターンに使用したカード枚数（レリック「不動の扇」用） */
+        this.cardsPlayedThisTurn = 0;
+        /** レリック「成長の魔剣」用の累計正解カウント */
+        this.kunaiCorrectCount = 0;
 
         // 次の敵の行動を計算
         this.nextEnemyIntent = getEnemyIntent(enemy);
@@ -105,6 +109,16 @@ export class BattleSystem {
     }
 
     /**
+     * 敵の攻撃力バフ（strength）を加算し、今ターンの行動予定（nextEnemyIntent）へ即座に反映する
+     * @param {number} amount - 加算する攻撃力
+     */
+    addEnemyStrength(amount) {
+        if (!this.enemy.buffs) this.enemy.buffs = {};
+        this.enemy.buffs.strength = (this.enemy.buffs.strength || 0) + amount;
+        this.nextEnemyIntent = getEnemyIntent(this.enemy);
+    }
+
+    /**
      * バトル開始（初期手札ドロー）
      */
     start() {
@@ -115,10 +129,12 @@ export class BattleSystem {
         const drawn = this.deck.draw(drawCount);
         if (window.sm && drawn.length > 0) window.sm.playCardDraw();
 
-        // 特別なボス戦の開始時ログ
+        // 特別なボス・モンスターのギミック開始時ログ
         if (this.enemy.id === 'evolving_archive') {
             this.log.push('【特殊戦闘】覚醒する知性：正解するたびダメージが1.5倍（乗算）！ミスでリセット。');
             this.log.push('【警告】敵の攻撃力が毎ターン上昇していく！');
+        } else if (this.enemy.gimmickDesc) {
+            this.log.push(`【ギミック】${this.enemy.gimmickDesc}`);
         }
 
         this.emit('battle_start', { drawn, enemy: this.enemy });
@@ -145,6 +161,14 @@ export class BattleSystem {
         this.selectedCard = card;
         this.currentHitIndex = 0;
         this.state = BATTLE_STATES.QUIZ_ACTIVE;
+
+        // ボスギミック「女王の逆鱗（enrage_skill）」：防御・スキルカード（攻撃以外）を使った瞬間に敵の攻撃力+2＆今ターンの行動予定にも即時反映
+        if ((card.type === CARD_TYPES.SKILL || card.type === CARD_TYPES.DEFENSE) && this.enemy.gimmick === 'enrage_skill') {
+            const enrage = this.enemy.enrageValue || 2;
+            this.addEnemyStrength(enrage);
+            this.selectedCard.triggeredEnrage = enrage;
+            this.log.push(`🐝 女王の逆鱗！ 補助カード使用に反応して敵の攻撃力+${enrage}！`);
+        }
 
         // フロアに応じた難易度重み付きで問題を選択（1Fボス等でもフロア基準の難易度を維持）
         const quizFloor = this.currentFloor || 1;
@@ -252,6 +276,32 @@ export class BattleSystem {
             const wisdomPoints = difficulty === 3 ? 800 : difficulty === 2 ? 300 : 100;
             this.wisdomScore += wisdomPoints;
 
+            // レリック「成長の魔剣（kunai_scaling）」：3問正解ごとにバトル中の全攻撃ダメージ+3
+            if (this.scaling.hasRelic('kunai_scaling')) {
+                this.kunaiCorrectCount++;
+                if (this.kunaiCorrectCount % 3 === 0) {
+                    const bonus = this.scaling.getRelicBonus('kunai_scaling');
+                    this.damagePermanentBuff += bonus;
+                    result.kunaiTriggered = bonus;
+                    this.log.push(`🗡️ 成長の魔剣！ 3回正解で永続ダメージ+${bonus}（合計+${this.damagePermanentBuff}）！`);
+                }
+            }
+
+            // レリック「知恵の歯車（diff3_energy_draw）」：難易度★3正解でエナジー+1＆1枚ドロー
+            if (difficulty >= 3 && this.scaling.hasRelic('diff3_energy_draw')) {
+                this.energy += 1;
+                const drawn = this.deck.draw(1);
+                result.wisdomGearTriggered = true;
+                this.log.push(`⚙️ 知恵の歯車！ 難易度★3正解でエナジー+1＆カード${drawn.length}枚ドロー！`);
+            }
+
+            // ボスギミック「時の審判（chrono_judgment）」：3コンボ以上でエナジー+1回復
+            if (this.enemy.gimmick === 'chrono_judgment' && this.scaling.comboCount >= 3) {
+                this.energy += 1;
+                result.chronoBonus = true;
+                this.log.push('⏳ 時の審判ボーナス！ 3コンボ以上の正解でエナジー+1回復！');
+            }
+
             const cardResult = this.applyCardEffect(this.selectedCard);
             result.cardEffect = cardResult;
 
@@ -275,6 +325,18 @@ export class BattleSystem {
                 this.emit('quiz_result', result);
                 return result;
             }
+
+            // レリック「不動の扇（fan_block）」：1ターンに3枚カードを使うたびブロック+6
+            this.cardsPlayedThisTurn++;
+            if (this.scaling.hasRelic('fan_block') && this.cardsPlayedThisTurn % 3 === 0) {
+                const fanBlock = this.scaling.getRelicBonus('fan_block');
+                this.playerBlock += fanBlock;
+                if (result.cardEffect && result.cardEffect.effects) {
+                    result.cardEffect.effects.push({ type: 'block', value: fanBlock });
+                }
+                result.fanTriggered = fanBlock;
+                this.log.push(`🪭 不動の扇！ このターン3枚目のカード使用でブロック+${fanBlock}！`);
+            }
         } else {
             // 誤答ペナルティ ― カード不発
             result.cardEffect = { type: 'miss', message: 'カード不発！' };
@@ -283,6 +345,24 @@ export class BattleSystem {
             if (this.enemy.id === 'evolving_archive') {
                 this.awakeningMultiplier = 1.0;
                 this.log.push('覚醒する知性が解除された！');
+            }
+
+            // 敵ギミック：ミス時ペナルティ（知識吸収・呪いの言霊・王の威圧・時の審判）
+            if (this.enemy.absorbOnMiss) {
+                const healVal = Math.min(this.enemy.absorbOnMiss, this.enemy.maxHp - this.enemy.hp);
+                this.enemy.hp += healVal;
+                this.addEnemyStrength(3);
+                result.gimmickPenalty = `🌌 知識吸収！ 敵のHP+${healVal}・攻撃力+3！`;
+                this.log.push(result.gimmickPenalty);
+            } else if (this.enemy.gimmick === 'curse_weaken' || this.enemy.gimmick === 'king_pressure') {
+                this.enemy.block += 10;
+                this.addEnemyStrength(2);
+                result.gimmickPenalty = `${this.enemy.emoji} ミスにより敵のブロック+10・攻撃力+2！`;
+                this.log.push(result.gimmickPenalty);
+            } else if (this.enemy.gimmick === 'chrono_judgment') {
+                this.addEnemyStrength(3);
+                result.gimmickPenalty = '⏳ 時の審判：ミスにより敵の攻撃力+3！';
+                this.log.push(result.gimmickPenalty);
             }
         }
 
@@ -323,6 +403,12 @@ export class BattleSystem {
         const mathPowerMult = (this.currentQuiz && this.currentQuiz.word && this.currentQuiz.word.powerMultiplier)
             ? this.currentQuiz.word.powerMultiplier
             : 1.0;
+
+        // ボスギミック「女王の逆鱗（enrage_skill）」：selectCard時点で発動済みのためエフェクト情報のみ記録
+        if (card.triggeredEnrage) {
+            result.effects.push({ type: 'enemy_enrage', value: card.triggeredEnrage });
+            delete card.triggeredEnrage;
+        }
 
         // 攻撃
         if (card.baseDamage !== undefined) {
@@ -430,18 +516,71 @@ export class BattleSystem {
                 this.nextAttackMultiplier = 1;
             }
 
+            // ギミック「風の衣（flight）」：飛翔中は受ける攻撃ダメージ半減
+            if (this.enemy.flightActive && !window.TEST_9999_DAMAGE) {
+                damage = Math.ceil(damage * 0.5);
+            }
+
+            // テストプレイ専用：9999ダメージONモード
+            if (window.TEST_9999_DAMAGE) {
+                damage = 9999;
+                window.USED_TEST_CHEAT = true;
+            }
+
             // 敵のブロックを計算してダメージ適用
+            const hadBlockBefore = this.enemy.block > 0;
             const actualDamage = Math.max(0, damage - this.enemy.block);
             this.enemy.block = Math.max(0, this.enemy.block - damage);
             this.enemy.hp = Math.max(0, this.enemy.hp - actualDamage);
 
-            // 今回のバトルの最大ダメージを記録
+            // 今回のバトルの最大ダメージを記録（9999テストモード時はスコアが壊れないよう通常ダメージ相当に制限）
             if (!this.maxDamageThisBattle) this.maxDamageThisBattle = 0;
-            this.maxDamageThisBattle = Math.max(this.maxDamageThisBattle, damage);
+            this.maxDamageThisBattle = Math.max(this.maxDamageThisBattle, window.TEST_9999_DAMAGE ? 30 : damage);
 
             // 攻撃音はmain.js側でエフェクトタイミングに合わせて再生するためここでは鳴らさない
 
             result.effects.push({ type: 'damage', value: damage, actual: actualDamage });
+
+            // ギミック「溶岩装甲（magma_armor）」：ブロックを完全に破壊すると装甲クラッシュで10ダメージ＆弱体化
+            if (hadBlockBefore && this.enemy.block === 0 && this.enemy.gimmick === 'magma_armor' && this.enemy.hp > 0) {
+                const breakDmg = 10;
+                this.enemy.hp = Math.max(0, this.enemy.hp - breakDmg);
+                this.enemyDebuffs.weakened = { value: 3, turns: 2 };
+                result.effects.push({ type: 'armor_break', value: breakDmg });
+                this.log.push('🌋 溶岩装甲クラッシュ！ 装甲が砕けて10ダメージ＆弱体化！');
+            }
+
+            // ギミック「居眠り（slumber）」：HPダメージを受けると目覚めて攻撃力アップ
+            if (this.enemy.asleepTurns > 0 && actualDamage > 0 && this.enemy.hp > 0) {
+                this.enemy.asleepTurns = 0;
+                const wakeStr = this.enemy.wakeUpStrength || 4;
+                this.enemy.buffs.strength = (this.enemy.buffs.strength || 0) + wakeStr;
+                this.nextEnemyIntent = getEnemyIntent(this.enemy);
+                result.effects.push({ type: 'enemy_wakeup', value: wakeStr });
+                this.log.push(`🔥 ${this.enemy.name}が目を覚ました！ 怒りで攻撃力+${wakeStr}！`);
+            }
+
+            // ギミック「風の衣（flight）」：1ターンに規定回数ヒットさせると撃墜して追加8ダメージ
+            if (this.enemy.flightActive && this.enemy.hp > 0) {
+                this.enemy.hitsTakenThisTurn = (this.enemy.hitsTakenThisTurn || 0) + 1;
+                if (this.enemy.hitsTakenThisTurn >= (this.enemy.flightHitsRequired || 2)) {
+                    this.enemy.flightActive = false;
+                    const crashDmg = 8;
+                    this.enemy.hp = Math.max(0, this.enemy.hp - crashDmg);
+                    result.effects.push({ type: 'flight_crash', value: crashDmg });
+                    this.log.push(`🌪️ 風の衣がやぶれて撃墜！ 追加${crashDmg}ダメージ！`);
+                }
+            }
+
+            // ギミック「水晶のトゲ（passiveThorns）」：攻撃時にトゲ反撃ダメージ（HP1は必ず残る親切設計）
+            if (this.enemy.passiveThorns > 0 && this.enemy.hp > 0) {
+                const thornsDmg = this.enemy.passiveThorns;
+                const actualThorns = Math.max(0, thornsDmg - this.playerBlock);
+                this.playerBlock = Math.max(0, this.playerBlock - thornsDmg);
+                this.player.hp = Math.max(1, this.player.hp - actualThorns);
+                result.effects.push({ type: 'enemy_thorns', value: thornsDmg, actual: actualThorns });
+                this.log.push(`💎 トゲの反撃！ プレイヤーに${thornsDmg}ダメージ！`);
+            }
 
             // ゆきだるま / 等差ストーム：使用後にbaseDamageを永続成長
             if (card.snowball) {
@@ -516,10 +655,11 @@ export class BattleSystem {
             result.effects.push({ type: 'debuff', debuffType: card.debuff.type });
         }
 
-        // 毒
+        // 毒（レリック「ベノムスカル」のpoison_bonusを反映）
         if (card.poison) {
-            this.enemyPoison += card.poison;
-            result.effects.push({ type: 'poison', value: card.poison });
+            const poisonAmount = card.poison + this.scaling.getRelicBonus('poison_bonus');
+            this.enemyPoison += poisonAmount;
+            result.effects.push({ type: 'poison', value: poisonAmount });
         }
 
         // 毒の触媒（毒を2倍にする）
@@ -565,6 +705,9 @@ export class BattleSystem {
                             copyDamage *= this.nextAttackMultiplier;
                             this.nextAttackMultiplier = 1;
                         }
+                        if (window.TEST_9999_DAMAGE) {
+                            copyDamage = 9999;
+                        }
                         const actual = Math.max(0, copyDamage - this.enemy.block);
                         this.enemy.block = Math.max(0, this.enemy.block - copyDamage);
                         this.enemy.hp = Math.max(0, this.enemy.hp - actual);
@@ -585,8 +728,9 @@ export class BattleSystem {
 
                     // 毒のコピー
                     if (lastDef.poison) {
-                        this.enemyPoison += lastDef.poison;
-                        result.effects.push({ type: 'mirror_poison', value: lastDef.poison });
+                        const copyPoison = lastDef.poison + this.scaling.getRelicBonus('poison_bonus');
+                        this.enemyPoison += copyPoison;
+                        result.effects.push({ type: 'mirror_poison', value: copyPoison });
                         hasEffect = true;
                     }
 
@@ -862,9 +1006,30 @@ export class BattleSystem {
                 break;
             }
 
+            case ENEMY_INTENTS.SLEEP: {
+                this.enemy.asleepTurns = Math.max(0, (this.enemy.asleepTurns || 1) - 1);
+                result.effects.push({ type: 'sleep', remaining: this.enemy.asleepTurns });
+                if (this.enemy.asleepTurns === 0) {
+                    const wakeStr = this.enemy.wakeUpStrength || 4;
+                    this.enemy.buffs.strength = (this.enemy.buffs.strength || 0) + wakeStr;
+                    this.log.push(`🔥 ${this.enemy.name}が目を覚ました！ 攻撃力+${wakeStr}！`);
+                } else {
+                    this.log.push(`💤 ${this.enemy.name}はぐっすり眠っている…`);
+                }
+                break;
+            }
+
             case ENEMY_INTENTS.DEFEND: {
                 this.enemy.block += intent.block || 0;
                 result.effects.push({ type: 'block', value: intent.block });
+                if (this.enemy.gimmick === 'regen_defend') {
+                    const healVal = Math.min(this.enemy.regenValue || 6, this.enemy.maxHp - this.enemy.hp);
+                    if (healVal > 0) {
+                        this.enemy.hp += healVal;
+                        result.effects.push({ type: 'enemy_heal', value: healVal });
+                        this.log.push(`🌳 森の再生！ ${this.enemy.name}のHPが${healVal}回復した！`);
+                    }
+                }
                 break;
             }
 
@@ -875,6 +1040,11 @@ export class BattleSystem {
                     }
                     this.enemy.buffs[intent.buff.type] += intent.buff.value;
                     result.effects.push({ type: 'buff', buffType: intent.buff.type, value: intent.buff.value });
+                }
+                if (this.enemy.gimmick === 'dragon_roar') {
+                    this.enemy.block += 8;
+                    result.effects.push({ type: 'block', value: 8 });
+                    this.log.push('🐉 竜の咆哮！ 攻撃力上昇と同時にブロック+8！');
                 }
                 break;
             }
@@ -909,6 +1079,11 @@ export class BattleSystem {
 
         // とげのよろいは1ターン限定なのでリセット
         this.thornArmorDamage = 0;
+        // 1ターン内のカード使用枚数と敵の被ヒット数をリセット
+        this.cardsPlayedThisTurn = 0;
+        if (this.enemy) {
+            this.enemy.hitsTakenThisTurn = 0;
+        }
 
         // デバフのターン経過
         for (const [key, debuff] of Object.entries(this.enemyDebuffs)) {
