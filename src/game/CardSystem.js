@@ -73,12 +73,12 @@ export const CARD_DEFINITIONS = {
         name: 'チェイン・サンダー',
         type: CARD_TYPES.ATTACK,
         cost: 2,
-        baseDamage: 12,
+        baseDamage: 14,
         emoji: '⛈️',
-        description: '⛈️ 12ダメージ！コンボ中は+6ダメージ＆エナジー+1回復！',
+        description: '⛈️ 14ダメージ！コンボ中は+8ダメージ＆カードを1まい引く！',
         quizMode: QUIZ_MODES.CHOICE,
-        comboBonus: 6,
-        comboEnergyRefund: 1,
+        comboBonus: 8,
+        comboDraw: 1,
         rarity: 'uncommon',
         color: '#ffea00'
     },
@@ -267,11 +267,11 @@ export const CARD_DEFINITIONS = {
         name: 'エコー・カウンター',
         type: CARD_TYPES.DEFENSE,
         cost: 1,
-        baseBlock: 5,
-        baseDamage: 5,
-        comboEnergyRefund: 1,
+        baseBlock: 6,
+        baseDamage: 6,
+        comboBonus: 4,
         emoji: '🔄',
-        description: '🔄 5ブロック＋5ダメージ！コンボ中ならエナジー+1回復！',
+        description: '🔄 6ブロック＋6ダメージ！コンボ中ならさらに+4ダメージ！',
         quizMode: QUIZ_MODES.CHOICE,
         rarity: 'uncommon',
         color: '#fd79a8'
@@ -1407,7 +1407,7 @@ export function getCardDescription(card) {
         case 'triple_slash':
             return `⚡ ${card.baseDamage}ダメージを${card.hits}回！英単語を${card.hits}問とく超連撃！`;
         case 'thunder':
-            return `⛈️ ${card.baseDamage}ダメージ！コンボ中は+${card.comboBonus}ダメージ＆⚡+1回復！`;
+            return `⛈️ ${card.baseDamage}ダメージ！コンボ中は+${card.comboBonus}ダメージ＆1まい引く！`;
         case 'ice_lance':
             return `🧊 ${card.baseDamage}ダメージ！敵攻撃力-${card.debuff.value}＆カードを${card.drawCount || 1}まい引く！`;
         case 'meteor':
@@ -1435,7 +1435,7 @@ export function getCardDescription(card) {
         case 'iron_wall':
             return `🏰 ${card.baseBlock}ブロック！さらにカードを${card.drawCount || 1}まい引く！`;
         case 'counter':
-            return `🔄 ${card.baseBlock}ブロック＋${card.baseDamage}ダメージ！コンボ中なら⚡+1回復！`;
+            return `🔄 ${card.baseBlock}ブロック＋${card.baseDamage}ダメージ！コンボ中なら+${card.comboBonus || 4}ダメージ！`;
         case 'barrier':
             return `✨ ${card.baseBlock}ブロック！次のターンも${card.persistBlock}ブロック残る！`;
         case 'thorn_armor':

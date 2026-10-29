@@ -48,7 +48,7 @@ export const NODE_ICONS = {
  */
 export function generateMap(floor) {
     const theme = FLOOR_THEMES[floor];
-    const layers = 6; // 開始 + 4中間 + ボス
+    const layers = 7; // 開始 + 5中間 + ボス
     const nodesPerLayer = 3;
     const nodes = [];
     const connections = [];
@@ -164,23 +164,23 @@ function generateLayerTypes(layer, totalLayers) {
     const midPoint = Math.floor(totalLayers / 2);
 
     if (layer === 1) {
-        // 最初の層は通常バトルのみ
-        return [NODE_TYPES.BATTLE, NODE_TYPES.BATTLE, NODE_TYPES.BATTLE];
+        // 最初の層は通常バトル＋イベントマス
+        return [NODE_TYPES.BATTLE, NODE_TYPES.EVENT, NODE_TYPES.BATTLE];
     }
 
     if (layer === totalLayers - 2) {
-        // ボス前は休憩 + ショップ
-        return [NODE_TYPES.REST, NODE_TYPES.SHOP, NODE_TYPES.BATTLE];
+        // ボス前は休憩 + ショップ + イベント
+        return [NODE_TYPES.REST, NODE_TYPES.SHOP, NODE_TYPES.EVENT];
     }
 
-    // 中間層はランダム（重み付き）
-    const pool = [];
+    // 中間層はランダム（イベントマスとレリック宝箱マスの出現率を強化）
     const weights = {
-        [NODE_TYPES.BATTLE]: 40,
-        [NODE_TYPES.ELITE]: layer >= midPoint ? 20 : 10,
-        [NODE_TYPES.SHOP]: 15,
-        [NODE_TYPES.REST]: 15,
-        [NODE_TYPES.EVENT]: 10
+        [NODE_TYPES.BATTLE]: 30,
+        [NODE_TYPES.EVENT]: 26,
+        [NODE_TYPES.TREASURE]: 14,
+        [NODE_TYPES.ELITE]: layer >= midPoint ? 18 : 10,
+        [NODE_TYPES.SHOP]: 12,
+        [NODE_TYPES.REST]: 12
     };
 
     // ランダムにタイプを選択
@@ -199,17 +199,26 @@ function generateLayerTypes(layer, totalLayers) {
 
     // 同じタイプが3つにならないようにする
     if (types.every(t => t === types[0])) {
-        types[1] = NODE_TYPES.BATTLE;
+        types[1] = NODE_TYPES.EVENT;
     }
 
-    // 第2層には必ず1つ「💎 宝箱（レリック確定）」ノードを配置（ノード数が2個の場合でも確実に出るよう0または1番目に配置）
+    // 第2層には必ず1つ「💎 宝箱（レリック確定）」ノードを配置
     if (layer === 2) {
         types[Math.floor(Math.random() * 2)] = NODE_TYPES.TREASURE;
     }
 
-    // 第3層には必ず1つ「🔥 強敵エリート（レアカード＆レリック確定のハイリスク・ハイリターン）」ノードを配置
+    // 第3層には必ず1つ「🔥 強敵エリート（レアカード＆レリック確定）」と「❓ イベント」を配置
     if (layer === 3) {
-        types[Math.floor(Math.random() * 2)] = NODE_TYPES.BURNING_ELITE;
+        types[0] = NODE_TYPES.BURNING_ELITE;
+        types[1] = NODE_TYPES.EVENT;
+    }
+
+    // 第4層にも必ず「💎 宝箱（レリック）」または「❓ イベント」を配置
+    if (layer === 4) {
+        types[0] = Math.random() < 0.55 ? NODE_TYPES.TREASURE : NODE_TYPES.EVENT;
+        if (types[1] === NODE_TYPES.BATTLE) {
+            types[1] = NODE_TYPES.EVENT;
+        }
     }
 
     return types;

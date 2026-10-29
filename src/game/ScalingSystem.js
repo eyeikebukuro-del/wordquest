@@ -66,7 +66,7 @@ export const RELIC_DEFINITIONS = {
         id: 'magic_book',
         name: 'まほうの本',
         emoji: '📖',
-        description: 'エナジー+1（バトル開始時）',
+        description: 'バトル開始時（1ターン目）のみエナジー+1',
         effect: { type: 'energy_bonus', value: 1 }
     },
     wisdom_gem: {
@@ -101,7 +101,7 @@ export const RELIC_DEFINITIONS = {
         id: 'wisdom_gear',
         name: '知恵の歯車',
         emoji: '⚙️',
-        description: '難易度3の問題に正解すると、エナジー+1＆カード1枚ドロー！',
+        description: '1ターンに1回、難易度3の問題に正解するとエナジー+1＆カード1枚ドロー！',
         effect: { type: 'diff3_energy_draw', value: 1 }
     },
     smith_hammer: {

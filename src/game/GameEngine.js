@@ -576,6 +576,42 @@ export class GameEngine {
                 result.message = 'カードを1枚選んで強化しよう！';
                 result.needCardSelect = true;
                 break;
+            case 'random_relic': {
+                const relicIds = this.scaling.getRandomRelics(1);
+                if (relicIds.length > 0) {
+                    const addedRelic = this.scaling.addRelic(relicIds[0]);
+                    if (addedRelic) {
+                        if (addedRelic.effect && addedRelic.effect.type === 'max_hp_bonus') {
+                            this.player.maxHp += addedRelic.effect.value;
+                            this.player.hp += addedRelic.effect.value;
+                        }
+                        result.message = `✨ レリック「${addedRelic.emoji} ${addedRelic.name}」（${addedRelic.description}）を手に入れた！`;
+                    }
+                } else {
+                    this.player.gold += 35;
+                    result.message = 'すべてのレリックを所持しているため、代わりに35ゴールドを手に入れた！';
+                }
+                break;
+            }
+            case 'relic_for_hp': {
+                const dmg = effect.value || 8;
+                this.player.hp = Math.max(1, this.player.hp - dmg);
+                const relicIds = this.scaling.getRandomRelics(1);
+                if (relicIds.length > 0) {
+                    const addedRelic = this.scaling.addRelic(relicIds[0]);
+                    if (addedRelic) {
+                        if (addedRelic.effect && addedRelic.effect.type === 'max_hp_bonus') {
+                            this.player.maxHp += addedRelic.effect.value;
+                            this.player.hp += addedRelic.effect.value;
+                        }
+                        result.message = `${dmg}ダメージを受けたが、レリック「${addedRelic.emoji} ${addedRelic.name}」（${addedRelic.description}）を手に入れた！`;
+                    }
+                } else {
+                    this.player.gold += 40;
+                    result.message = `${dmg}ダメージを受けたが、40ゴールドを手に入れた！`;
+                }
+                break;
+            }
             case 'none':
                 result.message = 'そっとその場を去った…';
                 break;

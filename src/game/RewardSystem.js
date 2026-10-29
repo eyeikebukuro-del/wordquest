@@ -215,6 +215,33 @@ export function generateEvent() {
                 { text: '修行する（カード1枚強化）', effect: { type: 'upgrade_card' } },
                 { text: 'お祈りする（最大HP+5）', effect: { type: 'max_hp', value: 5 } }
             ]
+        },
+        {
+            title: '古代の遺物祭壇',
+            emoji: '✨',
+            description: '光を放つ古代の祭壇に、不思議な秘宝（レリック）が眠っている…！',
+            choices: [
+                { text: '✨ 祭壇に手をかざす（ランダムなレリックを1つ獲得！）', effect: { type: 'random_relic' } },
+                { text: '💰 お供えの金貨を拾う（ゴールド+25）', effect: { type: 'gold', value: 25 } }
+            ]
+        },
+        {
+            title: '眠れる竜の宝物庫',
+            emoji: '💎',
+            description: '巨大な竜が眠る奥に、輝く秘宝（レリック）が見える！',
+            choices: [
+                { text: '💎 秘宝を1つ持ち帰る（レリック獲得＆HP-8）', effect: { type: 'relic_for_hp', value: 8 } },
+                { text: '💰 入り口の金貨だけ拾う（ゴールド+30）', effect: { type: 'gold', value: 30 } }
+            ]
+        },
+        {
+            title: '星詠みの賢者',
+            emoji: '🔮',
+            description: '塔を旅する星詠みの賢者が、あなたの知恵をたたえて力を授けてくれるという。',
+            choices: [
+                { text: '🔮 知恵の秘宝を授かる（ランダムなレリックを獲得！）', effect: { type: 'random_relic' } },
+                { text: '⬆️ カードを鍛えてもらう（カード1枚強化）', effect: { type: 'upgrade_card' } }
+            ]
         }
     ];
 

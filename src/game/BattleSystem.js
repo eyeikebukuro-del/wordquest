@@ -47,10 +47,10 @@ export class BattleSystem {
         this.state = BATTLE_STATES.PLAYER_TURN;
         /** ターン番号 */
         this.turn = 1;
-        /** 最大エナジー */
-        this.maxEnergy = player.maxEnergy + scaling.getRelicBonus('energy_bonus');
-        /** 現在のエナジー */
-        this.energy = this.maxEnergy;
+        /** 基本最大エナジー */
+        this.maxEnergy = player.maxEnergy;
+        /** 現在のエナジー（レリック「まほうの本」はバトル開始時の1ターン目のみ+1） */
+        this.energy = this.maxEnergy + scaling.getRelicBonus('energy_bonus');
         /** プレイヤーのブロック */
         this.playerBlock = 0;
         /** 次のクイズで消去する選択肢の数 */
@@ -89,6 +89,8 @@ export class BattleSystem {
         this.cardsPlayedThisTurn = 0;
         /** レリック「成長の魔剣」用の累計正解カウント */
         this.kunaiCorrectCount = 0;
+        /** レリック「知恵の歯車」がこのターン既に発動したか（1ターン1回制限） */
+        this.wisdomGearUsedThisTurn = false;
 
         // 次の敵の行動を計算
         this.nextEnemyIntent = getEnemyIntent(enemy);
@@ -255,16 +257,28 @@ export class BattleSystem {
                     : ''
         };
 
-        if (correct) {
-            // カードにXP付与（レリック「言葉の巻物」のxp_bonusを反映）
-            const xpAmount = 1 + this.scaling.getRelicBonus('xp_bonus');
-            let leveledUp = false;
-            for (let i = 0; i < xpAmount; i++) {
-                if (addCardXP(this.selectedCard)) {
-                    leveledUp = true;
-                }
+        // 初回回答時にカードのエナジーコストを即座に消費する（連撃カードでも1問目回答時に確実に減算し、二重消費や未消費を防ぐ）
+        if (this.selectedCard && !this.selectedCard._costPaid) {
+            this.energy = Math.max(0, this.energy - this.selectedCard.cost);
+            this.selectedCard._costPaid = true;
+            if (this.selectedCard._originalCost !== undefined) {
+                this.selectedCard.cost = this.selectedCard._originalCost;
+                delete this.selectedCard._originalCost;
             }
-            result.leveledUp = leveledUp;
+        }
+
+        if (correct) {
+            // カードにXP付与（レリック「言葉の巻物」のxp_bonusを反映・1枚のカードにつき1回）
+            if (this.currentHitIndex === 0) {
+                const xpAmount = 1 + this.scaling.getRelicBonus('xp_bonus');
+                let leveledUp = false;
+                for (let i = 0; i < xpAmount; i++) {
+                    if (addCardXP(this.selectedCard)) {
+                        leveledUp = true;
+                    }
+                }
+                result.leveledUp = leveledUp;
+            }
 
             // カード効果発動
             this.currentHitIndex++;
@@ -291,19 +305,20 @@ export class BattleSystem {
                 }
             }
 
-            // レリック「知恵の歯車（diff3_energy_draw）」：難易度★3正解でエナジー+1＆1枚ドロー
-            if (difficulty >= 3 && this.scaling.hasRelic('diff3_energy_draw')) {
+            // レリック「知恵の歯車（diff3_energy_draw）」：1ターンに1回のみ、難易度★3正解でエナジー+1＆1枚ドロー
+            if (difficulty >= 3 && this.scaling.hasRelic('diff3_energy_draw') && !this.wisdomGearUsedThisTurn && this.currentHitIndex === 1) {
+                this.wisdomGearUsedThisTurn = true;
                 this.energy += 1;
                 const drawn = this.deck.draw(1);
                 result.wisdomGearTriggered = true;
-                this.log.push(`⚙️ 知恵の歯車！ 難易度★3正解でエナジー+1＆カード${drawn.length}枚ドロー！`);
+                this.log.push(`⚙️ 知恵の歯車！ 難易度★3正解でエナジー+1＆カード${drawn.length}枚ドロー！（1ターン1回）`);
             }
 
-            // ボスギミック「時の審判（chrono_judgment）」：3コンボ以上でエナジー+1回復
-            if (this.enemy.gimmick === 'chrono_judgment' && this.scaling.comboCount >= 3) {
+            // ボスギミック「時の審判（chrono_judgment）」：3問連続正解ごと（3, 6, 9...コンボ到達時）にエナジー+1回復
+            if (this.enemy.gimmick === 'chrono_judgment' && this.scaling.comboCount > 0 && this.scaling.comboCount % 3 === 0 && this.currentHitIndex === 1) {
                 this.energy += 1;
                 result.chronoBonus = true;
-                this.log.push('⏳ 時の審判ボーナス！ 3コンボ以上の正解でエナジー+1回復！');
+                this.log.push('⏳ 時の審判ボーナス！ 3問連続正解ごとにエナジー+1回復！');
             }
 
             const cardResult = this.applyCardEffect(this.selectedCard);
@@ -371,12 +386,8 @@ export class BattleSystem {
             }
         }
 
-        // カードを使用済みにする（一時コスト0化されていた場合は消費後に元のコストへ戻す）
-        this.energy = Math.max(0, this.energy - this.selectedCard.cost);
-        if (this.selectedCard._originalCost !== undefined) {
-            this.selectedCard.cost = this.selectedCard._originalCost;
-            delete this.selectedCard._originalCost;
-        }
+        // カードを使用済みにする（コスト支払いフラグをクリアして捨て札または除外へ移動）
+        delete this.selectedCard._costPaid;
         if (this.selectedCard.type === CARD_TYPES.SKILL) {
             if (window.sm) window.sm.playCardExhaust();
             this.deck.exhaustCard(this.selectedCard.instanceId);
@@ -650,11 +661,12 @@ export class BattleSystem {
             result.effects.push({ type: 'block', value: block });
         }
 
-        // コンボ中エナジー還付（チェイン・サンダー、エコー・カウンター等）
-        if (card.comboEnergyRefund && this.scaling.comboCount >= 2) {
-            this.energy += card.comboEnergyRefund;
-            result.effects.push({ type: 'energy_bonus', value: card.comboEnergyRefund });
-            this.log.push(`⚡ コンボ共鳴！ エナジー+${card.comboEnergyRefund}回復！`);
+        // コンボ中追加ドロー（チェイン・サンダー等）
+        if (card.comboDraw && this.scaling.comboCount >= 2) {
+            const drawn = this.deck.draw(card.comboDraw);
+            if (drawn.length > 0) {
+                result.effects.push({ type: 'draw', value: drawn.length });
+            }
         }
 
         // とげのよろい / コンパスの針：このターン中の敵ヒット1回ごとに反撃ダメージを加算
@@ -1152,8 +1164,8 @@ export class BattleSystem {
     newTurn() {
         this.turn++;
 
-        // 最大エナジーを再計算（レリック等）
-        this.maxEnergy = this.player.maxEnergy + this.scaling.getRelicBonus('energy_bonus');
+        // 2ターン目以降はプレイヤーの基本最大エナジー（3）に戻す（レリック「まほうの本」は1ターン目限定）
+        this.maxEnergy = this.player.maxEnergy;
         this.energy = this.maxEnergy;
 
         // 次ターンエナジーバフの適用
@@ -1167,8 +1179,9 @@ export class BattleSystem {
 
         // とげのよろいは1ターン限定なのでリセット
         this.thornArmorDamage = 0;
-        // 1ターン内のカード使用枚数と敵の被ヒット数をリセット
+        // 1ターン内のカード使用枚数・知恵の歯車発動フラグ・敵の被ヒット数をリセット
         this.cardsPlayedThisTurn = 0;
+        this.wisdomGearUsedThisTurn = false;
         if (this.enemy) {
             this.enemy.hitsTakenThisTurn = 0;
         }

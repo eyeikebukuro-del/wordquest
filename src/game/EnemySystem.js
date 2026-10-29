@@ -433,7 +433,7 @@ export const ENEMY_DEFINITIONS = {
         baseHp: 180,
         isBoss: true,
         gimmick: 'chrono_judgment',
-        gimmickDesc: '🌌 時の審判：3コンボ以上で攻撃するとエナジー+1回復！ミスすると神の攻撃力+3！',
+        gimmickDesc: '🌌 時の審判：3問連続正解ごとにエナジー+1回復！ミスすると神の攻撃力+3！',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 16, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.DEFEND, block: 18, emoji: '🛡️' },
