@@ -206,6 +206,56 @@ export class SaveManager {
     }
 
     /**
+     * 進行中の冒険データをセーブ（中断セーブ＆オートセーブ用）
+     * @param {Object} runState - 現在のラン状態
+     */
+    saveActiveRun(runState) {
+        try {
+            localStorage.setItem(SAVE_KEY, JSON.stringify({
+                ...runState,
+                savedAt: Date.now()
+            }));
+        } catch {
+            // ストレージ容量超過等は無視
+        }
+    }
+
+    /**
+     * 中断セーブデータを読み込む
+     * @returns {Object|null} 保存されたラン状態
+     */
+    loadActiveRun() {
+        try {
+            const raw = localStorage.getItem(SAVE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || !parsed.player || !parsed.maps) return null;
+            return parsed;
+        } catch {
+            return null;
+        }
+    }
+
+    /**
+     * 中断セーブデータが存在するか
+     * @returns {boolean}
+     */
+    hasActiveRun() {
+        return Boolean(this.loadActiveRun());
+    }
+
+    /**
+     * 中断セーブデータを削除（ゲームオーバー・クリア時）
+     */
+    clearActiveRun() {
+        try {
+            localStorage.removeItem(SAVE_KEY);
+        } catch {
+            // 無視
+        }
+    }
+
+    /**
      * ローカルキャッシュされた全ランキングエントリーを取得
      */
     getCachedEntries() {

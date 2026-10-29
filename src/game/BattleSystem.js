@@ -34,6 +34,10 @@ export class BattleSystem {
         this.enemy = enemy;
         this.deck = new DeckManager(deck);
         this.scaling = scaling;
+        // 前バトルの一時バフ（次ターンエナジー・一時筋力・ポーション倍率等）を確実にクリア
+        if (this.scaling) {
+            this.scaling.buffs = {};
+        }
         this.wordDb = wordDb;
         this.spacedRep = spacedRep;
         /** 現在のフロア（クイズ難易度制御用） */
@@ -305,8 +309,9 @@ export class BattleSystem {
             const cardResult = this.applyCardEffect(this.selectedCard);
             result.cardEffect = cardResult;
 
-            // ダブルストライク等の連撃問題チェック
-            if ((this.selectedCard.quizMode === QUIZ_MODES.CHOICE_DOUBLE || this.selectedCard.quizMode === QUIZ_MODES.CHOICE_TRIPLE) &&
+            // ダブルストライク等の連撃問題チェック（敵がまだ生存している場合のみ次のヒットを出題）
+            if (this.enemy.hp > 0 &&
+                (this.selectedCard.quizMode === QUIZ_MODES.CHOICE_DOUBLE || this.selectedCard.quizMode === QUIZ_MODES.CHOICE_TRIPLE) &&
                 this.currentHitIndex < (this.selectedCard.hits || 1)) {
                 // もう1問出題
                 const weights = this.spacedRep.getWeights();
@@ -366,8 +371,12 @@ export class BattleSystem {
             }
         }
 
-        // カードを使用済みにする
-        this.energy -= this.selectedCard.cost;
+        // カードを使用済みにする（一時コスト0化されていた場合は消費後に元のコストへ戻す）
+        this.energy = Math.max(0, this.energy - this.selectedCard.cost);
+        if (this.selectedCard._originalCost !== undefined) {
+            this.selectedCard.cost = this.selectedCard._originalCost;
+            delete this.selectedCard._originalCost;
+        }
         if (this.selectedCard.type === CARD_TYPES.SKILL) {
             if (window.sm) window.sm.playCardExhaust();
             this.deck.exhaustCard(this.selectedCard.instanceId);
@@ -435,12 +444,40 @@ export class BattleSystem {
             }
 
             // 長文バースト（文字数×係数）
-            if (card.lengthSynergy && this.currentQuiz && this.currentQuiz.word.english) {
-                damage += this.currentQuiz.word.english.length * card.lengthSynergy;
-                const blockAmount = this.currentQuiz.word.english.length * card.lengthSynergy;
+            const engWord = (this.currentQuiz && this.currentQuiz.word && !this.currentQuiz.word.isMath && !this.currentQuiz.word.isKanji)
+                ? String(this.currentQuiz.word.english || '').trim()
+                : '';
+
+            if (card.lengthSynergy && engWord) {
+                damage += engWord.length * card.lengthSynergy;
+                const blockAmount = engWord.length * card.lengthSynergy;
                 this.playerBlock += blockAmount;
                 result.effects.push({ type: 'block', value: blockAmount });
                 if (window.sm) window.sm.playBlock();
+            }
+
+            // スペル・スラッシュ：5文字以上の英単語で追加ダメージ
+            if (card.longWordBonus && engWord.length >= 5) {
+                damage += card.longWordBonus;
+            }
+
+            // スペル・フレア：英単語の文字数×係数の追加ダメージ
+            if (card.wordLengthDamage && engWord) {
+                damage += engWord.length * card.wordLengthDamage;
+            }
+
+            // アルファ・メテオ：英単語に含まれる母音(a,i,u,e,o)の数×係数の追加ダメージ
+            if (card.vowelBonusDamage && engWord) {
+                const vowelCount = (engWord.match(/[aeiou]/gi) || []).length;
+                damage += vowelCount * card.vowelBonusDamage;
+            }
+
+            // フォニックス・ダガー：母音(a,i,u,e,o)で始まる英単語ならカードドロー
+            if (card.vowelStartDraw && engWord && /^[aeiou]/i.test(engWord)) {
+                const drawn = this.deck.draw(card.vowelStartDraw);
+                if (drawn.length > 0) {
+                    result.effects.push({ type: 'draw', value: drawn.length });
+                }
             }
 
             // インド式魔導砲（2桁を含む計算のとき追加ダメージ）
@@ -480,26 +517,28 @@ export class BattleSystem {
                 if (window.sm) window.sm.playBlock();
             }
 
-            // ソウルブレード / 定理の刃：このバトルの正解数×2の追加ダメージ
+            // ソウルブレード / アカシック・ブレード / 定理の刃：このバトルの正解数×倍率の追加ダメージ
             if (card.soulBlade) {
-                const bonus = this.correctCount * 2;
+                const mult = card.soulMult || 2;
+                const bonus = this.correctCount * mult;
                 damage += bonus;
                 result.effects.push({ type: 'soul_bonus', value: bonus });
             }
 
-            // いかりの炎 / パラドックスの炎：失ったHP÷5の追加ダメージ
+            // いかりの炎 / リベンジ・フレイム / パラドックスの炎：失ったHPに応じた追加ダメージ
             if (card.rageFlame) {
                 const lostHp = this.player.maxHp - this.player.hp;
-                const bonus = Math.floor(lostHp / 5);
+                const div = card.healAmount ? 4 : 5;
+                const bonus = Math.floor(lostHp / div);
                 damage += bonus;
                 result.effects.push({ type: 'rage_bonus', value: bonus });
             }
 
-            // うずしお / 因数うずしお：手札の枚数×2の追加ダメージ
+            // うずしお / ワード・ストーム / 因数うずしお：手札の枚数×倍率の追加ダメージ
             if (card.vortex) {
-                // 自分自身は手札の外なので手札枚数そのまま使う
                 const handCount = this.deck.hand.length;
-                const bonus = handCount * 2;
+                const mult = card.vortexMult || 2;
+                const bonus = handCount * mult;
                 damage += bonus;
                 result.effects.push({ type: 'vortex_bonus', value: bonus, hand: handCount });
             }
@@ -596,12 +635,26 @@ export class BattleSystem {
         // 防御
         if (card.baseBlock) {
             let block = this.scaling.calculateBlock(card);
+            // スペル・シールド：5文字以上の英単語で追加ブロック
+            if (card.longWordBlock && this.currentQuiz && this.currentQuiz.word && !this.currentQuiz.word.isMath && !this.currentQuiz.word.isKanji) {
+                const engLen = String(this.currentQuiz.word.english || '').trim().length;
+                if (engLen >= 5) {
+                    block += card.longWordBlock;
+                }
+            }
             if (mathPowerMult > 1.0) {
                 block = Math.ceil(block * mathPowerMult);
             }
             this.playerBlock += block;
             if (window.sm) window.sm.playBlock();
             result.effects.push({ type: 'block', value: block });
+        }
+
+        // コンボ中エナジー還付（チェイン・サンダー、エコー・カウンター等）
+        if (card.comboEnergyRefund && this.scaling.comboCount >= 2) {
+            this.energy += card.comboEnergyRefund;
+            result.effects.push({ type: 'energy_bonus', value: card.comboEnergyRefund });
+            this.log.push(`⚡ コンボ共鳴！ エナジー+${card.comboEnergyRefund}回復！`);
         }
 
         // とげのよろい / コンパスの針：このターン中の敵ヒット1回ごとに反撃ダメージを加算
@@ -625,11 +678,29 @@ export class BattleSystem {
             result.effects.push({ type: 'draw', value: drawn.length });
         }
 
-        // バフ（重ねがけ対応：加算）
+        // グリモワール：手札のランダムなカード1枚のコストをこのターン0にする
+        if (card.zeroCostHandCard) {
+            const candidates = this.deck.hand.filter(c => c.instanceId !== card.instanceId && c.cost > 0);
+            if (candidates.length > 0) {
+                const target = candidates[Math.floor(Math.random() * candidates.length)];
+                if (target._originalCost === undefined) {
+                    target._originalCost = target.cost;
+                }
+                target.cost = 0;
+                result.effects.push({ type: 'zero_cost', cardName: target.name });
+                this.log.push(`📖 グリモワールの魔力！「${target.name}」のコストがこのターン0になった！`);
+            }
+        }
+
+        // バフ（重ねがけ対応：strengthは倍率加算、next_turn_energy等は実数値加算）
         if (card.buff) {
             const existing = this.scaling.buffs[card.buff.type];
             if (existing) {
-                existing.value += (card.buff.value - 1); // strength: 1.5→+0.5加算で2.0
+                if (card.buff.type === 'strength') {
+                    existing.value = +(existing.value + (card.buff.value - 1)).toFixed(2);
+                } else {
+                    existing.value += card.buff.value;
+                }
                 existing.turns = Math.max(existing.turns, card.buff.turns);
             } else {
                 this.scaling.buffs[card.buff.type] = {
@@ -655,9 +726,14 @@ export class BattleSystem {
             result.effects.push({ type: 'debuff', debuffType: card.debuff.type });
         }
 
-        // 毒（レリック「ベノムスカル」のpoison_bonusを反映）
+        // 毒（ベノム・スペルの文字数連動およびレリック「ベノムスカル」のpoison_bonusを反映）
         if (card.poison) {
-            const poisonAmount = card.poison + this.scaling.getRelicBonus('poison_bonus');
+            let basePoison = card.poison;
+            if (card.wordLengthPoison && this.currentQuiz && this.currentQuiz.word && !this.currentQuiz.word.isMath && !this.currentQuiz.word.isKanji) {
+                const engLen = String(this.currentQuiz.word.english || '').trim().length;
+                if (engLen > 0) basePoison = Math.max(basePoison, engLen);
+            }
+            const poisonAmount = basePoison + this.scaling.getRelicBonus('poison_bonus');
             this.enemyPoison += poisonAmount;
             result.effects.push({ type: 'poison', value: poisonAmount });
         }
@@ -773,7 +849,11 @@ export class BattleSystem {
                     if (lastDef.buff) {
                         const existingBuff = this.scaling.buffs[lastDef.buff.type];
                         if (existingBuff) {
-                            existingBuff.value += (lastDef.buff.value - 1);
+                            if (lastDef.buff.type === 'strength') {
+                                existingBuff.value = +(existingBuff.value + (lastDef.buff.value - 1)).toFixed(2);
+                            } else {
+                                existingBuff.value += lastDef.buff.value;
+                            }
                             existingBuff.turns = Math.max(existingBuff.turns, lastDef.buff.turns);
                         } else {
                             this.scaling.buffs[lastDef.buff.type] = {
@@ -782,6 +862,13 @@ export class BattleSystem {
                             };
                         }
                         result.effects.push({ type: 'buff', buffType: lastDef.buff.type });
+                        hasEffect = true;
+                    }
+
+                    // 即時エナジー獲得のコピー
+                    if (lastDef.energyBonus) {
+                        this.energy += lastDef.energyBonus;
+                        result.effects.push({ type: 'energy_bonus', value: lastDef.energyBonus });
                         hasEffect = true;
                     }
 
@@ -837,9 +924,9 @@ export class BattleSystem {
             }
         }
 
-        // エナジーボーナス
+        // 即時エナジーボーナス（マナ・チャント等：その場の使用可能エナジーを加算）
         if (card.energyBonus) {
-            this.maxEnergy += card.energyBonus;
+            this.energy += card.energyBonus;
             result.effects.push({ type: 'energy_bonus', value: card.energyBonus });
         }
 
@@ -1023,12 +1110,13 @@ export class BattleSystem {
                 this.enemy.block += intent.block || 0;
                 result.effects.push({ type: 'block', value: intent.block });
                 if (this.enemy.gimmick === 'regen_defend') {
-                    const healVal = Math.min(this.enemy.regenValue || 6, this.enemy.maxHp - this.enemy.hp);
-                    if (healVal > 0) {
-                        this.enemy.hp += healVal;
-                        result.effects.push({ type: 'enemy_heal', value: healVal });
-                        this.log.push(`🌳 森の再生！ ${this.enemy.name}のHPが${healVal}回復した！`);
+                    const healVal = this.enemy.regenValue || 8;
+                    if (this.enemy.hp + healVal > this.enemy.maxHp) {
+                        this.enemy.maxHp = this.enemy.hp + healVal;
                     }
+                    this.enemy.hp = Math.min(this.enemy.maxHp, this.enemy.hp + healVal);
+                    result.effects.push({ type: 'enemy_heal', value: healVal });
+                    this.log.push(`🌳 森の再生！ ${this.enemy.name}のHPが${healVal}回復した！`);
                 }
                 break;
             }
@@ -1103,7 +1191,13 @@ export class BattleSystem {
             }
         }
 
-        // 手札を捨て、新しく5枚引く
+        // 手札の一時コスト変化（グリモワール効果等）をリセットしてから捨て、新しく5枚引く
+        for (const c of this.deck.hand) {
+            if (c._originalCost !== undefined) {
+                c.cost = c._originalCost;
+                delete c._originalCost;
+            }
+        }
         this.deck.discardHand();
         const drawn = this.deck.draw(5);
         if (window.sm && drawn.length > 0) window.sm.playCardDraw();

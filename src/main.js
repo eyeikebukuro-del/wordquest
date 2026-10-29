@@ -511,7 +511,11 @@ function updateBattleUI() {
         intentClass = 'attack';
         break;
       case 'defend':
-        intentText = `${intent.emoji} ${intent.block || ''}`;
+        if (enemy.gimmick === 'regen_defend') {
+          intentText = `${intent.emoji} ${intent.block || ''} 💚+${enemy.regenValue || 8}`;
+        } else {
+          intentText = `${intent.emoji} ${intent.block || ''}`;
+        }
         intentClass = 'defend';
         break;
       case 'buff':
@@ -676,6 +680,14 @@ function renderPotions() {
         if (!confirmed) return;
         const result = currentBattle.usePotion(potion.instanceId);
         if (result) {
+          for (const eff of (result.effects || [])) {
+            if (eff.type === 'energy') showDamageNumber(`⚡+${eff.value}`, 'heal', true);
+            if (eff.type === 'heal') showDamageNumber(eff.value, 'heal', true);
+            if (eff.type === 'buff') showDamageNumber('💪攻撃UP!', 'heal', true);
+          }
+          if (currentBattle.state === BATTLE_STATES.PLAYER_TURN) {
+            isAnimating = false;
+          }
           updateBattleUI();
           renderHand();
           renderPotions();
@@ -834,6 +846,7 @@ function onQuizAnswer(answer, quiz) {
 
   // エフェクト中フラグを立てる（カード連打防止）
   isAnimating = true;
+  document.getElementById('btn-end-turn').disabled = true;
 
   const resultEl = document.getElementById('quiz-result');
   const choicesEl = document.getElementById('quiz-choices');
@@ -863,6 +876,12 @@ function onQuizAnswer(answer, quiz) {
     if (result.wisdomGearTriggered) txt += ' ⚙️歯車エナジー+1&ドロー！';
     if (result.chronoBonus) txt += ' ⏳時の審判エナジー+1！';
     if (result.fanTriggered) txt += ` 🪭扇ブロック+${result.fanTriggered}！`;
+    if (result.cardEffect && result.cardEffect.effects) {
+      for (const eff of result.cardEffect.effects) {
+        if (eff.type === 'energy_bonus') txt += ` ⚡エナジー+${eff.value}！`;
+        if (eff.type === 'zero_cost') txt += ` 📖「${eff.cardName}」コスト0化！`;
+      }
+    }
     resultEl.className = 'quiz-result correct';
     resultEl.textContent = txt;
   } else {
@@ -878,7 +897,7 @@ function onQuizAnswer(answer, quiz) {
     setTimeout(() => {
       isAnimating = false; // ダブルストライク2問目に進む前にリセット
       showQuiz(result.nextQuiz);
-    }, 1200);
+    }, 1100);
     return;
   }
 
@@ -887,6 +906,8 @@ function onQuizAnswer(answer, quiz) {
     document.getElementById('quiz-area').style.display = 'none';
     updateBattleUI();
 
+    let hasSlashEffect = false;
+
     // ↓ エフェクトと音のタイミング制御 ↓
     if (result.correct && result.cardEffect && result.cardEffect.effects) {
       const isMeteor = result.cardEffect.type === 'attack' && result.cardEffect.cost >= 3;
@@ -894,26 +915,31 @@ function onQuizAnswer(answer, quiz) {
 
       for (const eff of result.cardEffect.effects) {
         if (eff.type === 'damage' || eff.type === 'mirror_damage') {
-          // 正解音から300ms遅延してスラッシュエフェクト＋音を同時再生
+          hasSlashEffect = true;
+          // 正解音から250ms遅延してスラッシュエフェクト＋音を同時再生
           setTimeout(() => {
             playAttackEffect(false, isMeteor, eff.value);
-          }, 300);
+          }, 250);
 
-          // スラッシュから300ms後にダメージ数字＋ヒットアニメ
+          // スラッシュから250ms後にダメージ数字＋ヒットアニメ
           setTimeout(() => {
             showDamageNumber(eff.actual !== undefined ? eff.actual : eff.value, 'damage', false);
             const hitTarget = game.battle.enemy.image ? document.getElementById('enemy-image') : document.getElementById('enemy-emoji');
             hitTarget.classList.add('anim-hit');
             setTimeout(() => hitTarget.classList.remove('anim-hit'), 400);
-          }, 600);
+          }, 500);
         } else if (eff.type === 'block') {
           showDamageNumber(eff.value, 'block', true);
         } else if (eff.type === 'heal') {
           showDamageNumber(eff.value, 'heal', true);
+        } else if (eff.type === 'energy_bonus') {
+          showDamageNumber(`⚡+${eff.value}`, 'heal', true);
+        } else if (eff.type === 'zero_cost') {
+          showDamageNumber('📖コスト0!', 'heal', true);
         } else if (eff.type === 'flight_crash' || eff.type === 'armor_break') {
-          setTimeout(() => showDamageNumber(eff.value, 'damage', false), 700);
+          setTimeout(() => showDamageNumber(eff.value, 'damage', false), 600);
         } else if (eff.type === 'enemy_thorns' && eff.actual > 0) {
-          setTimeout(() => showDamageNumber(eff.actual, 'thorn', true), 700);
+          setTimeout(() => showDamageNumber(eff.actual, 'thorn', true), 600);
         }
       }
 
@@ -927,18 +953,26 @@ function onQuizAnswer(answer, quiz) {
             isAnimating = false;
             game.onBattleEnd('victory');
           }, 700);
-        }, 1200); // スラッシュ(300ms) + ダメージ表示(600ms) + 余韻(300ms)
+        }, 1050);
         return; // 勝利時はここで終了（renderHandしない）
       }
     }
     // ↑ エフェクトここまで ↑
 
-    // エフェクト完了後にアニメ中フラグを解除して手札再表示
-    setTimeout(() => {
+    // 不正解時や防御・スキルカード時は即座に操作ロック解除＆手札再描画
+    if (!hasSlashEffect) {
       isAnimating = false;
+      updateBattleUI();
       renderHand();
-    }, 800); // エフェクト演出分の待機
-  }, 1500);
+    } else {
+      // 攻撃スラッシュ演出完了後にアニメ中フラグを解除して手札再表示
+      setTimeout(() => {
+        isAnimating = false;
+        updateBattleUI();
+        renderHand();
+      }, 650);
+    }
+  }, 1150);
 }
 
 function playAttackEffect(isPlayer = false, isMeteor = false, damage = 0) {
@@ -1042,6 +1076,22 @@ function showEnemyTurnEffects(result) {
     if (eff.type === 'thorn_counter' && eff.value > 0) {
       setTimeout(() => showDamageNumber(eff.value, 'thorn', false), 400);
     }
+
+    // 敵のHP回復エフェクト（森のガーディアン等）
+    if (eff.type === 'enemy_heal' && eff.value > 0) {
+      if (window.sm) window.sm.playHeal();
+      setTimeout(() => showDamageNumber(`💚+${eff.value}`, 'heal', false), 200);
+    }
+
+    // 敵の防御（ブロック）エフェクト
+    if (eff.type === 'block' && eff.value > 0) {
+      setTimeout(() => showDamageNumber(`🛡️+${eff.value}`, 'block', false), 100);
+    }
+
+    // 敵のバフエフェクト
+    if (eff.type === 'buff' && eff.value > 0) {
+      setTimeout(() => showDamageNumber(`💪+${eff.value}`, 'thorn', false), 200);
+    }
   }
 
   if (blockedAll && totalDamage === 0) {
@@ -1057,7 +1107,7 @@ function showEnemyTurnEffects(result) {
 
 // === ターン終了 ===
 function onEndTurn() {
-  if (!currentBattle || currentBattle.state !== BATTLE_STATES.PLAYER_TURN) return;
+  if (isAnimating || !currentBattle || currentBattle.state !== BATTLE_STATES.PLAYER_TURN) return;
 
   // 敵ターン実行（戻り値でpoisonKillを判定）
   const enemyResult = currentBattle.endTurn();
@@ -1109,6 +1159,7 @@ function onEndTurn() {
   }
 
   // UI更新
+  isAnimating = false;
   updateBattleUI();
   renderHand();
 }
@@ -1139,6 +1190,7 @@ function renderRewards() {
           game.addGold(reward.amount);
           item.classList.add('claimed');
           item.innerHTML += ' ✅';
+          game.saveCurrentRun();
         }
       });
     } else if (reward.type === 'card') {
@@ -1149,6 +1201,7 @@ function renderRewards() {
             game.selectRewardCard(selectedCard);
             item.classList.add('claimed');
             item.innerHTML = `<span class="reward-emoji">🃏</span><span class="reward-desc">${selectedCard.name}を獲得！ ✅</span>`;
+            game.saveCurrentRun();
           });
         }
       });
@@ -1165,6 +1218,7 @@ function renderRewards() {
             }
             item.classList.add('claimed');
             item.innerHTML += ' ✅';
+            game.saveCurrentRun();
           }
         });
       }
@@ -1182,6 +1236,7 @@ function renderRewards() {
               }
               item.classList.add('claimed');
               item.innerHTML = `<span class="reward-emoji">${relic.emoji}</span><span class="reward-desc">${relic.name}を獲得！ ✅</span>`;
+              game.saveCurrentRun();
             }
           });
         }
@@ -1200,6 +1255,7 @@ function renderRewards() {
             if (added) {
               item.classList.add('claimed');
               item.innerHTML += ' ✅';
+              game.saveCurrentRun();
             }
           }
         });
@@ -1647,9 +1703,10 @@ function renderVictory() {
   else if (game.stats.lastBossId === 'forest_guardian') bossBonus = 2000;
 
   const goldScore = (game.player?.gold || 0) * 10;
+  const exBonus = game.stats.exStageCleared ? 10000 : 0;
   const baseScore = 5000;
   const ascMult = 1 + (game.ascensionLevel || 0) * 0.15;
-  const rawScore = baseScore + enemiesScore + comboScore + damageScore + wisdomBonus + bossBonus + goldScore;
+  const rawScore = baseScore + enemiesScore + comboScore + damageScore + wisdomBonus + bossBonus + goldScore + exBonus;
   const totalScore = Math.round(rawScore * ascMult);
 
   const todayStr = formatDateYMD();
@@ -1664,6 +1721,7 @@ function renderVictory() {
     <div class="stat-row"><span class="stat-label">📅 クリア達成日</span><span class="stat-value">${todayStr}</span></div>
     <div class="stat-row"><span class="stat-label">👤 キャラクター</span><span class="stat-value">${game.player?.emoji || '🧙‍♂️'} ${game.player?.name || 'ワードマスター'} (🏆Lv.${game.ascensionLevel || 0})</span></div>
     <div class="stat-row"><span class="stat-label">クリアボーナス</span><span class="stat-value">+${baseScore}点</span></div>
+    ${exBonus > 0 ? `<div class="stat-row" style="color:#f472b6;font-weight:700;"><span class="stat-label">🌌 EXステージ完全制覇</span><span class="stat-value">+${exBonus.toLocaleString()}点</span></div>` : ''}
     <div class="stat-row"><span class="stat-label">ボス撃破 (${game.stats.lastBossName || 'ボス'})</span><span class="stat-value">+${bossBonus}点</span></div>
     <div class="stat-row"><span class="stat-label">倒した敵 (${game.stats.enemiesDefeated || 0}体)</span><span class="stat-value">+${enemiesScore}点</span></div>
     <div class="stat-row"><span class="stat-label">最大コンボ (${game.stats.maxCombo || 0})</span><span class="stat-value">+${comboScore}点</span></div>
@@ -1896,11 +1954,38 @@ function showStats() {
   });
 }
 
+// === セーブ＆コンティニューボタンの表示更新 ===
+function updateContinueButtonUI() {
+  const btnContinue = document.getElementById('btn-continue-game');
+  const labelContinue = document.getElementById('continue-game-label');
+  if (!btnContinue || !labelContinue) return;
+
+  const saved = game.saveManager.loadActiveRun();
+  if (saved && saved.player && saved.maps) {
+    const floorNum = saved.currentFloor || 1;
+    const charEmoji = saved.player.emoji || '🧙‍♂️';
+    const charName = saved.player.name || 'ワードマスター';
+    labelContinue.textContent = `つづきから遊ぶ（${charEmoji}${charName} / ${floorNum}F / ❤️${saved.player.hp}）`;
+    btnContinue.style.display = 'flex';
+  } else {
+    btnContinue.style.display = 'none';
+  }
+}
+
+// フロア3ボス撃破後の「通常クリア帰還」or「EXステージ（フロア4）突入」選択モーダル表示
+game.onFloor3ClearChoice = () => {
+  const modal = document.getElementById('modal-floor3-choice');
+  if (modal) modal.style.display = 'block';
+};
+
 // === 画面遷移ハンドラー ===
 game.onScreenChange = (screen) => {
   showScreen(screen);
 
   switch (screen) {
+    case SCREENS.MENU:
+      updateContinueButtonUI();
+      break;
     case SCREENS.MAP:
       renderMap();
       break;
@@ -2045,7 +2130,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // メニュー
+  // 初回起動時にセーブデータがあれば「つづきから遊ぶ」ボタンを表示
+  updateContinueButtonUI();
+
+  // メニュー：「つづきから遊ぶ」ボタン
+  document.getElementById('btn-continue-game')?.addEventListener('click', () => {
+    if (window.sm) window.sm.playGameStart();
+    isAnimating = false;
+    game.resumeSavedRun();
+  });
+
+  // メニュー：「ぼうけんに出る」ボタン
   document.getElementById('btn-new-game').addEventListener('click', () => {
     // キャラクター選択画面への遷移とスクロール初期化
     showScreen('char-select');
@@ -2056,8 +2151,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // キャラクター選択画面：「冒険にしゅっぱつ！」ボタン
-  document.getElementById('btn-start-adventure').addEventListener('click', () => {
+  document.getElementById('btn-start-adventure').addEventListener('click', async () => {
+    if (game.saveManager.hasActiveRun()) {
+      const overwrite = await showConfirmDialog(`
+        <div style="text-align:center;">
+          <div style="font-size:2rem;">⚠️</div>
+          <div style="font-weight:700; margin:8px 0;">セーブデータがあります</div>
+          <div style="color:var(--text-secondary); font-size:0.85rem;">あたらしく冒険をはじめると、いまの途中セーブデータは上書きされます。よろしいですか？</div>
+        </div>
+      `);
+      if (!overwrite) return;
+    }
     if (window.sm) window.sm.playGameStart();
+    isAnimating = false;
     game.startNewRun(selectedCharacterId, selectedAscensionLevel);
   });
 
@@ -2073,6 +2179,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('btn-back-menu').addEventListener('click', () => {
+    updateContinueButtonUI();
     showScreen('menu');
   });
 
@@ -2084,6 +2191,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // マップ
   document.getElementById('btn-view-deck').addEventListener('click', showDeck);
+  document.getElementById('btn-save-quit')?.addEventListener('click', () => {
+    game.saveCurrentRun();
+    updateContinueButtonUI();
+    showFloatMessage('💾 セーブしました！またいつでも「つづきから」遊べます✨');
+    showScreen('menu');
+  });
+
+  // フロア3制覇後の選択モーダル（通常クリア帰還 or EXステージ『天空の聖域』突入）
+  document.getElementById('btn-choice-victory')?.addEventListener('click', () => {
+    document.getElementById('modal-floor3-choice').style.display = 'none';
+    game.finishRunAtFloor3();
+  });
+  document.getElementById('btn-choice-ex-stage')?.addEventListener('click', () => {
+    document.getElementById('modal-floor3-choice').style.display = 'none';
+    if (window.sm) window.sm.playHeal();
+    showFloatMessage('🌌 EXステージ『天空の聖域』へ突入！（HP30%回復！）');
+    game.enterFloor4ExStage();
+  });
 
   // バトル
   document.getElementById('btn-end-turn').addEventListener('click', onEndTurn);

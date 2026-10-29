@@ -105,8 +105,8 @@ export const ENEMY_DEFINITIONS = {
         baseHp: 55,
         isBoss: true,
         gimmick: 'regen_defend',
-        regenValue: 6,
-        gimmickDesc: '🌳 森の再生：防御ターンにHPを6回復する！',
+        regenValue: 8,
+        gimmickDesc: '🌳 森の再生：防御ターン（🛡️）にHPを8回復する！（満タン時は最大HPも成長！）',
         patterns: [
             { intent: ENEMY_INTENTS.ATTACK, damage: 8, emoji: '⚔️' },
             { intent: ENEMY_INTENTS.DEFEND, block: 10, emoji: '🛡️' },

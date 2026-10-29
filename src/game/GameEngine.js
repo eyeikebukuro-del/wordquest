@@ -161,7 +161,75 @@ export class GameEngine {
             lastBossName: null
         };
 
+        this.saveCurrentRun();
         this.changeScreen(SCREENS.MAP);
+    }
+
+    /**
+     * 現在の冒険の進行状況をセーブする（オートセーブ＆手動中断セーブ用）
+     */
+    saveCurrentRun() {
+        if (!this.player || !this.maps) return;
+        this.saveManager.saveActiveRun({
+            characterId: this.characterId,
+            ascensionLevel: this.ascensionLevel,
+            player: this.player,
+            playerDeck: this.playerDeck,
+            currentFloor: this.currentFloor,
+            maps: this.maps,
+            currentNodeId: this.currentNodeId,
+            nodesVisited: this.nodesVisited,
+            stats: this.stats,
+            relics: this.scaling ? this.scaling.relics : [],
+            potions: this.scaling ? this.scaling.potions : [],
+            maxCombo: this.scaling ? this.scaling.maxCombo : 0
+        });
+    }
+
+    /**
+     * セーブされた冒険データを読み込んで再開する（コンティニュー）
+     * @returns {boolean} 再開に成功したか
+     */
+    resumeSavedRun() {
+        const saved = this.saveManager.loadActiveRun();
+        if (!saved || !saved.player || !saved.maps) return false;
+
+        this.characterId = saved.characterId || saved.player.characterId || 'wordmaster';
+        this.ascensionLevel = saved.ascensionLevel || saved.player.ascensionLevel || 0;
+        if (this.characterId === 'mathmaster') {
+            this.activeDb = this.mathDb;
+        } else if (this.characterId === 'kungfumaster') {
+            this.activeDb = this.kanjiDb;
+        } else {
+            this.activeDb = this.wordDb;
+        }
+
+        this.player = saved.player;
+        this.playerDeck = Array.isArray(saved.playerDeck) ? saved.playerDeck : createStarterDeck(this.characterId);
+        this.currentFloor = saved.currentFloor || 1;
+        this.maps = saved.maps;
+        this.currentNodeId = saved.currentNodeId || 'start';
+        this.nodesVisited = saved.nodesVisited || 0;
+        this.stats = saved.stats || {
+            battlesWon: 0,
+            enemiesDefeated: 0,
+            totalCorrect: 0,
+            totalIncorrect: 0,
+            floorsCleared: 0,
+            maxCombo: 0,
+            totalWisdomScore: 0,
+            lastBossId: null,
+            lastBossName: null
+        };
+
+        this.scaling = new ScalingSystem();
+        this.scaling.ascensionLevel = this.ascensionLevel;
+        this.scaling.relics = Array.isArray(saved.relics) ? saved.relics : [];
+        this.scaling.potions = Array.isArray(saved.potions) ? saved.potions : [];
+        this.scaling.maxCombo = saved.maxCombo || 0;
+
+        this.changeScreen(SCREENS.MAP);
+        return true;
     }
 
     /**
@@ -306,7 +374,9 @@ export class GameEngine {
                 this.stats.floorsCleared++;
 
                 if (this.currentFloor >= 4) {
-                    // フロア4（最終ボス）撃破でゲームクリア
+                    // フロア4（EX最終ボス）撃破で完全ゲームクリア
+                    this.stats.exStageCleared = true;
+                    this.saveManager.clearActiveRun();
                     this.changeScreen(SCREENS.VICTORY);
                     return;
                 }
@@ -314,8 +384,10 @@ export class GameEngine {
 
             // 報酬生成
             this.currentRewards = generateBattleRewards(this.battle.enemy, this.scaling, this.characterId);
+            this.saveCurrentRun();
             this.changeScreen(SCREENS.REWARD);
         } else {
+            this.saveManager.clearActiveRun();
             this.changeScreen(SCREENS.GAME_OVER);
         }
     }
@@ -344,13 +416,47 @@ export class GameEngine {
         const map = this.maps[this.currentFloor];
         const node = map.nodes.find(n => n.id === this.currentNodeId);
 
-        // ボス勝利後は次のフロアへ（全4フロア）
-        if (node && node.type === NODE_TYPES.BOSS && this.currentFloor < 4) {
-            this.currentFloor++;
-            this.maps[this.currentFloor] = generateMap(this.currentFloor);
-            this.currentNodeId = 'start';
+        // ボス勝利時の処理
+        if (node && node.type === NODE_TYPES.BOSS) {
+            if (this.currentFloor === 3) {
+                // フロア3（魔王の城）のボス撃破後：「ここでクリアする」か「EXステージ（天空の聖域・フロア4）へ挑む」かを選択！
+                if (this.onFloor3ClearChoice) {
+                    this.saveCurrentRun();
+                    this.onFloor3ClearChoice();
+                    return;
+                }
+            }
+            if (this.currentFloor < 4) {
+                this.currentFloor++;
+                this.maps[this.currentFloor] = generateMap(this.currentFloor);
+                this.currentNodeId = 'start';
+            }
         }
 
+        this.saveCurrentRun();
+        this.changeScreen(SCREENS.MAP);
+    }
+
+    /**
+     * フロア3クリア時点で通常クリアとして帰還する
+     */
+    finishRunAtFloor3() {
+        this.stats.exStageCleared = false;
+        this.saveManager.clearActiveRun();
+        this.changeScreen(SCREENS.VICTORY);
+    }
+
+    /**
+     * フロア3クリア後、EXステージ（フロア4「天空の聖域」）へ進む
+     */
+    enterFloor4ExStage() {
+        this.currentFloor = 4;
+        this.maps[4] = generateMap(4);
+        this.currentNodeId = 'start';
+        // EXステージ突入ボーナスとしてHPを最大HPの30%回復
+        const healAmount = Math.ceil(this.player.maxHp * 0.3);
+        this.player.hp = Math.min(this.player.maxHp, this.player.hp + healAmount);
+        this.saveCurrentRun();
         this.changeScreen(SCREENS.MAP);
     }
 
@@ -388,9 +494,11 @@ export class GameEngine {
                 this.scaling.addPotion(item.potionId);
                 break;
             case 'remove_card':
+                this.saveCurrentRun();
                 return true; // UI側でカード選択画面を表示
         }
 
+        this.saveCurrentRun();
         return true;
     }
 
@@ -401,6 +509,7 @@ export class GameEngine {
     removeCardFromDeck(deckIndex) {
         if (deckIndex >= 0 && deckIndex < this.playerDeck.length) {
             this.playerDeck.splice(deckIndex, 1);
+            this.saveCurrentRun();
         }
     }
 
@@ -414,6 +523,7 @@ export class GameEngine {
             this.player.hp = Math.min(this.player.maxHp, this.player.hp + healAmount);
         }
         // upgradeの場合はUI側でカード選択後にカード強化
+        this.saveCurrentRun();
         this.changeScreen(SCREENS.MAP);
     }
 
@@ -471,6 +581,7 @@ export class GameEngine {
                 break;
         }
 
+        this.saveCurrentRun();
         return result;
     }
 
@@ -480,6 +591,9 @@ export class GameEngine {
      */
     changeScreen(screen) {
         this.currentScreen = screen;
+        if (screen === SCREENS.MAP) {
+            this.saveCurrentRun();
+        }
         if (this.onScreenChange) {
             this.onScreenChange(screen);
         }
