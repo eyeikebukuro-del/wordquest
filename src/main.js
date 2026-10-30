@@ -12,10 +12,10 @@ import { KanjiDatabase } from './vocabulary/KanjiDatabase.js';
 import { summarizeDeck, formatDateYMD } from './utils/SaveManager.js';
 
 // マップ背景画像のアセットインポート (Viteで正しくパス解決させるため)
-import bgForestMap from './assets/bg_forest_map.png';
-import bgCaveMap from './assets/bg_cave_map.png';
-import bgTowerMap from './assets/bg_tower_map.png';
-import bgSkyMap from './assets/bg_sky_map.png';
+import bgForestMap from './assets/map_forest.jpg';
+import bgCaveMap from './assets/map_cave.jpg';
+import bgTowerMap from './assets/map_tower.jpg';
+import bgSkyMap from './assets/map_sky.jpg';
 import { SoundManager } from './game/SoundManager.js';
 
 // ゲームエンジンのインスタンス
@@ -113,8 +113,9 @@ function renderMap() {
   else if (game.currentFloor === 4) bgImage = bgSkyMap;
 
   if (bgImage) {
-    container.style.background = `url(${bgImage}) center center / cover no-repeat, ${theme.bgGradient}`;
-    container.style.backgroundBlendMode = 'overlay'; // 既存のカラーと自然にブレンドする
+    // スレスパ風の古地図（羊皮紙）背景をそのまま見せる
+    container.style.background = `url(${bgImage}) center center / 100% 100% no-repeat, #e8d9b5`;
+    container.style.backgroundBlendMode = 'normal';
   } else {
     container.style.background = theme.bgGradient;
   }
@@ -170,9 +171,18 @@ function renderMap() {
 
     for (const node of layerNodes) {
       const nodeDiv = document.createElement('div');
-      nodeDiv.className = 'map-node';
+      nodeDiv.className = `map-node node-type-${node.type}`;
       nodeDiv.dataset.nodeId = node.id; // ルート描画用にIDを付与
       nodeDiv.innerHTML = NODE_ICONS[node.type] || '❓';
+
+      // スレスパ風の手描き感：ノードIDから決まる固定のゆらぎ（再描画しても位置がブレない）
+      if (node.type !== NODE_TYPES.BOSS && node.type !== NODE_TYPES.START) {
+        let hash = 0;
+        for (const ch of `${game.currentFloor}_${node.id}`) hash = (hash * 31 + ch.charCodeAt(0)) | 0;
+        const jitterX = ((hash & 0xff) / 255 - 0.5) * 22;
+        const jitterY = (((hash >> 8) & 0xff) / 255 - 0.5) * 14;
+        nodeDiv.style.translate = `${jitterX.toFixed(1)}px ${jitterY.toFixed(1)}px`;
+      }
 
       if (node.available) nodeDiv.classList.add('available');
       if (node.visited) nodeDiv.classList.add('visited');
@@ -333,35 +343,51 @@ function drawMapConnections() {
     const endX = x2 - Math.cos(angle) * toRadius;
     const endY = y2 - Math.sin(angle) * toRadius;
 
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(endX, endY);
+    // スレスパ風：接続ごとに固定のゆるいカーブ（手描きの道のり感）
+    let hash = 0;
+    for (const ch of conn.id) hash = (hash * 31 + ch.charCodeAt(0)) | 0;
+    const bend = ((hash & 0xff) / 255 - 0.5) * 0.35 * dist;
+    const midX = (startX + endX) / 2 + Math.cos(angle + Math.PI / 2) * bend;
+    const midY = (startY + endY) / 2 + Math.sin(angle + Math.PI / 2) * bend;
 
-    // スタイル決定
-    ctx.lineWidth = 2;
-    if (fromNode.visited && toNode.visited) {
-      // 踏破済みルート（白実線で強調）
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+    // 線の状態を判定
+    const isTraveled = fromNode.visited && toNode.visited;
+    const isNextRoute = (fromNode.id === game.currentNodeId || (fromNode.layer === 0 && game.currentNodeId === 'start')) && toNode.available;
+
+    const strokePath = () => {
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.quadraticCurveTo(midX, midY, endX, endY);
+      ctx.stroke();
+    };
+
+    ctx.lineCap = 'round';
+
+    // 下地の淡い縁取り（どの背景色の上でもインク線が見えるように）
+    ctx.setLineDash([]);
+    ctx.lineWidth = isTraveled ? 7 : 5;
+    ctx.strokeStyle = 'rgba(254, 243, 199, 0.28)';
+    strokePath();
+
+    if (isTraveled) {
+      // 踏破済みルート：濃いインクの太い実線
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = 'rgba(69, 26, 3, 0.95)';
       ctx.setLineDash([]);
-    } else if (fromNode.visited || fromNode.layer === 0) {
-      // 現在地から次に到達可能なルートを強調
-      if (toNode.available) {
-        ctx.strokeStyle = '#f1c40f'; // yellow
-        ctx.setLineDash([8, 8]); // 点線
-        ctx.lineDashOffset = -performance.now() / 50;
-      } else {
-        // 現在地から繋がっていない遠い未来の線
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.setLineDash([]);
-      }
+    } else if (isNextRoute) {
+      // 次に進めるルート：赤いインクの太い点線で強調
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = 'rgba(185, 28, 28, 0.95)';
+      ctx.setLineDash([2, 9]);
     } else {
-      // 未到達の先の予測ルート
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.setLineDash([]);
+      // まだ先のルート：細いインクの点線
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = 'rgba(41, 37, 36, 0.7)';
+      ctx.setLineDash([1, 9]);
     }
-
-    ctx.stroke();
+    strokePath();
   }
+  ctx.setLineDash([]);
 }
 
 // === バトルレンダリング ===
@@ -379,10 +405,10 @@ function renderBattle() {
 
   // 背景色を敵のフロアに応じて変更（画像ベース）
   const bgMap = {
-    1: 'url(./assets/bg_forest.png)',
-    2: 'url(./assets/bg_cave.png)',
-    3: 'url(./assets/bg_tower.png)',
-    4: 'url(./assets/bg_sky.png)'
+    1: 'url(./assets/stage_forest.jpg)',
+    2: 'url(./assets/stage_cave.jpg)',
+    3: 'url(./assets/stage_tower.jpg)',
+    4: 'url(./assets/stage_sky.jpg)'
   };
   const battleField = document.querySelector('.battle-field');
   if (battleField) {
@@ -1965,7 +1991,7 @@ function updateContinueButtonUI() {
     const floorNum = saved.currentFloor || 1;
     const charEmoji = saved.player.emoji || '🧙‍♂️';
     const charName = saved.player.name || 'ワードマスター';
-    labelContinue.textContent = `つづきから遊ぶ（${charEmoji}${charName} / ${floorNum}F / ❤️${saved.player.hp}）`;
+    labelContinue.textContent = `${charEmoji}${charName} / ${floorNum}F / ❤️${saved.player.hp}/${saved.player.maxHp}`;
     btnContinue.style.display = 'flex';
   } else {
     btnContinue.style.display = 'none';
@@ -1978,9 +2004,43 @@ game.onFloor3ClearChoice = () => {
   if (modal) modal.style.display = 'block';
 };
 
+// === 画面ごとのBGM切り替え ===
+function updateBGMForScreen(screen) {
+  if (!window.sm || !window.sm.startBattleBGM) return;
+  const floor = game.currentFloor || 1;
+  switch (screen) {
+    case SCREENS.BATTLE: {
+      const enemy = game.battle ? game.battle.enemy : null;
+      if (enemy && (enemy.isBoss || enemy.isBurningElite)) {
+        window.sm.startBossBGM(floor);
+      } else {
+        window.sm.startBattleBGM(floor);
+      }
+      break;
+    }
+    case SCREENS.GAME_OVER:
+    case SCREENS.VICTORY:
+      window.sm.stopBGM();
+      break;
+    default:
+      // マップ・報酬・ショップ・休憩・イベント・タイトルは探索BGM
+      window.sm.startMapBGM(floor);
+      break;
+  }
+}
+
+// BGMのON/OFFボタン表示を更新
+function updateBGMToggleButtons() {
+  const muted = window.sm ? window.sm.bgmMuted : false;
+  document.querySelectorAll('.btn-bgm-toggle').forEach(btn => {
+    btn.textContent = muted ? '🔇 BGM OFF' : '🎵 BGM ON';
+  });
+}
+
 // === 画面遷移ハンドラー ===
 game.onScreenChange = (screen) => {
   showScreen(screen);
+  updateBGMForScreen(screen);
 
   switch (screen) {
     case SCREENS.MENU:
@@ -2133,6 +2193,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // 初回起動時にセーブデータがあれば「つづきから遊ぶ」ボタンを表示
   updateContinueButtonUI();
 
+  // BGMのON/OFF切り替えボタン（タイトル・マップ共通）
+  updateBGMToggleButtons();
+  document.querySelectorAll('.btn-bgm-toggle').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!window.sm) return;
+      const muted = window.sm.toggleBGM();
+      if (!muted) updateBGMForScreen(game.currentScreen || SCREENS.MENU);
+      updateBGMToggleButtons();
+    });
+  });
+
+  // 最初のタップ/クリックでタイトルの探索BGMを開始（ブラウザの自動再生制限対策）
+  const startTitleBGMOnce = () => {
+    if (window.sm && !window.sm.currentBgmType) {
+      updateBGMForScreen(game.currentScreen || SCREENS.MENU);
+    }
+    document.removeEventListener('pointerdown', startTitleBGMOnce);
+  };
+  document.addEventListener('pointerdown', startTitleBGMOnce);
+
   // メニュー：「つづきから遊ぶ」ボタン
   document.getElementById('btn-continue-game')?.addEventListener('click', () => {
     if (window.sm) window.sm.playGameStart();
@@ -2205,9 +2286,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('btn-choice-ex-stage')?.addEventListener('click', () => {
     document.getElementById('modal-floor3-choice').style.display = 'none';
-    if (window.sm) window.sm.playHeal();
-    showFloatMessage('🌌 EXステージ『天空の聖域』へ突入！（HP30%回復！）');
+    // 先に画面遷移を確実に実行し、効果音は失敗しても進行を止めない
     game.enterFloor4ExStage();
+    try {
+      if (window.sm && window.sm.playHeal) window.sm.playHeal();
+    } catch { /* 効果音エラーは無視 */ }
+    showFloatMessage('🌌 EXステージ『天空の聖域』へ突入！（HP30%回復！）');
   });
 
   // バトル

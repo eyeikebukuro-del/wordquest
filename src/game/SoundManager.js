@@ -6,6 +6,15 @@ export class SoundManager {
         this.masterGain.gain.value = 0.5;
         this.masterGain.connect(this.ctx.destination);
 
+        // BGM専用GainNode（英単語発音時のダッキングやミュート制御用）
+        this.bgmGain = this.ctx.createGain();
+        this.bgmGain.gain.value = 0.22;
+        this.bgmGain.connect(this.ctx.destination);
+        this.bgmMuted = localStorage.getItem('wordquest_bgm_muted') === '1';
+        this.currentBgmType = null;
+        this.bgmTimer = null;
+        this.bgmStep = 0;
+
         // 英単語ネイティブ発音用のAudioキャッシュとWeb Speech API英語ボイスの事前ロード
         this.audioCache = new Map();
         this.currentWordAudio = null;
@@ -241,6 +250,250 @@ export class SoundManager {
         this._playTone('sine', 2500, 2500, 1.0, 0.1, 0, 0.2);
         this._playTone('triangle', 3000, 3000, 0.5, 0.05, 0, 0.1);
     }
+    playHeal() {
+        // ファァァン…（温かい回復音）
+        this._playTone('sine', 523.25, 659.25, 0.35, 0.18, 0, 0.05);
+        setTimeout(() => this._playTone('sine', 659.25, 783.99, 0.35, 0.18, 0, 0.05), 110);
+        setTimeout(() => this._playTone('triangle', 1046.5, 1046.5, 0.45, 0.15, 0, 0.05), 220);
+    }
+
+    // ==========================================
+    // 5.5. BGMシンセサイザー（通常バトルBGM / ボスバトルBGM / マップBGM）
+    // ==========================================
+    _playBgmNote(type, freq, duration, vol, detune = 0) {
+        if (!this.ctx || this.bgmMuted || !freq) return;
+        this.resume();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        if (detune) osc.detune.value = detune;
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(vol, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0008, now + duration);
+
+        osc.connect(gain);
+        gain.connect(this.bgmGain);
+        osc.start(now);
+        osc.stop(now + duration + 0.01);
+    }
+
+    _playBgmPerc(isKick = true, vol = 0.18) {
+        if (!this.ctx || this.bgmMuted) return;
+        const now = this.ctx.currentTime;
+        if (isKick) {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(130, now);
+            osc.frequency.exponentialRampToValueAtTime(32, now + 0.12);
+            gain.gain.setValueAtTime(vol, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+            osc.connect(gain);
+            gain.connect(this.bgmGain);
+            osc.start(now);
+            osc.stop(now + 0.14);
+        } else {
+            // ハイハット・スネア系リズムノイズ
+            const bufferSize = Math.floor(this.ctx.sampleRate * 0.06);
+            const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            const noise = this.ctx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(5500, now);
+            const gain = this.ctx.createGain();
+            gain.gain.setValueAtTime(vol * 0.55, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.bgmGain);
+            noise.start(now);
+            noise.stop(now + 0.06);
+        }
+    }
+
+    /**
+     * 英単語発音時にBGMを一時的に小さくする（ダッキング）
+     */
+    _duckBGM() {
+        if (!this.ctx || !this.bgmGain) return;
+        const now = this.ctx.currentTime;
+        this.bgmGain.gain.cancelScheduledValues(now);
+        this.bgmGain.gain.setValueAtTime(0.04, now);
+        this.bgmGain.gain.linearRampToValueAtTime(0.22, now + 1.3);
+    }
+
+    /**
+     * BGMのON/OFFを切り替える
+     * @returns {boolean} ミュート状態（true=消音）
+     */
+    toggleBGM() {
+        this.bgmMuted = !this.bgmMuted;
+        localStorage.setItem('wordquest_bgm_muted', this.bgmMuted ? '1' : '0');
+        if (this.bgmMuted) {
+            if (this.bgmGain && this.ctx) {
+                this.bgmGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+            }
+        } else {
+            if (this.bgmGain && this.ctx) {
+                this.bgmGain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+            }
+        }
+        return this.bgmMuted;
+    }
+
+    /**
+     * 現在再生中のBGMを停止する
+     */
+    stopBGM() {
+        if (this.bgmTimer) {
+            clearInterval(this.bgmTimer);
+            this.bgmTimer = null;
+        }
+        this.currentBgmType = null;
+    }
+
+    /**
+     * 通常バトルBGMを開始（疾走感のあるヒロイック・ファンタジー戦闘曲）
+     * @param {number} floor - 現在のフロア（1〜4でキーが少しずつ変化）
+     */
+    startBattleBGM(floor = 1) {
+        const typeKey = `battle_${floor}`;
+        if (this.currentBgmType === typeKey && this.bgmTimer) return;
+        this.stopBGM();
+        this.currentBgmType = typeKey;
+        this.bgmStep = 0;
+
+        // フロアごとに少しずつピッチを変えて雰囲気を変化させる（1F:Am, 2F:Bm, 3F:Cm, 4F:C#m）
+        const pitchShift = [1.0, 1.0, 1.06, 1.12, 1.18][floor] || 1.0;
+
+        // 32ステップ（2小節ループ）のヒロイック戦闘メロディ (Am -> F -> G -> E7)
+        const melody = [
+            440, 0, 523.25, 587.33, 659.25, 0, 587.33, 523.25,
+            659.25, 0, 783.99, 659.25, 587.33, 523.25, 493.88, 0,
+            349.23, 0, 440, 523.25, 587.33, 0, 659.25, 587.33,
+            493.88, 0, 587.33, 659.25, 783.99, 659.25, 659.25, 0
+        ];
+        const bass = [
+            110, 110, 220, 110, 110, 110, 220, 110,
+            87.31, 87.31, 174.61, 87.31, 87.31, 87.31, 174.61, 87.31,
+            98.0, 98.0, 196.0, 98.0, 98.0, 98.0, 196.0, 98.0,
+            82.41, 82.41, 164.81, 82.41, 98.0, 98.0, 123.47, 130.81
+        ];
+        const arp = [
+            329.63, 440, 523.25, 440, 329.63, 440, 523.25, 440,
+            261.63, 349.23, 440, 349.23, 261.63, 349.23, 440, 349.23,
+            293.66, 392.0, 493.88, 392.0, 293.66, 392.0, 493.88, 392.0,
+            246.94, 329.63, 415.30, 329.63, 293.66, 392.0, 493.88, 587.33
+        ];
+
+        const stepMs = 155; // 約193BPMの8分音符ステップ
+        this.bgmTimer = setInterval(() => {
+            if (this.bgmMuted) return;
+            const s = this.bgmStep % 32;
+            const mFreq = melody[s] ? melody[s] * pitchShift : 0;
+            const bFreq = bass[s] ? bass[s] * pitchShift : 0;
+            const aFreq = arp[s] ? arp[s] * pitchShift : 0;
+
+            if (mFreq > 0) this._playBgmNote('triangle', mFreq, 0.24, 0.22);
+            if (bFreq > 0) this._playBgmNote('sawtooth', bFreq, 0.14, 0.12);
+            if (aFreq > 0 && s % 2 === 1) this._playBgmNote('sine', aFreq, 0.12, 0.09);
+
+            if (s % 4 === 0) this._playBgmPerc(true, 0.2);
+            else if (s % 2 === 0) this._playBgmPerc(false, 0.14);
+
+            this.bgmStep++;
+        }, stepMs);
+    }
+
+    /**
+     * ボスバトル＆強敵エリートBGMを開始（緊迫感あふれる高速シンフォニック・ボス戦曲）
+     * @param {number} floor - 現在のフロア
+     */
+    startBossBGM(floor = 1) {
+        const typeKey = `boss_${floor}`;
+        if (this.currentBgmType === typeKey && this.bgmTimer) return;
+        this.stopBGM();
+        this.currentBgmType = typeKey;
+        this.bgmStep = 0;
+
+        const pitchShift = floor >= 4 ? 1.12 : (floor === 3 ? 1.06 : 1.0);
+
+        // ハーモニックマイナー＆フリジアンの威圧感あるボス戦メロディ
+        const melody = [
+            587.33, 0, 587.33, 622.25, 587.33, 523.25, 466.16, 440.0,
+            587.33, 0, 698.46, 659.25, 587.33, 554.37, 587.33, 0,
+            698.46, 0, 698.46, 783.99, 880.0, 783.99, 698.46, 659.25,
+            622.25, 587.33, 554.37, 587.33, 659.25, 554.37, 440.0, 0
+        ];
+        const bass = [
+            146.83, 146.83, 293.66, 146.83, 155.56, 155.56, 146.83, 130.81,
+            146.83, 146.83, 293.66, 146.83, 138.59, 138.59, 146.83, 146.83,
+            174.61, 174.61, 349.23, 174.61, 164.81, 164.81, 329.63, 164.81,
+            155.56, 146.83, 138.59, 146.83, 110.0, 110.0, 220.0, 110.0
+        ];
+        const arp = [
+            440.0, 587.33, 698.46, 880.0, 466.16, 587.33, 698.46, 932.33,
+            440.0, 587.33, 698.46, 880.0, 415.30, 554.37, 659.25, 830.61,
+            523.25, 698.46, 880.0, 1046.5, 493.88, 659.25, 783.99, 987.77,
+            466.16, 587.33, 698.46, 880.0, 415.30, 554.37, 659.25, 880.0
+        ];
+
+        const stepMs = 128; // 高速ドライビングビート
+        this.bgmTimer = setInterval(() => {
+            if (this.bgmMuted) return;
+            const s = this.bgmStep % 32;
+            const mFreq = melody[s] ? melody[s] * pitchShift : 0;
+            const bFreq = bass[s] ? bass[s] * pitchShift : 0;
+            const aFreq = arp[s] ? arp[s] * pitchShift : 0;
+
+            if (mFreq > 0) {
+                this._playBgmNote('sawtooth', mFreq, 0.19, 0.16);
+                this._playBgmNote('square', mFreq * 0.5, 0.18, 0.10, 6);
+            }
+            if (bFreq > 0) this._playBgmNote('sawtooth', bFreq, 0.12, 0.16);
+            if (aFreq > 0) this._playBgmNote('triangle', aFreq, 0.09, 0.09);
+
+            if (s % 2 === 0) this._playBgmPerc(true, 0.24);
+            else this._playBgmPerc(false, 0.16);
+
+            this.bgmStep++;
+        }, stepMs);
+    }
+
+    /**
+     * マップ探索BGMを開始（神秘的で静かな塔の探索アルペジオ）
+     * @param {number} floor - 現在のフロア
+     */
+    startMapBGM(floor = 1) {
+        const typeKey = `map_${floor}`;
+        if (this.currentBgmType === typeKey && this.bgmTimer) return;
+        this.stopBGM();
+        this.currentBgmType = typeKey;
+        this.bgmStep = 0;
+
+        const pitchShift = [1.0, 1.0, 0.94, 1.06, 1.18][floor] || 1.0;
+        const notes = [
+            220.0, 329.63, 440.0, 523.25, 440.0, 329.63, 293.66, 329.63,
+            196.0, 293.66, 392.0, 493.88, 392.0, 293.66, 261.63, 293.66
+        ];
+
+        this.bgmTimer = setInterval(() => {
+            if (this.bgmMuted) return;
+            const s = this.bgmStep % 16;
+            const freq = notes[s] * pitchShift;
+            this._playBgmNote('sine', freq, 0.42, 0.09);
+            if (s % 4 === 0) {
+                this._playBgmNote('triangle', freq * 0.5, 0.75, 0.06);
+            }
+            this.bgmStep++;
+        }, 320);
+    }
 
     // ==========================================
     // 6. 英単語ネイティブ発音読み上げ（実録音辞書音声 ＋ Web Speech APIフォールバック）
@@ -254,6 +507,9 @@ export class SoundManager {
         if (!text || typeof window === 'undefined') return;
         const cleanWord = String(text).trim().toLowerCase();
         if (!cleanWord) return;
+
+        // 発音がはっきり聞こえるようにBGMを一時ダッキング
+        this._duckBGM();
 
         // 再生中の音声があれば停止
         if (this.currentWordAudio) {

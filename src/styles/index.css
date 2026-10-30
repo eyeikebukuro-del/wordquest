@@ -623,3 +623,41 @@ body {
     font-size: 1.5rem;
   }
 }
+
+
+/* 長い文章を折り返して2行表示できるボタン（スマホで見切れ防止） */
+.btn.btn-wrap {
+  white-space: normal;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.3;
+  padding: 10px 14px;
+  height: auto;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.btn-wrap .btn-main-text {
+  font-size: clamp(0.88rem, 4vw, 1.05rem);
+  font-weight: 800;
+}
+
+.btn-wrap .btn-sub-text {
+  font-size: clamp(0.68rem, 3vw, 0.8rem);
+  font-weight: 600;
+  opacity: 0.92;
+}
+
+.btn-wrap .btn-sub-text:empty {
+  display: none;
+}
+
+/* フロア3制覇モーダルはスマホ幅に収める */
+#modal-floor3-choice .modal-panel {
+  width: calc(100vw - 24px);
+  max-width: 440px;
+  box-sizing: border-box;
+  padding: 16px 14px;
+}

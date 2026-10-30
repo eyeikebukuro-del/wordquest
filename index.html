@@ -32,9 +32,9 @@
           <p class="logo-subtitle">〜 知恵と冒険の塔 〜</p>
         </div>
         <div class="menu-buttons">
-          <button id="btn-continue-game" class="btn btn-primary btn-glow" style="display:none; background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399;">
-            <span class="btn-icon">▶️</span>
-            <span id="continue-game-label">つづきから遊ぶ</span>
+          <button id="btn-continue-game" class="btn btn-primary btn-glow btn-wrap" style="display:none; background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399;">
+            <span class="btn-main-text">▶️ つづきから遊ぶ</span>
+            <span class="btn-sub-text" id="continue-game-label"></span>
           </button>
           <button id="btn-new-game" class="btn btn-primary btn-glow">
             <span class="btn-icon">🗡️</span>
@@ -58,6 +58,7 @@
           </button>
         </div>
         <div class="menu-footer">
+          <button type="button" class="btn btn-small btn-secondary btn-bgm-toggle" style="margin-bottom: 6px;">🎵 BGM ON</button>
           <p>小学生向け えいご・かけ算・かんじ ローグライク</p>
         </div>
       </div>
@@ -145,6 +146,7 @@
       <div class="map-footer">
         <button id="btn-view-deck" class="btn btn-small">🃏 デッキ (<span id="deck-count">10</span>枚)</button>
         <button id="btn-save-quit" class="btn btn-small btn-secondary" style="margin-left: 8px; background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #a7f3d0;">💾 セーブして休む</button>
+        <button type="button" class="btn btn-small btn-secondary btn-bgm-toggle" style="margin-left: 8px;">🎵 BGM ON</button>
       </div>
     </div>
 
@@ -387,12 +389,13 @@
             しかし、頭上の雲が割れ、<strong>禁断のEXステージ『🌌 天空の聖域（フロア4）』</strong>への階段が現れた…！
           </p>
           <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
-            <button id="btn-choice-victory" class="btn btn-primary btn-glow" style="padding: 12px; font-size: 0.95rem;">
-              🏆 ここで塔を制覇して帰還する（通常クリア・ランキング登録）
+            <button id="btn-choice-victory" class="btn btn-primary btn-wrap">
+              <span class="btn-main-text">🏆 ここで制覇して帰還する</span>
+              <span class="btn-sub-text">（通常クリア・ランキング登録）</span>
             </button>
-            <button id="btn-choice-ex-stage" class="btn btn-secondary" style="padding: 12px; font-size: 0.95rem; background: linear-gradient(135deg, #7c3aed, #db2777); border-color: #f472b6; color: #fff; font-weight: 800;">
-              🌌 EXステージ『天空の聖域』へ挑む！<br>
-              <span style="font-size: 0.78rem; font-weight: 600; color: #fbcfe8;">（HP30%回復 ＆ クリア時EXボーナス +10,000点！）</span>
+            <button id="btn-choice-ex-stage" class="btn btn-secondary btn-wrap" style="background: linear-gradient(135deg, #7c3aed, #db2777); border-color: #f472b6; color: #fff;">
+              <span class="btn-main-text">🌌 EXステージ『天空の聖域』へ挑む！</span>
+              <span class="btn-sub-text" style="color: #fbcfe8;">（HP30%回復 ＆ クリア時 +10,000点）</span>
             </button>
           </div>
         </div>

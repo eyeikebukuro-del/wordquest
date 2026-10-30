@@ -31,9 +31,9 @@ export const FLOOR_THEMES = {
  */
 export const NODE_ICONS = {
     [NODE_TYPES.BATTLE]: '⚔️',
-    [NODE_TYPES.ELITE]: '💀',
+    [NODE_TYPES.ELITE]: '👹',
     [NODE_TYPES.BURNING_ELITE]: '🔥',
-    [NODE_TYPES.TREASURE]: '💎',
+    [NODE_TYPES.TREASURE]: '🎁',
     [NODE_TYPES.SHOP]: '🛒',
     [NODE_TYPES.REST]: '🏕️',
     [NODE_TYPES.EVENT]: '❓',
